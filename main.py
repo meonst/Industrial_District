@@ -5,6 +5,26 @@ import protocol29406
 import json
 from mpyq import mpyq
 
+player = list(dict() for i in range(0, 10))
+for i in player:
+    i['RegenGlobesTime'] = list()
+    i['Pings'] = list()
+    i['Spray'] = list()
+    i['VoiceLine'] = list()
+    i['PlayerKill'] = list()
+    i['Death'] = list()
+    
+ChatHistory = list()
+TeamBlue = dict()
+TeamRed = dict()
+TeamBlue['LevelUp'] = list(0 for i in range(0, 2))
+TeamRed['LevelUp'] = list(0 for i in range(0, 2))
+TeamBlue['CampCapture'] = list()
+TeamRed['CampCapture'] = list()
+
+def looptime(t):
+    return (t - 610) / 16
+
 
 
 class EventLogger:
@@ -65,31 +85,80 @@ if hasattr(protocol, 'decode_replay_tracker_events'):
     contents = archive.read_file('replay.tracker.events')
     
     for event in protocol.decode_replay_tracker_events(contents):
+        pprint.pprint(event, sys.stdout)
         '''
         if event.has_key('m_eventName'):
             pprint.pprint(event, sys.stdout)
         '''
-        
-        if event.has_key('m_eventName'):
-            if event['m_eventName'] == 'EndOfGameTalentChoices':
-                print event['m_intData'][0]['m_value']
-                for i in event['m_stringData']:
-                    print i['m_value']
-                #pprint.pprint(event['m_stringData'], sys.stdout)
-                
-            
+
         '''
         if event['_event'] == 'NNet.Replay.Tracker.SStatGameEvent':
             pprint.pprint(event, sys.stdout)
         '''
-            
-        '''
-        #Regen Globe Pickup
+        
+       
+        
+        
         if event.has_key('m_eventName'):
-            if event['m_eventName'] == 'RegenGlobePickedUp':
-                print event
-        '''
+            #pprint.pprint(event['m_eventName'], sys.stdout)
 
+            #TimeSpentDead
+            if event['m_eventName'] == 'EndOfGameTimeSpentDead':
+                time_spent_dead = event['m_fixedData'][0]['m_value'] / 4096
+                player_number = event['m_intData'][0]['m_value'] - 1
+                player[player_number]['TimeSpentDead'] = time_spent_dead
+            
+            #Camp Capture
+            if event['m_eventName'] == 'JungleCampCapture':
+                time = looptime(event['_gameloop'])
+                if event['m_fixedData'][0]['m_value'] == 4096:
+                    TeamBlue['CampCapture'].append((time, event['m_stringData'][0]['m_value']))
+                elif event['m_fixedData'][0]['m_value'] == 8192:
+                    TeamRed['CampCapture'].append((time, event['m_stringData'][0]['m_value']))
+                
+                
+            #LevelUp
+            if event['m_eventName'] == 'LevelUp':
+                time = looptime(event['_gameloop'])
+                if time > 0:
+                    player_number = event['m_intData'][0]['m_value'] - 1
+                    if player_number < 5:
+                        if time != TeamBlue['LevelUp'][-1]:
+                            TeamBlue['LevelUp'].append(time)
+                    elif player_number <= 5:
+                        if time != TeamRed['LevelUp'][-1]:
+                            TeamRed['LevelUp'].append(time)
+            #Talents
+            if event['m_eventName'] == 'EndOfGameTalentChoices':
+                player_number = event['m_intData'][0]['m_value'] - 1
+                for i in event['m_stringData']:
+                    player[player_number][i['m_key']] = i['m_value']
+            #Player Kills
+            if event['m_eventName'] == 'PlayerDeath':
+                time = looptime(event['_gameloop'])
+                dead_player_number = event['m_intData'][0]['m_value'] - 1
+                player[dead_player_number]['Death'].append(time)
+                for i in range(1, len(event['m_intData'])):
+                    player_number = event['m_intData'][i]['m_value'] - 1
+                    player[player_number]['PlayerKill'].append((time, dead_player_number))
+            
+            #Spray
+            if event['m_eventName'] == 'LootSprayUsed':
+                time = looptime(event['_gameloop'])
+                player_number = event['m_intData'][0]['m_value'] - 1
+                player[player_number]['Spray'].append(time)
+
+            #VoiceLine
+            if event['m_eventName'] == 'LootVoiceLineUsed':
+                time = looptime(event['_gameloop'])
+                player_number = event['m_intData'][0]['m_value'] - 1
+                player[player_number]['VoiceLine'].append(time)
+
+            #Regen Globe Pickup
+            if event['m_eventName'] == 'RegenGlobePickedUp':
+                time = looptime(event['_gameloop'])
+                player_number = event['m_intData'][0]['m_value'] - 1
+                player[player_number]['RegenGlobesTime'].append(time)
 
         
 
@@ -98,35 +167,43 @@ initdata = protocol.decode_replay_initdata(archive.read_file('replay.initData'))
 
 #print "header", header
 
-'''
+
 # Hero name, Player name, Team
-print "details"
+player_number = 0
+
 for i in details['m_playerList']:
+    
     team = 'other'
     if i['m_teamId'] == 1:
-        team = 'red'
+        team = 'Red'
     if i['m_teamId'] == 0:
-        team = 'blue'
+        team = 'Blue'
         
-    print i['m_hero'], i['m_name'], team
-''' 
+    player[player_number]['team'] = team
+    player[player_number]['PlayerName'] = i['m_name']
     
+    player_number += 1
+
+
 
 #print "gameevents", gameevents
 
-'''
+
 #Chatting history, Ping
-print "messageevents"
 for i in protocol.decode_replay_message_events(messageevents):
-    #pprint.pprint(i, stream = sys.stdout)
     
-    if i['_event'] != 'NNet.Game.SLoadingProgressMessage':
-        pass
     if i['_event'] == 'NNet.Game.SChatMessage':
-        print i['_userid'], ":", i['m_string']
+        
+        time = looptime(i['_gameloop'])
+        player_number = i['_userid']['m_userId'] - 1
+        words = i['m_string']
+        ChatHistory.append((time, player_number, words))
+        
     if i ['_event'] == 'NNet.Game.SPingMessage':
-        print i['_userid']
-'''    
+        player_number = i['_userid']['m_userId'] - 1
+        time = looptime(i['_gameloop'])
+        player[player_number]['Pings'].append(time)
+
 
     
 
@@ -135,4 +212,11 @@ for i in protocol.decode_replay_message_events(messageevents):
 #print "initdata", initdata
 
 
-
+pprint.pprint(player, sys.stdout)
+#pprint.pprint(TeamBlue, sys.stdout)
+#pprint.pprint(TeamRed, sys.stdout)
+        
+'''        
+for i in ChatHistory:
+    print '(', i[0]//60, ':', i[0]%60, ')', player[i[1]]['PlayerName'], ':', i[2]
+'''
