@@ -1,4 +1,5 @@
 # -*- coding: cp949 -*-
+
 import sys
 import pprint
 from heroprotocol import protocol29406
@@ -35,8 +36,6 @@ with open('./json/spraydata_75589_{}.json'.format(Language)) as json_file:
     
 with open('./json/voicelinedata_75589_{}.json'.format(Language)) as json_file:
     voiceline = json.load(json_file)
-
-
 
 
 
@@ -170,6 +169,7 @@ def openreplay():
                                 if herodata[Hero]["unitId"] == i['m_value']:
                                     thisHero = Hero
                             player[player_number][i['m_key']] = thisHero
+                    
                         elif i['m_key'] != 'Win/Loss' and i['m_key'] != 'Map':
                             for which_talent in herodata[player[player_number]['Hero']]["talents"]["level{}".format(talent_tier[j])]:
                                 if which_talent["nameId"] == i['m_value']:
@@ -220,6 +220,7 @@ def openreplay():
         player[player_number]['team'] = team
 
         player[player_number]['PlayerName'] = i['m_name']
+        
         player_number += 1
     #print "gameevents", gameevents
     #Chatting history, Ping
@@ -255,7 +256,9 @@ def overview_page():
             team = 'blue'
         elif i // 5 == 1:
             team = 'red'
+        
         player_button = Button(page, text = "{}({})".format(player[i]['PlayerName'], herodata[player[i]['Hero']]["name"]), fg = team)
+        
         player_button.pack()
         player_button.place(relx = 0.5 * (i // 5), rely = 0.2 * (i % 5), relwidth = 0.5, relheight = 0.20)
 
@@ -267,7 +270,13 @@ def new_page():
     for child in page.winfo_children():
         child.destroy()
     
-    
+def hover_enter_talent_button(self):
+    print 'enter'
+
+def hover_leave_talent_button(self):
+    print 'leave'
+
+
 def talent_page():
     new_page()
     global page
@@ -275,7 +284,6 @@ def talent_page():
     page.place(relx = 0, rely = 0.05, relwidth = 1, relheight = 0.95)
     page_width = page.winfo_width()
     page_height =  page.winfo_height()
-
     talent_portrait_button_image = list(list(0 for i in range(0, 8)) for i in range(0, 10))
     talent_portrait_button = list(list(0 for i in range(0, 8)) for i in range(0, 10))
     for i in range(0, 10):
@@ -289,7 +297,7 @@ def talent_page():
         talent_portrait_button[i][0].image = talent_portrait_button_image[i][0]
         talent_portrait_button[i][0].pack()
         talent_portrait_button[i][0].place(relx = 0.0, rely = 0.1 * i, relwidth = 0.3, relheight = 0.1)
-
+    
         for j in range(1, 8):
             try:
                 talent_portrait_button_image[i][j] = Image.open("./images/abilitytalents/{}".format(player[i]['tier{}'.format(j)]['icon']))
@@ -297,11 +305,16 @@ def talent_page():
                 talent_portrait_button_image[i][j] = Image.open("./images/abilitytalents/storm_ui_icon_monk_trait1.png")
             talent_portrait_button_image[i][j] = ImageTk.PhotoImage(resize_image(talent_portrait_button_image[i][j], (0.1 * page_width, 0.1 * page_height)))
             talent_portrait_button[i][j] = Button(page, image = talent_portrait_button_image[i][j], relief = "flat", bg = background_color)
+            talent_portrait_button[i][j].grid()
+
+            talent_portrait_button[i][j].bind("<Enter>", hover_enter_talent_button)
+            talent_portrait_button[i][j].bind("<Leave>", hover_leave_talent_button)
+            
             talent_portrait_button[i][j].image = talent_portrait_button_image[i][j]
             talent_portrait_button[i][j].pack()
             talent_portrait_button[i][j].place(relx = (j + 2) * 0.1, rely = 0.1 * i, relwidth = 0.1, relheight = 0.1)
-
-
+def hero_page(n):
+    pass
 OpenReplay = Tkinter.Button(plane, text = "Open Replay", command = openreplay, bg = 'gray')
 OpenReplay.pack()
 OpenReplay.place(relx = 0 , rely = 0, relwidth = 0.20, relheight = 0.05)
