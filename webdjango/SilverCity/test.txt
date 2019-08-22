@@ -1,0 +1,648 @@
+{
+  "Abathur": {
+    "name": "Abathur",
+    "unitId": "HeroAbathur",
+    "hyperlinkId": "Abathur",
+    "attributeId": "Abat",
+    "difficulty": "Very Hard",
+    "franchise": "Starcraft",
+    "gender": "Neutral",
+    "title": "Evolution Master",
+    "innerRadius": 0.75,
+    "radius": 0.75,
+    "releaseDate": "2014-03-13",
+    "sight": 12.0,
+    "speed": 4.8398,
+    "type": "Melee",
+    "rarity": "Legendary",
+    "scalingLinkId": "HeroDummyVeterancy",
+    "searchText": "Abathur Zerg Swarm HotS Heart of the Swarm StarCraft II 2 SC2 Star2 Starcraft2 SC slug",
+    "description": "A unique Hero that can manipulate the battle from anywhere on the map.",
+    "descriptors": [
+      "Ganker",
+      "Helper",
+      "InstantTraveler",
+      "RoleSpecialist",
+      "TowerPusher",
+      "WaveClearer"
+    ],
+    "units": [
+      "AbathurEvolvedMonstrosity",
+      "AbathurLocustAssaultStrain",
+      "AbathurLocustBombardStrain",
+      "AbathurLocustNormal",
+      "AbathurToxicNest"
+    ],
+    "portraits": {
+      "heroSelect": "storm_ui_ingame_heroselect_btn_infestor.png",
+      "leaderboard": "storm_ui_ingame_hero_leaderboard_abathur.png",
+      "loading": "storm_ui_ingame_hero_loadingscreen_abathur.png",
+      "partyPanel": "storm_ui_ingame_partypanel_btn_abathur.png",
+      "target": "ui_targetportrait_hero_abathur.png",
+      "draftScreen": "storm_ui_glues_draft_portrait_abathur.png",
+      "partyFrames": [
+        "storm_ui_ingame_partyframe_abathur.png"
+      ],
+      "minimap": "storm_ui_minimapicon_heros_infestor.png",
+      "targetInfo": "storm_ui_ingame_partyframe_abathur.png"
+    },
+    "life": {
+      "amount": 685.0,
+      "scale": 0.04,
+      "type": "Health",
+      "regenRate": 1.4257,
+      "regenScale": 0.04
+    },
+    "roles": [
+      "Specialist"
+    ],
+    "expandedRole": "Support",
+    "ratings": {
+      "complexity": 9.0,
+      "damage": 3.0,
+      "survivability": 1.0,
+      "utility": 7.0
+    },
+    "weapons": [
+      {
+        "nameId": "HeroAbathur",
+        "range": 1.0,
+        "period": 0.7,
+        "damage": 26.0,
+        "damageScale": 0.04
+      }
+    ],
+    "abilities": {
+      "basic": [
+        {
+          "nameId": "AbathurSymbiote",
+          "buttonId": "AbathurSymbiote",
+          "name": "Symbiote",
+          "icon": "storm_ui_icon_abathur_symbiote.png",
+          "cooldownTooltip": "Cooldown: 4 seconds",
+          "shortTooltip": "Assist an ally and gain new abilities",
+          "fullTooltip": "Spawn and attach a Symbiote to a target ally or Structure. While active, Abathur controls the Symbiote, gaining access to new Abilities. The Symbiote is able to gain XP from nearby enemy deaths.",
+          "abilityType": "Q"
+        },
+        {
+          "nameId": "AbathurToxicNest",
+          "buttonId": "AbathurToxicNest",
+          "name": "Toxic Nest",
+          "icon": "storm_ui_icon_abathur_toxicnest.png",
+          "charges": {
+            "countMax": 3,
+            "countUse": 1,
+            "countStart": 3,
+            "recastCooldown": 0.0625
+          },
+          "cooldownTooltip": "Charge Cooldown: 10 seconds",
+          "shortTooltip": "Spawn a mine",
+          "fullTooltip": "Spawn a mine that becomes active after a short time. Deals <c val=\"bfd4fd\">153~~0.04~~</c> damage and reveals the enemy for <c val=\"bfd4fd\">4</c> seconds. Lasts <c val=\"bfd4fd\">90</c> seconds.<n/><n/>Stores up to <c val=\"bfd4fd\">3</c> charges.",
+          "abilityType": "W"
+        }
+      ],
+      "heroic": [
+        {
+          "nameId": "AbathurEvolveMonstrosity",
+          "buttonId": "AbathurEvolveMonstrosityHotbar",
+          "name": "Evolve Monstrosity",
+          "icon": "storm_ui_icon_abathur_evolvemonstrosity.png",
+          "cooldownTooltip": "Cooldown: 90 seconds",
+          "shortTooltip": "Minion or Locust becomes a powerful Monstrosity",
+          "fullTooltip": "Turn an allied Minion or Locust into a Monstrosity. When enemy Minions near the Monstrosity die, it gains <c val=\"bfd4fd\">2%</c> Health and <c val=\"bfd4fd\">2%</c> Basic Attack damage, stacking up to <c val=\"bfd4fd\">40</c> times.  The Monstrosity can be healed by Carapace and has the ability to Burrow to a visible location every <c val=\"bfd4fd\">80</c> seconds.<n/><n/>Using Symbiote on the Monstrosity allows Abathur to control it, in addition to Symbiote's normal benefits.  This Ability can be reactivated to automatically cast Symbiote on his Monstrosity.",
+          "abilityType": "Heroic"
+        },
+        {
+          "nameId": "AbathurUltimateEvolution",
+          "buttonId": "AbathurUltimateEvolution",
+          "name": "Ultimate Evolution",
+          "icon": "storm_ui_icon_abathur_ultimateevolution.png",
+          "cooldownTooltip": "Cooldown: 70 seconds",
+          "shortTooltip": "Clone target allied Hero and control it",
+          "fullTooltip": "Clone target allied Hero and control it for <c val=\"bfd4fd\">20</c> seconds. Abathur has perfected the clone, granting it <c val=\"bfd4fd\">20%</c> Spell Power, <c val=\"bfd4fd\">20%</c> bonus Attack Damage, and <c val=\"bfd4fd\">10%</c> bonus Movement Speed. Cannot use their Heroic Ability.",
+          "abilityType": "Heroic"
+        }
+      ],
+      "trait": [
+        {
+          "nameId": "AbathurSpawnLocusts",
+          "buttonId": "AbathurLocustStrain",
+          "name": "Locust Strain",
+          "icon": "storm_ui_icon_abathur_spawnlocust.png",
+          "cooldownTooltip": "Cooldown: 15 seconds",
+          "shortTooltip": "Spawn locusts that attack down the nearest lane",
+          "fullTooltip": "Spawns a Locust to attack down the nearest lane every <c val=\"bfd4fd\">15</c> seconds. Locusts last for <c val=\"bfd4fd\">16</c> seconds, have <c val=\"bfd4fd\">316~~0.04~~</c> health and deal <c val=\"bfd4fd\">46~~0.04~~</c> damage with each Basic Attack.",
+          "abilityType": "Trait"
+        }
+      ],
+      "mount": [
+        {
+          "nameId": "AbathurDeepTunnel",
+          "buttonId": "AbathurDeepTunnel",
+          "name": "Deep Tunnel",
+          "icon": "storm_ui_icon_abathur_mount.png",
+          "cooldownTooltip": "Cooldown: 30 seconds",
+          "shortTooltip": "Tunnel to a location.",
+          "fullTooltip": "Quickly tunnel to a visible location",
+          "abilityType": "Z"
+        }
+      ],
+      "hearth": [
+        {
+          "nameId": "Hearthstone",
+          "buttonId": "HearthstoneNoMana",
+          "name": "Hearthstone",
+          "icon": "storm_ui_icon_miscrune_1.png",
+          "fullTooltip": "After Channeling for <c val=\"bfd4fd\">6</c> seconds, teleport back to the Hall of Storms, instantly restoring <c val=\"bfd4fd\">1125</c> Health.",
+          "abilityType": "B"
+        }
+      ],
+      "spray": [
+        {
+          "nameId": "LootSpray",
+          "buttonId": "LootSpray",
+          "name": "Quick Spray Expression",
+          "icon": "storm_temp_war3_btnhealingspray.png",
+          "cooldownTooltip": "Cooldown: 3 seconds",
+          "fullTooltip": "Express yourself to other players by marking the ground with your selected spray.",
+          "abilityType": "Spray"
+        }
+      ],
+      "voice": [
+        {
+          "nameId": "LootYellVoiceLine",
+          "buttonId": "LootYellVoiceLine",
+          "name": "Quick Voice Line Expression",
+          "icon": "storm_btn_d3_barbarian_threateningshout.png",
+          "cooldownTooltip": "Cooldown: 7 seconds",
+          "fullTooltip": "Express yourself to other players by playing your selected Voice Line.",
+          "abilityType": "Voice"
+        }
+      ]
+    },
+    "subAbilities": [
+      {
+        "AbathurEvolveMonstrosity": {
+          "heroic": [
+            {
+              "nameId": "AbathurEvolveMonstrosityActiveSymbiote",
+              "buttonId": "EvolveMonstrosityActiveHotbar",
+              "name": "Evolve Monstrosity Active",
+              "icon": "storm_ui_icon_abathur_evolvemonstrosity.png",
+              "cooldownTooltip": "Cooldown: 4 seconds",
+              "fullTooltip": "Activate to cast Symbiote on Abathur's Monstrosity.",
+              "abilityType": "Heroic"
+            }
+          ]
+        }
+      }
+    ],
+    "talents": {
+      "level1": [
+        {
+          "nameId": "AbathurMasteryPressurizedGlands",
+          "buttonId": "AbathurSymbiotePressurizedGlandsTalent",
+          "name": "Pressurized Glands",
+          "icon": "storm_ui_icon_abathur_spikeburst.png",
+          "shortTooltip": "Increases Spike Burst range and decreases cooldown",
+          "fullTooltip": "Increases the range of Symbiote's Spike Burst by <c val=\"bfd4fd\">25%</c> and decreases the cooldown by <c val=\"bfd4fd\">1</c> second.",
+          "abilityType": "W",
+          "sort": 1,
+          "abilityTalentLinkIds": [
+            "AbathurSymbiote",
+            "AbathurSymbioteSpikeBurst"
+          ]
+        },
+        {
+          "nameId": "AbathurMasteryEnvenomedNestsToxicNest",
+          "buttonId": "AbathurToxicNestEnvenomedNestTalent",
+          "name": "Envenomed Nest",
+          "icon": "storm_ui_icon_abathur_toxicnest.png",
+          "charges": {
+            "countMax": 3,
+            "countUse": 1,
+            "countStart": 3,
+            "recastCooldown": 0.0625
+          },
+          "shortTooltip": "Toxic Nests deal more damage",
+          "fullTooltip": "Toxic Nests deal <c val=\"bfd4fd\">75%</c> more damage over <c val=\"bfd4fd\">3</c> seconds.",
+          "abilityType": "W",
+          "sort": 2,
+          "abilityTalentLinkIds": [
+            "AbathurToxicNest"
+          ]
+        },
+        {
+          "nameId": "AbathurReinforcedCarapace",
+          "buttonId": "AbathurReinforcedCarapaceTalent",
+          "name": "Reinforced Carapace",
+          "icon": "storm_ui_icon_abathur_carapace.png",
+          "shortTooltip": "Increase Carapace Shield",
+          "fullTooltip": "Increase the Shield amount of Carapace by 30%.",
+          "abilityType": "E",
+          "sort": 3,
+          "abilityTalentLinkIds": [
+            "AbathurSymbioteCarapace"
+          ]
+        },
+        {
+          "nameId": "AbathurCombatStyleSurvivalInstincts",
+          "buttonId": "AbathurLocustStrainSurvivalInstinctsTalent",
+          "name": "Survival Instincts",
+          "icon": "storm_ui_icon_abathur_spawnlocust.png",
+          "shortTooltip": "Increases Locust Health and damage",
+          "fullTooltip": "Increases Locust's Health by <c val=\"bfd4fd\">100%</c> and damage by <c val=\"bfd4fd\">60%</c>.",
+          "abilityType": "Trait",
+          "sort": 4,
+          "abilityTalentLinkIds": [
+            "AbathurSpawnLocusts"
+          ]
+        }
+      ],
+      "level4": [
+        {
+          "nameId": "AbathurSymbioteAdrenalOverload",
+          "buttonId": "AbathurSymbioteAdrenalOverloadTalent",
+          "name": "Adrenal Overload",
+          "icon": "storm_ui_icon_abathur_symbiote.png",
+          "shortTooltip": "Symbiote host gains Attack Speed",
+          "fullTooltip": "Heroic Symbiote hosts gain <c val=\"bfd4fd\">25%</c> increased Attack Speed.",
+          "abilityType": "Q",
+          "sort": 1,
+          "abilityTalentLinkIds": [
+            "AbathurSymbiote"
+          ]
+        },
+        {
+          "nameId": "AbathurMasteryNeedlespine",
+          "buttonId": "AbathurSymbioteNeedlespineTalent",
+          "name": "Needlespine",
+          "icon": "storm_ui_icon_abathur_stab.png",
+          "charges": {
+            "countMax": 2,
+            "countUse": 1,
+            "countStart": 2,
+            "recastCooldown": 1.0
+          },
+          "shortTooltip": "Increases Stab damage and range",
+          "fullTooltip": "Increases the damage and range of Symbiote's Stab by <c val=\"bfd4fd\">20%</c>.",
+          "abilityType": "Q",
+          "sort": 2,
+          "abilityTalentLinkIds": [
+            "AbathurSymbiote",
+            "AbathurSymbioteStab"
+          ]
+        },
+        {
+          "nameId": "AbathurMasteryProlificDispersal",
+          "buttonId": "AbathurToxicNestProlificDispersalTalent",
+          "name": "Prolific Dispersal",
+          "icon": "storm_ui_icon_abathur_toxicnest.png",
+          "charges": {
+            "countMax": 3,
+            "countUse": 1,
+            "countStart": 3,
+            "recastCooldown": 0.0625
+          },
+          "shortTooltip": "Increases Toxic Nest range, charges",
+          "fullTooltip": "Increase the range of Toxic Nest by <c val=\"bfd4fd\">30%</c>, reduce its cooldown by <c val=\"bfd4fd\">2</c> seconds, and add <c val=\"bfd4fd\">2</c> additional charges.",
+          "abilityType": "W",
+          "sort": 3,
+          "abilityTalentLinkIds": [
+            "AbathurToxicNest"
+          ]
+        }
+      ],
+      "level7": [
+        {
+          "nameId": "AbathurMasteryVileNestsToxicNest",
+          "buttonId": "AbathurToxicNestVileNestTalent",
+          "name": "Vile Nest",
+          "icon": "storm_ui_icon_abathur_toxicnest.png",
+          "charges": {
+            "countMax": 3,
+            "countUse": 1,
+            "countStart": 3,
+            "recastCooldown": 0.0625
+          },
+          "shortTooltip": "Toxic Nests slow Move Speed",
+          "fullTooltip": "Toxic Nests Slow enemy Movement Speed by <c val=\"bfd4fd\">40%</c> for <c val=\"bfd4fd\">2.5</c> seconds.",
+          "abilityType": "W",
+          "sort": 1,
+          "abilityTalentLinkIds": [
+            "AbathurToxicNest"
+          ]
+        },
+        {
+          "nameId": "AbathurSymbioteCarapaceNetworkedCarapace",
+          "buttonId": "AbathurSymbioteCarapaceNetworkedCarapaceTalent",
+          "name": "Networked Carapace",
+          "icon": "storm_ui_icon_abathur_carapace.png",
+          "shortTooltip": "Carapace Shields all nearby allies",
+          "fullTooltip": "Using Symbiote's Carapace also applies an untalented Carapace Shield to all nearby allied Heroes, Minions, and Mercenaries.",
+          "abilityType": "E",
+          "sort": 2,
+          "abilityTalentLinkIds": [
+            "AbathurSymbiote",
+            "AbathurSymbioteCarapace"
+          ]
+        },
+        {
+          "nameId": "GenericTalentCalldownMULE",
+          "buttonId": "GenericCalldownMule",
+          "name": "Calldown: MULE",
+          "icon": "storm_ui_icon_talent_mule.png",
+          "cooldownTooltip": "Cooldown: 60 seconds",
+          "shortTooltip": "Activate to heal Structures",
+          "fullTooltip": "Activate to calldown a Mule that repairs Structures, one at a time, near target point for <c val=\"bfd4fd\">40</c> seconds, healing for <c val=\"bfd4fd\">90</c> Health every <c val=\"bfd4fd\">1</c> second. ",
+          "abilityType": "Active",
+          "isActive": true,
+          "sort": 3
+        }
+      ],
+      "level10": [
+        {
+          "nameId": "AbathurHeroicAbilityUltimateEvolution",
+          "buttonId": "AbathurUltimateEvolution",
+          "name": "Ultimate Evolution",
+          "icon": "storm_ui_icon_abathur_ultimateevolution.png",
+          "cooldownTooltip": "Cooldown: 70 seconds",
+          "shortTooltip": "Clone target allied Hero and control it",
+          "fullTooltip": "Clone target allied Hero and control it for <c val=\"bfd4fd\">20</c> seconds. Abathur has perfected the clone, granting it <c val=\"bfd4fd\">20%</c> Spell Power, <c val=\"bfd4fd\">20%</c> bonus Attack Damage, and <c val=\"bfd4fd\">10%</c> bonus Movement Speed. Cannot use their Heroic Ability.",
+          "abilityType": "Heroic",
+          "isActive": true,
+          "sort": 1,
+          "abilityTalentLinkIds": [
+            "AbathurUltimateEvolution"
+          ]
+        },
+        {
+          "nameId": "AbathurHeroicAbilityEvolveMonstrosity",
+          "buttonId": "AbathurEvolveMonstrosityHotbar",
+          "name": "Evolve Monstrosity",
+          "icon": "storm_ui_icon_abathur_evolvemonstrosity.png",
+          "cooldownTooltip": "Cooldown: 90 seconds",
+          "shortTooltip": "Minion or Locust becomes a powerful Monstrosity",
+          "fullTooltip": "Turn an allied Minion or Locust into a Monstrosity. When enemy Minions near the Monstrosity die, it gains <c val=\"bfd4fd\">2%</c> Health and <c val=\"bfd4fd\">2%</c> Basic Attack damage, stacking up to <c val=\"bfd4fd\">40</c> times.  The Monstrosity can be healed by Carapace and has the ability to Burrow to a visible location every <c val=\"bfd4fd\">80</c> seconds.<n/><n/>Using Symbiote on the Monstrosity allows Abathur to control it, in addition to Symbiote's normal benefits.  This Ability can be reactivated to automatically cast Symbiote on his Monstrosity.",
+          "abilityType": "Heroic",
+          "isActive": true,
+          "sort": 2,
+          "abilityTalentLinkIds": [
+            "AbathurEvolveMonstrosity"
+          ]
+        }
+      ],
+      "level13": [
+        {
+          "nameId": "AbathurMasterySpatialEfficiency",
+          "buttonId": "AbathurSymbioteSpatialEfficiencyTalent",
+          "name": "Spatial Efficiency",
+          "icon": "storm_ui_icon_abathur_stab.png",
+          "charges": {
+            "countMax": 2,
+            "countUse": 1,
+            "countStart": 2,
+            "recastCooldown": 1.0
+          },
+          "shortTooltip": "Stab gains an additional charge",
+          "fullTooltip": "Symbiote's Stab gains <c val=\"bfd4fd\">1</c> additional charge and its cooldown is reduced by <c val=\"bfd4fd\">.5</c> seconds.",
+          "abilityType": "Q",
+          "sort": 1,
+          "abilityTalentLinkIds": [
+            "AbathurSymbiote",
+            "AbathurSymbioteStab"
+          ]
+        },
+        {
+          "nameId": "AbathurSymbioteSpikeBurstSomaTransference",
+          "buttonId": "AbathurSymbioteSpikeBurstSomaTransferenceTalent",
+          "name": "Soma Transference",
+          "icon": "storm_ui_icon_abathur_spikeburst.png",
+          "shortTooltip": "Spike Burst heals for each Hero hit",
+          "fullTooltip": "Symbiote's Spike Burst heals the host for <c val=\"bfd4fd\">64~~0.04~~</c> Health per enemy Hero hit.",
+          "abilityType": "W",
+          "sort": 2,
+          "abilityTalentLinkIds": [
+            "AbathurSymbiote",
+            "AbathurSymbioteSpikeBurst"
+          ]
+        },
+        {
+          "nameId": "AbathurCombatStyleBombardStrain",
+          "buttonId": "AbathurLocustStrainBombardStrainTalent",
+          "name": "Bombard Strain",
+          "icon": "storm_ui_icon_abathur_spawnlocust_var1.png",
+          "shortTooltip": "Locusts gain a ranged attack, increased duration",
+          "fullTooltip": "Locust's Basic Attacks become a long-range siege attack and their duration is increased by <c val=\"bfd4fd\">75%</c>.",
+          "abilityType": "Trait",
+          "sort": 3,
+          "abilityTalentLinkIds": [
+            "AbathurSpawnLocusts"
+          ]
+        }
+      ],
+      "level16": [
+        {
+          "nameId": "AbathurMasteryEnvenomedSpikes",
+          "buttonId": "AbathurSymbioteEnvenomedSpikesTalent",
+          "name": "Envenomed Spikes",
+          "icon": "storm_ui_icon_abathur_spikeburst.png",
+          "shortTooltip": "Spike Burst Slows Move Speed",
+          "fullTooltip": "Abathur's Symbiote's Spike Burst also Slows enemy Movement Speed by <c val=\"bfd4fd\">40%</c> for <c val=\"bfd4fd\">2</c> seconds.",
+          "abilityType": "W",
+          "sort": 1,
+          "abilityTalentLinkIds": [
+            "AbathurSymbiote",
+            "AbathurSymbioteSpikeBurst"
+          ]
+        },
+        {
+          "nameId": "AbathurMasteryAdrenalineBoost",
+          "buttonId": "AbathurSymbioteAdrenalineBoostTalent",
+          "name": "Adrenaline Boost",
+          "icon": "storm_ui_icon_abathur_carapace.png",
+          "shortTooltip": "Carapace increases Move Speed",
+          "fullTooltip": "Symbiote's Carapace increases the Movement Speed of the target by <c val=\"bfd4fd\">40%</c> for <c val=\"bfd4fd\">3.5</c> seconds.",
+          "abilityType": "E",
+          "sort": 2,
+          "abilityTalentLinkIds": [
+            "AbathurSymbiote",
+            "AbathurSymbioteCarapace"
+          ]
+        },
+        {
+          "nameId": "AbathurVolatileMutation",
+          "buttonId": "AbathurVolatileMutationTalent",
+          "name": "Volatile Mutation",
+          "icon": "storm_ui_icon_abathur_volatilemutation.png",
+          "shortTooltip": "Heroic summons radiate damage",
+          "fullTooltip": "Ultimate Evolution clones and Monstrosities deal <c val=\"bfd4fd\">137~~0.04~~</c> damage to nearby enemies every <c val=\"bfd4fd\">3</c> seconds and when they die. Enemy Heroes hit heal the clone or Monstrosity for <c val=\"bfd4fd\">75%</c> of the damage dealt.",
+          "abilityType": "Heroic",
+          "sort": 3,
+          "abilityTalentLinkIds": [
+            "AbathurEvolveMonstrosity",
+            "AbathurUltimateEvolution"
+          ]
+        },
+        {
+          "nameId": "AbathurCombatStyleLocustBrood",
+          "buttonId": "AbathurLocustSwarm",
+          "name": "Locust Brood",
+          "icon": "storm_ui_icon_abathur_spawnlocust.png",
+          "cooldownTooltip": "Cooldown: 45 seconds",
+          "shortTooltip": "Spawn a group of Locusts",
+          "fullTooltip": "Activate to spawn <c val=\"bfd4fd\">3</c> Locusts at a nearby location.",
+          "abilityType": "Active",
+          "isActive": true,
+          "sort": 4
+        }
+      ],
+      "level20": [
+        {
+          "nameId": "AbathurUltimateEvolutionEvolutionaryLink",
+          "buttonId": "AbathurUltimateEvolutionEvolutionaryLinkTalent",
+          "name": "Evolutionary Link",
+          "icon": "storm_ui_icon_abathur_ultimateevolution.png",
+          "shortTooltip": "Ultimate Evolution target gets a Shield",
+          "fullTooltip": "Increase the duration of Ultimate Evolution by <c val=\"bfd4fd\">50%</c>.  As long as the Ultimate Evolution is alive, the original target of the clone gains a Shield equal to <c val=\"bfd4fd\">25%</c> of their maximum Health.  Refreshes every <c val=\"bfd4fd\">5</c> seconds.",
+          "abilityType": "Heroic",
+          "sort": 1,
+          "abilityTalentLinkIds": [
+            "AbathurUltimateEvolution"
+          ],
+          "prerequisiteTalentIds": [
+            "AbathurHeroicAbilityUltimateEvolution"
+          ]
+        },
+        {
+          "nameId": "AbathurMasteryEvolutionComplete",
+          "buttonId": "AbathurMonstrosityEvolutionCompleteTalent",
+          "name": "Evolution Complete",
+          "icon": "storm_ui_icon_abathur_evolvemonstrosity.png",
+          "shortTooltip": "Monstrosity gains Attack Damage",
+          "fullTooltip": "Increase Monstrosity's Basic Attack damage by <c val=\"bfd4fd\">100%</c>.",
+          "abilityType": "Heroic",
+          "sort": 2,
+          "abilityTalentLinkIds": [
+            "AbathurEvolveMonstrosity"
+          ],
+          "prerequisiteTalentIds": [
+            "AbathurHeroicAbilityEvolveMonstrosity"
+          ]
+        },
+        {
+          "nameId": "AbathurSymbioteHivemind",
+          "buttonId": "AbathurSymbioteHivemindTalent",
+          "name": "Hivemind",
+          "icon": "storm_ui_icon_abathur_symbiote.png",
+          "shortTooltip": "Symbiote two targets",
+          "fullTooltip": "Symbiote creates an additional Symbiote on a nearby allied Hero.  This Symbiote mimics the commands of the first, but does half damage and Shielding.",
+          "abilityType": "Q",
+          "sort": 3,
+          "abilityTalentLinkIds": [
+            "AbathurSymbiote"
+          ]
+        },
+        {
+          "nameId": "AbathurMasteryLocustMaster",
+          "buttonId": "AbathurLocustMasterHotbar",
+          "name": "Locust Nest",
+          "icon": "storm_ui_icon_abathur_locustnest.png",
+          "cooldownTooltip": "Cooldown: 45 seconds",
+          "shortTooltip": "Create Locust Nests",
+          "fullTooltip": "Activate to create a nest that periodically spawns Locusts. Only one Locust Nest can be active at a time.",
+          "abilityType": "Active",
+          "isActive": true,
+          "sort": 4
+        }
+      ]
+    },
+    "heroUnits": [
+      {
+        "AbathurSymbiote": {
+          "name": "Symbiote",
+          "hyperlinkId": "AbathurSymbiote",
+          "sight": 4.0,
+          "speed": 0.0117,
+          "portraits": {
+            "targetInfo": "ui_targetportrait_hero_symbiote.png",
+            "minimap": "storm_ui_minimapicon_abathur_hat.png"
+          },
+          "life": {
+            "amount": 1.0,
+            "scale": 0.0,
+            "regenRate": 0.0,
+            "regenScale": 0.0
+          },
+          "abilities": {
+            "basic": [
+              {
+                "nameId": "AbathurSymbioteStab",
+                "buttonId": "AbathurSymbioteStab",
+                "name": "Stab",
+                "icon": "storm_ui_icon_abathur_stab.png",
+                "charges": {
+                  "countMax": 2,
+                  "countUse": 1,
+                  "countStart": 2,
+                  "recastCooldown": 1.0
+                },
+                "cooldownTooltip": "Charge Cooldown: 3 seconds",
+                "shortTooltip": "Shoots a spike that deals damage to the first enemy it contacts.",
+                "fullTooltip": "Shoots a spike towards target area that deals <c val=\"bfd4fd\">119~~0.04~~</c> damage to the first enemy it contacts.",
+                "abilityType": "Q"
+              },
+              {
+                "nameId": "AbathurSymbioteSpikeBurst",
+                "buttonId": "AbathurSymbioteSpikeBurst",
+                "name": "Spike Burst",
+                "icon": "storm_ui_icon_abathur_spikeburst.png",
+                "cooldownTooltip": "Cooldown: 6 seconds",
+                "shortTooltip": "Damage nearby enemies",
+                "fullTooltip": "Deals <c val=\"bfd4fd\">120~~0.04~~</c> damage to nearby enemies.",
+                "abilityType": "W"
+              },
+              {
+                "nameId": "AbathurSymbioteCarapace",
+                "buttonId": "AbathurSymbioteCarapace",
+                "name": "Carapace",
+                "icon": "storm_ui_icon_abathur_carapace.png",
+                "cooldownTooltip": "Cooldown: 6 seconds",
+                "fullTooltip": "Shields the assisted ally for <c val=\"bfd4fd\">150~~0.04~~</c>. Allied Heroes are healed for <c val=\"bfd4fd\">22~~0.04~~</c> Health per second while the Shield is active. Lasts for <c val=\"bfd4fd\">6</c> seconds.",
+                "abilityType": "E"
+              }
+            ],
+            "mount": [
+              {
+                "nameId": "AbathurMonstrosityDeepTunnel",
+                "buttonId": "AbathurMonstrosityDeepTunnel",
+                "name": "Deep Tunnel",
+                "icon": "storm_ui_icon_abathur_mount.png",
+                "cooldownTooltip": "Cooldown: 80 seconds",
+                "shortTooltip": "Tunnel to a location.",
+                "fullTooltip": "Order your Evolved Monstrosity to quickly tunnel to a visible location",
+                "abilityType": "Z"
+              }
+            ]
+          },
+          "subAbilities": [
+            {
+              "AbathurSymbiote": {
+                "heroic": [
+                  {
+                    "nameId": "AbathurAssumingDirectControlCancel",
+                    "buttonId": "AbathurSymbioteCancel",
+                    "name": "Cancel Symbiote",
+                    "icon": "hud_btn_bg_ability_cancel.png",
+                    "cooldownTooltip": "Cooldown: 1.5 seconds",
+                    "fullTooltip": "Cancels the Symbiote ability.",
+                    "abilityType": "Heroic"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
