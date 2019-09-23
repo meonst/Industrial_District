@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, render
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 import json
 def index(request):
     with open("/Users/smh21/Desktop/prog/silvercity/json/herodata_75589_enus.json", encoding = 'utf-8') as json_file:
@@ -19,7 +19,8 @@ def heropage(request, heroname):
             context = {
                 'herodata' : herodata[i]
             }
-            
-            return render(request, 'hero/heropage.html', context)
+            return JsonResponse(context)
+
+            #return render(request, 'hero/heropage.html', context)
 
 # Create your views here.
