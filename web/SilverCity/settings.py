@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'polls.apps.PollsConfig',
     'hero.apps.HeroConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
