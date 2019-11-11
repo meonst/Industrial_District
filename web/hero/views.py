@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, render
 from django.http import HttpResponse, Http404, JsonResponse
 import json
 def index(request):
-    with open("/Users/smh21/Desktop/prog/silvercity/json/herodata_75589_enus.json", encoding = 'utf-8') as json_file:
+    with open("../json/herodata_75589_enus.json", encoding = 'utf-8') as json_file:
         herodata = json.load(json_file)
     herolist = list()
     for herolink in herodata:
@@ -11,7 +11,7 @@ def index(request):
 
 
 def heropage(request, herolink):
-    with open("/Users/smh21/Desktop/prog/silvercity/json/herodata_75589_enus.json", encoding = 'utf-8') as json_file:
+    with open("../json/herodata_75589_enus.json", encoding = 'utf-8') as json_file:
         herodata = json.load(json_file)
         context = {
             'herodata' : herodata[herolink]
@@ -19,7 +19,7 @@ def heropage(request, herolink):
         return JsonResponse(context)
             #return render(request, 'hero/heropage.html', context)
 def heroskin(request, herolink):
-    with open("/Users/smh21/Desktop/prog/silvercity/json/heroskindata_75589_enus.json", encoding = 'utf-8') as json_file:
+    with open("../json/heroskindata_75589_enus.json", encoding = 'utf-8') as json_file:
         heroskindata = json.load(json_file)
         context = {}
         for i in heroskindata:
@@ -28,7 +28,7 @@ def heroskin(request, herolink):
                 context.update({'{}'.format(i) : heroskindata[i]})
         return JsonResponse(context)
 def herovoices(request, herolink):
-    with open("/Users/smh21/Desktop/prog/silvercity/json/voicelinedata_75589_enus.json", encoding = 'utf-8') as json_file:
+    with open("../json/voicelinedata_75589_enus.json", encoding = 'utf-8') as json_file:
         voicelinedata = json.load(json_file)
         context = {}
         for i in voicelinedata:
@@ -37,7 +37,7 @@ def herovoices(request, herolink):
         return JsonResponse(context)
 
 def herotalent(request, herolink):
-    with open("/Users/smh21/Desktop/prog/silvercity/json/herodata_75589_enus.json", encoding = 'utf-8') as json_file:
+    with open("../json/herodata_75589_enus.json", encoding = 'utf-8') as json_file:
         herodata = json.load(json_file)
         talents = {
             'talents' : herodata[herolink]['talents']
@@ -47,7 +47,7 @@ def herotalentshare(request, herolink, share):
     talenttier = [1, 4, 7, 10, 13, 16, 20]
     talentlist = list(share)
 
-    with open("/Users/smh21/Desktop/prog/silvercity/json/herodata_75589_enus.json", encoding = 'utf-8') as json_file:
+    with open("../json/herodata_75589_enus.json", encoding = 'utf-8') as json_file:
         herodata = json.load(json_file)
         talents = {
             'talents' : herodata[herolink]['talents']
