@@ -13,28 +13,29 @@ from PIL import Image, ImageTk
 
 talent_tier = [0, 1, 4, 7, 10, 13, 16, 20]
 Language = 'enus'
-with open('./json/announcerdata_75589_{}.json'.format(Language)) as json_file:
+version = '77692'
+with open('./json/announcerdata_{}_{}.json'.format(version, Language)) as json_file:
     announcer = json.load(json_file)
     
-with open('./json/bannerdata_75589_{}.json'.format(Language)) as json_file:
+with open('./json/bannerdata_{}_{}.json'.format(version, Language)) as json_file:
     banner = json.load(json_file)
 
-with open('./json/herodata_75589_{}.json'.format(Language)) as json_file:
+with open('./json/herodata_{}_{}.json'.format(version, Language)) as json_file:
     herodata = json.load(json_file)
     
-with open('./json/heroskindata_75589_{}.json'.format(Language)) as json_file:
+with open('./json/heroskindata_{}_{}.json'.format(version, Language)) as json_file:
     heroskin = json.load(json_file)
     
-with open('./json/mountdata_75589_{}.json'.format(Language)) as json_file:
+with open('./json/mountdata_{}_{}.json'.format(version, Language)) as json_file:
     mount = json.load(json_file)
     
-with open('./json/portraitdata_75589_{}.json'.format(Language)) as json_file:
+with open('./json/portraitdata_{}_{}.json'.format(version, Language)) as json_file:
     portrait = json.load(json_file)
     
-with open('./json/spraydata_75589_{}.json'.format(Language)) as json_file:
+with open('./json/spraydata_{}_{}.json'.format(version, Language)) as json_file:
     spray = json.load(json_file)
     
-with open('./json/voicelinedata_75589_{}.json'.format(Language)) as json_file:
+with open('./json/voicelinedata_{}_{}.json'.format(version, Language)) as json_file:
     voiceline = json.load(json_file)
 
 
@@ -239,8 +240,8 @@ def openreplay():
     #pprint.pprint(player, sys.stdout)
     #pprint.pprint(TeamBlue, sys.stdout)
     #pprint.pprint(TeamRed, sys.stdout)        
-    #for i in ChatHistory:
-    #    print '(' + str(i[0]//60) + ':' + str(i[0]%60) + ')' + player[i[1]]['PlayerName'] + ':', i[2]
+    for i in ChatHistory:
+        print '(' + str(i[0]//60) + ':' + str(i[0]%60) + ')' + player[i[1]]['PlayerName'] + ':', i[2]
     overview_page()
 
 #overview

@@ -1,6 +1,0 @@
-<h1>Heros</h1>
-<ul>
-{% for heroname, herolink in herolist %}
-    <li><a href = "{% url 'hero:heropage' herolink %}">{{ heroname }}</a></li>
-{% endfor %}
-</ul>
