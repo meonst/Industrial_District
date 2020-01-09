@@ -127,11 +127,14 @@ def openreplay():
     #    messageevents.log(sys.stdout, event)
     attributeevents = protocol.decode_replay_attributes_events(archive.read_file('replay.attributes.events'))
     if hasattr(protocol, 'decode_replay_tracker_events'):
-        contents = archive.read_file('replay.tracker.events')    
+        contents = archive.read_file('replay.tracker.events')
+
+
         for event in protocol.decode_replay_tracker_events(contents):
             #pprint.pprint(event, sys.stdout)
             if event.has_key('m_eventName'):
                 #pprint.pprint(event['m_eventName'], sys.stdout)
+
 
                 #TimeSpentDead
                 if event['m_eventName'] == 'EndOfGameTimeSpentDead':
@@ -205,8 +208,6 @@ def openreplay():
                     time = looptime(event['_gameloop'])
                     player_number = event['m_intData'][0]['m_value'] - 1
                     player[player_number]['RegenGlobesTime'].append(time)
-
-            
 
     initdata = protocol.decode_replay_initdata(archive.read_file('replay.initData'))
     #print "header", header
