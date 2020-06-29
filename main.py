@@ -1,12 +1,13 @@
 import heroprotocol
 from heroprotocol.versions import build, latest
-
+from flask import Flask, render_template
 import sys
 import pprint
 import json
 import tkinter, tkinter.filedialog
 import mpyq
 
+app = Flask(__name__)
 plane = tkinter.Tk()
 plane.title("Replay")
 plane.geometry("1000x500")
@@ -159,8 +160,15 @@ def open_replay():
             time = looptime(i['_gameloop'])
             player[player_number]['Pings'].append(time)
 
-    pprint.pprint(player[4])
-    for i in chatHistory:
-        print('({}:{}){}: {}'.format(format(int(i[0]//60), '02d'), format(int(i[0]%60), '02d'), player[int(i[1])]['playerName'].decode(), i[2].decode()))
+    #for i in chatHistory:
+        #print('({}:{}){}: {}'.format(format(int(i[0]//60), '02d'), format(int(i[0]%60), '02d'), player[int(i[1])]['playerName'].decode(), i[2].decode()))
     
 open_replay()
+
+@app.route('/')
+def home():
+    chatlog = ""
+    for i in chatHistory:
+        chatlog += '({}:{}){}: {}'.format(format(int(i[0]//60), '02d'), format(int(i[0]%60), '02d'), player[int(i[1])]['playerName'].decode(), i[2].decode()) + "\n"
+    
+    return render_template('home.html', chatlog=chatlog)
