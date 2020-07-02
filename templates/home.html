@@ -3,11 +3,18 @@
 <title> home </title>
 
 
-<button
+<body>
+    <form action = "upload" method = "POST"
+        enctype = "multipart/form-data">
+        <input type = "file" name = "file" />
+        <input type = "submit"/>
 
->
-    Choose Replay
-</button>
+
+    </form>
+</body>
+
+
+
 <br>
 
 {% if chatlog %}

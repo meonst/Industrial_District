@@ -1,6 +1,7 @@
 import heroprotocol
 from heroprotocol.versions import build, latest
-from flask import Flask, render_template
+from flask import Flask, render_template, Response, request
+
 import sys
 import pprint
 import json
@@ -8,9 +9,7 @@ import tkinter, tkinter.filedialog
 import mpyq
 
 app = Flask(__name__)
-plane = tkinter.Tk()
-plane.title("Replay")
-plane.geometry("1000x500")
+
 talent_tier = [0, 1, 4, 7, 10, 13, 16, 20]
 player = list(dict() for i in range(0, 10))
 version = '80333'
@@ -37,11 +36,11 @@ teamRed['CampCapture'] = list()
 def looptime(t):
     return (t - 610) / 16
 
-def open_replay():
-    #plane.filename = tkinter.filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("replay files","*.StormReplay"),("all files","*.*")))
+def open_replay(replay_file):
+    #filename = tkinter.filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("replay files","*.StormReplay"),("all files","*.*")))
     #just disabling choosing file while in the making
-    plane.filename = "C:/Users/smh21/Desktop/silvercity/2020-06-26 18.03.00 브락시스 전초기지.StormReplay"
-    archive = mpyq.MPQArchive(plane.filename)
+    #filename = "C:/Users/smh21/Desktop/silvercity/2020-06-26 18.03.00 브락시스 전초기지.StormReplay"
+    archive = mpyq.MPQArchive(replay_file)
     # Read the protocol header, this can be read with any protocol
     header = latest().decode_replay_header(archive.header['user_data_header']['content'])
     baseBuild = header['m_version']['m_baseBuild']
@@ -163,12 +162,22 @@ def open_replay():
     #for i in chatHistory:
         #print('({}:{}){}: {}'.format(format(int(i[0]//60), '02d'), format(int(i[0]%60), '02d'), player[int(i[1])]['playerName'].decode(), i[2].decode()))
     
-open_replay()
+#open_replay()
 
 @app.route('/')
 def home():
-    chatlog = ""
-    for i in chatHistory:
-        chatlog += '({}:{}){}: {}'.format(format(int(i[0]//60), '02d'), format(int(i[0]%60), '02d'), player[int(i[1])]['playerName'].decode(), i[2].decode()) + "\n"
+    return render_template('home.html')
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+    if request.method == 'POST':
+        replay = request.files['file']
+        open_replay(replay)
+        chatlog = ""
+        for i in chatHistory:
+            chatlog += '({}:{}){}: {}'.format(format(int(i[0]//60), '02d'), format(int(i[0]%60), '02d'), player[int(i[1])]['playerName'].decode(), i[2].decode()) + "<br>"    
+        return chatlog
     
-    return render_template('home.html', chatlog=chatlog)
+    if __name__ == '__main__':
+        app.run(debug=True)
+    
