@@ -1,42 +1,43 @@
-import heroprotocol
+import heroprotocol, sys, pprint, json, mpyq
 from heroprotocol.versions import build, latest
 from flask import Flask, render_template, Response, request
+#import tkinter, tkinter.filedialog
 
-import sys
-import pprint
-import json
-import tkinter, tkinter.filedialog
-import mpyq
 
 app = Flask(__name__)
 
+talent_sort = ['80', '20', '0g', '04', '01']
 talent_tier = [0, 1, 4, 7, 10, 13, 16, 20]
+global chatHistory, teamBlue, teamRed, player
 player = list(dict() for i in range(0, 10))
 version = '80333'
 Language = 'enus'
 with open('./json/herodata_{}_{}.json'.format(version, Language), encoding='utf-8') as json_file:
     herodata = json.load(json_file)
 
-for i in player:
-    i['RegenGlobesTime'] = list()
-    i['Pings'] = list()
-    i['Spray'] = list()
-    i['VoiceLine'] = list()
-    i['PlayerKill'] = list()
-    i['Death'] = list()
-    
-chatHistory = list()
-teamBlue = dict()
-teamRed = dict()
-teamBlue['LevelUp'] = list(0 for i in range(0, 2))
-teamRed['LevelUp'] = list(0 for i in range(0, 2))
-teamBlue['CampCapture'] = list()
-teamRed['CampCapture'] = list()
 
 def looptime(t):
     return (t - 610) / 16
 
 def open_replay(replay_file):
+    for i in player:
+        i['RegenGlobesTime'] = list()
+        i['Pings'] = list()
+        i['Spray'] = list()
+        i['VoiceLine'] = list()
+        i['PlayerKill'] = list()
+        i['Death'] = list()
+        i['talent'] = "https://min.hyeok.org/SILVER/#/"
+    chatHistory = list()
+    teamBlue = dict()
+    teamRed = dict()
+    teamBlue['LevelUp'] = list(0 for i in range(0, 2))
+    teamRed['LevelUp'] = list(0 for i in range(0, 2))
+    teamBlue['CampCapture'] = list()
+    teamRed['CampCapture'] = list()
+
+
+    
     #filename = tkinter.filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("replay files","*.StormReplay"),("all files","*.*")))
     #just disabling choosing file while in the making
     #filename = "C:/Users/smh21/Desktop/silvercity/2020-06-26 18.03.00 브락시스 전초기지.StormReplay"
@@ -53,7 +54,7 @@ def open_replay(replay_file):
     gameevents = archive.read_file('replay.game.events')
     messageevents = archive.read_file('replay.message.events')
     attributeevents = protocol.decode_replay_attributes_events(archive.read_file('replay.attributes.events'))
-
+    
     if hasattr(protocol, 'decode_replay_tracker_events'):
         contents =archive.read_file('replay.tracker.events')
         for event in protocol.decode_replay_tracker_events(contents):
@@ -94,12 +95,16 @@ def open_replay(replay_file):
                             for Hero in herodata:
                                 if herodata[Hero]["unitId"] == i['m_value'].decode():
                                     thisHero = Hero
+                                    thisHeroName = herodata[Hero]["name"]
+                                    break
                             player[player_number][i['m_key'].decode()] = thisHero
+                            player[player_number]['heroName'] = thisHeroName
+                            player[player_number]['talent'] += player[player_number]['Hero'] + "/"
 
                         elif i['m_key'].decode() != 'Win/Loss' and i['m_key'] != 'Map':
                             for which_talent in herodata[player[player_number]['Hero']]["talents"]["level{}".format(talent_tier[j])]:
                                 if which_talent["nameId"] == i['m_value'].decode():
-                                    player[player_number]['tier{}'.format(j)] = which_talent
+                                    player[player_number]['talent'] += talent_sort[which_talent['sort'] - 1]
                                     j += 1
                                     continue
             
@@ -158,26 +163,30 @@ def open_replay(replay_file):
             player_number = i['_userid']['m_userId'] - 1
             time = looptime(i['_gameloop'])
             player[player_number]['Pings'].append(time)
-
     #for i in chatHistory:
         #print('({}:{}){}: {}'.format(format(int(i[0]//60), '02d'), format(int(i[0]%60), '02d'), player[int(i[1])]['playerName'].decode(), i[2].decode()))
-    
-#open_replay()
+    return [chatHistory, player, teamBlue, teamRed]
 
 @app.route('/')
 def home():
+
     return render_template('home.html')
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
         replay = request.files['file']
-        open_replay(replay)
+        
+        [global_chatHistory, global_player, global_teamBlue, global_teamRed] = open_replay(replay)
+        
         chatlog = ""
-        for i in chatHistory:
-            chatlog += '({}:{}){}: {}'.format(format(int(i[0]//60), '02d'), format(int(i[0]%60), '02d'), player[int(i[1])]['playerName'].decode(), i[2].decode()) + "<br>"    
-        return chatlog
+        talents = ""
+        for i in global_player:
+            talents += "{}{} ({}) : {}".format("\n", i['playerName'].decode(), i['heroName'], i['talent'])
+        for i in global_chatHistory:
+            chatlog += "{}({}:{}){}: {}".format("\n", format(int(i[0]//60), '02d'), format( int(i[0]%60), '02d'), player[int(i[1])]['playerName'].decode(), i[2].decode()) 
+        return render_template('upload.html', chatlog=chatlog, talents=talents)
     
-    if __name__ == '__main__':
-        app.run(debug=True)
+    else:
+        return render_template('error.html')
     

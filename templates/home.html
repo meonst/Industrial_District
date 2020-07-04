@@ -6,16 +6,11 @@
 <body>
     <form action = "upload" method = "POST"
         enctype = "multipart/form-data">
-        <input type = "file" name = "file" />
-        <input type = "submit" value="submit replay">
+        <input type = "file" name = "file" value = "Choose Replay"/>
+        <br>
+        <br>
+        <input type = "submit" name = "submit" value = "Submit Replay"/>
+
 
     </form>
 </body>
-
-
-
-<br>
-
-{% if chatlog %}
-    {{chatlog}}
-{% endif %}
