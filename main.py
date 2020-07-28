@@ -46,10 +46,11 @@ def open_replay(replay_file):
     header = latest().decode_replay_header(archive.header['user_data_header']['content'])
     baseBuild = header['m_version']['m_baseBuild']
     try:
-        protocol = __import__('protocol%s' % baseBuild)
+        protocol = __import__('heroprotocol.versions.protocol%s' % baseBuild, fromlist=['baseBuild'])
     except:
         print >> sys.stderr, 'Unsupported base build: %d' % baseBuild
         sys.exit(1)
+
     details = protocol.decode_replay_details(archive.read_file('replay.details'))
     gameevents = archive.read_file('replay.game.events')
     messageevents = archive.read_file('replay.message.events')
@@ -57,7 +58,25 @@ def open_replay(replay_file):
     
     if hasattr(protocol, 'decode_replay_tracker_events'):
         contents =archive.read_file('replay.tracker.events')
+
         for event in protocol.decode_replay_tracker_events(contents):
+            if event['_event'] == 'NNet.Replay.Tracker.SScoreResultEvent':
+                endOfGame = dict()
+                for i in event['m_instanceList']:
+                    values = list()
+                    print(i['m_name'].decode())
+                    for j in i['m_values'][0:10]:
+                        values.append(j[0]['m_value'])
+                    #if values != [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]:
+                    endOfGame[i['m_name'].decode()] = values
+                pprint.pprint(endOfGame)
+                
+                
+                            
+                        
+
+
+
             if 'm_eventName' in event:
                 #TimeSpentDead
                 if event['m_eventName'].decode() == 'EndOfGameTimeSpentDead':
@@ -136,6 +155,9 @@ def open_replay(replay_file):
                     time = looptime(event['_gameloop'])
                     player_number = event['m_intData'][0]['m_value'] - 1
                     player[player_number]['RegenGlobesTime'].append(time)
+                    
+                
+
             #try:
                 #pprint.pprint(event['m_eventName'], sys.stdout)
             #except:
@@ -181,6 +203,7 @@ def upload():
         
         chatlog = ""
         talents = ""
+        #pprint.pprint(player)
         for i in global_player:
             talents += "{}{} ({}) : {}".format("\n", i['playerName'].decode(), i['heroName'], i['talent'])
         for i in global_chatHistory:
