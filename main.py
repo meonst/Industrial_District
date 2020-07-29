@@ -1,10 +1,13 @@
 import heroprotocol, sys, pprint, json, mpyq
 from heroprotocol.versions import build, latest
 from flask import Flask, render_template, Response, request
-#import tkinter, tkinter.filedialog
-
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 app = Flask(__name__)
+env = Environment(
+    loader=FileSystemLoader('templates'),
+    autoescape=select_autoescape(['html', 'xml'])
+)
 
 talent_sort = ['80', '20', '0g', '04', '01']
 talent_tier = [0, 1, 4, 7, 10, 13, 16, 20]
@@ -61,19 +64,14 @@ def open_replay(replay_file):
 
         for event in protocol.decode_replay_tracker_events(contents):
             if event['_event'] == 'NNet.Replay.Tracker.SScoreResultEvent':
-                endOfGame = dict()
+                stats = dict()
                 for i in event['m_instanceList']:
                     values = list()
-                    print(i['m_name'].decode())
                     for j in i['m_values'][0:10]:
                         values.append(j[0]['m_value'])
                     #if values != [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]:
-                    endOfGame[i['m_name'].decode()] = values
-                pprint.pprint(endOfGame)
-                
-                
-                            
-                        
+                    stats[i['m_name'].decode()] = values
+  
 
 
 
@@ -162,8 +160,8 @@ def open_replay(replay_file):
                 #pprint.pprint(event['m_eventName'], sys.stdout)
             #except:
                 #a=1
-        # Hero name, Player name, Team
 
+    # Hero name, Player name, Team
     player_number = 0
     for i in details['m_playerList']:
         team = 'other'
@@ -187,29 +185,28 @@ def open_replay(replay_file):
             player[player_number]['Pings'].append(time)
     #for i in chatHistory:
         #print('({}:{}){}: {}'.format(format(int(i[0]//60), '02d'), format(int(i[0]%60), '02d'), player[int(i[1])]['playerName'].decode(), i[2].decode()))
-    return [chatHistory, player, teamBlue, teamRed]
+    return [chatHistory, player, teamBlue, teamRed, stats]
 
 @app.route('/')
-def home():
+def home_page():
+    home_template = env.get_template('home.html')
+    return home_template.render()
 
-    return render_template('home.html')
-
-@app.route('/upload', methods=['GET', 'POST'])
-def upload():
+@app.route('/replay', methods=['GET', 'POST'])
+def replay_page():
     if request.method == 'POST':
         replay = request.files['file']
-        
-        [global_chatHistory, global_player, global_teamBlue, global_teamRed] = open_replay(replay)
-        
+        [global_chatHistory, global_player, global_teamBlue, global_teamRed, global_stats] = open_replay(replay)
+
         chatlog = ""
-        talents = ""
-        #pprint.pprint(player)
-        for i in global_player:
-            talents += "{}{} ({}) : {}".format("\n", i['playerName'].decode(), i['heroName'], i['talent'])
         for i in global_chatHistory:
             chatlog += "{}({}:{}){}: {}".format("\n", format(int(i[0]//60), '02d'), format( int(i[0]%60), '02d'), player[int(i[1])]['playerName'].decode(), i[2].decode()) 
-        return render_template('upload.html', chatlog=chatlog, talents=talents)
-    
-    else:
-        return render_template('error.html')
-    
+
+        talents = dict()
+        for i in global_player:
+            talents["{}{} ({}) : ".format("\n", i['playerName'].decode(), i['heroName'])] = i['talent']
+        
+        replay_template = env.get_template('replay.html')
+
+        return replay_template.render(chatlog=chatlog, talents=talents, stats=global_stats)
+

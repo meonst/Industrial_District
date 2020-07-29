@@ -1,0 +1,59 @@
+<!doctype html>
+
+<title>replay</title>
+
+<body>
+    <form method = "POST" enctype = "multipart/form-data">
+        <input type = "file" name = "file" value = "Choose Replay"/>
+        <input type = "submit" name = "submit" value = "submit replay" formaction="replay"/>
+    </form>
+</body>
+
+<br>
+<button onclick='toggle("chatlog")'>chatlog</button>
+<button onclick='toggle("talents")'>talents</button>
+<button onclick='toggle("stats")'>stats</button>
+
+<pre id='chatlog' style='display:none;'>
+    {% if chatlog %}
+    {{chatlog}}
+    {% endif %}
+</pre>
+
+<pre id='talents' style='display:none;'>
+    {% for i in talents %}
+    {{ i }}<a href="{{ talents[i] }}">{{ talents[i] }}</a>
+    {% endfor %}
+</pre>
+
+<pre id=stats style='display:none;'>
+    {% for i in stats %}
+    {{ i }}, {{ stats[i] }}
+    {% endfor %}
+</pre>
+
+<script>
+    function toggle(selected_block) {
+        chatlog_block = document.getElementById("chatlog")
+        talents_block = document.getElementById("talents")
+        stats_block = document.getElementById("stats")
+        if (selected_block === "chatlog") {
+            chatlog_block.style.display = "block"    
+            talents_block.style.display = "none"    
+            stats_block.style.display = "none"    
+        }
+        else if (selected_block === "talents") {
+            chatlog_block.style.display = "none"   
+            talents_block.style.display = "block"    
+            stats_block.style.display = "none"    
+        }
+        else if (selected_block === "stats") {
+            chatlog_block.style.display = "none"    
+            talents_block.style.display = "none"    
+            stats_block.style.display = "block"    
+        }
+    }
+</script>
+
+
+
