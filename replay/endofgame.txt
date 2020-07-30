@@ -38,7 +38,7 @@ TimeStunningEnemyHeroes = 상대편 기절 시간
 ClutchHealsPerformed = 죽기 직전에 힐한 횟수
 EscapesPerformed = 딸피로 살아난 횟수
 VengeancesPerformed = 복수한 죽음 수
-TeamfightEscapesPerformed = 
+TeamfightEscapesPerformed = 한타 중 딸피로 살아난 횟수
 OutnumberedDeaths = 수적으로 열세인 동안 죽은 수
 TeamfightHealingDone = 한타 중 힐
 TeamfightDamageTaken = 한타 중 받은 데미지
@@ -51,6 +51,7 @@ SpellDamage = 스킬 데미지 + 스킬 데미지 특성
 Multikill = 연속킬 횟수
 MinionKills = 돌격병 죽인 횟수
 RegenGlobes = 재생의 구슬 획득 수
+OnFireTimeOnFire = 불타는 시간 
 
 EndOfMatchAwardMVPBoolean = 엠비피
 EndOfMatchAwardHighestKillStreakBoolean = 연속 처치 
@@ -148,7 +149,7 @@ PlaysFemale = 여성 캐릭터 플레이
 
 Role = 다 0
 EndOfMatchAwardGivenToNonwinner = 다 0
-OnFireTimeOnFire = 다 0
+
 GameScore = 다 0
 LunarNewYearSuccesfulArtifactTurnIns = 이벤트
 LunarNewYearEventCompleted = 이벤트

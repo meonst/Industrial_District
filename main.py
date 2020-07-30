@@ -30,7 +30,7 @@ def open_replay(replay_file):
         i['VoiceLine'] = list()
         i['PlayerKill'] = list()
         i['Death'] = list()
-        i['talent'] = "https://min.hyeok.org/SILVER/#/"
+        i['talent'] = ""
     chatHistory = list()
     teamBlue = dict()
     teamRed = dict()
@@ -64,14 +64,14 @@ def open_replay(replay_file):
 
         for event in protocol.decode_replay_tracker_events(contents):
             if event['_event'] == 'NNet.Replay.Tracker.SScoreResultEvent':
-                stats = dict()
+                statistics = dict()
                 for i in event['m_instanceList']:
                     values = list()
                     for j in i['m_values'][0:10]:
                         values.append(j[0]['m_value'])
-                    #if values != [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]:
-                    stats[i['m_name'].decode()] = values
-  
+                    if values != [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]:
+                        statistics[i['m_name'].decode()] = values
+
 
 
 
@@ -103,7 +103,7 @@ def open_replay(replay_file):
                             if time != teamRed['LevelUp'][-1]:
                                 teamRed['LevelUp'].append(time)
                                 
-                #Talents, Hero
+                #Hero, Talents
                 if event['m_eventName'].decode() == 'EndOfGameTalentChoices':
                     player_number = event['m_intData'][0]['m_value'] - 1
                     j = 1
@@ -116,7 +116,7 @@ def open_replay(replay_file):
                                     break
                             player[player_number][i['m_key'].decode()] = thisHero
                             player[player_number]['heroName'] = thisHeroName
-                            player[player_number]['talent'] += player[player_number]['Hero'] + "/"
+                            player[player_number]['heroLink'] = player[player_number]['Hero']
 
                         elif i['m_key'].decode() != 'Win/Loss' and i['m_key'] != 'Map':
                             for which_talent in herodata[player[player_number]['Hero']]["talents"]["level{}".format(talent_tier[j])]:
@@ -124,6 +124,8 @@ def open_replay(replay_file):
                                     player[player_number]['talent'] += talent_sort[which_talent['sort'] - 1]
                                     j += 1
                                     continue
+                
+                                    
             
                             
                 #Player Kills
@@ -160,7 +162,8 @@ def open_replay(replay_file):
                 #pprint.pprint(event['m_eventName'], sys.stdout)
             #except:
                 #a=1
-
+    for i in player:
+        i['talent'] = i['talent'].ljust(14, '0')
     # Hero name, Player name, Team
     player_number = 0
     for i in details['m_playerList']:
@@ -185,7 +188,13 @@ def open_replay(replay_file):
             player[player_number]['Pings'].append(time)
     #for i in chatHistory:
         #print('({}:{}){}: {}'.format(format(int(i[0]//60), '02d'), format(int(i[0]%60), '02d'), player[int(i[1])]['playerName'].decode(), i[2].decode()))
-    return [chatHistory, player, teamBlue, teamRed, stats]
+    stats = statistics.copy()
+    excludeFromStats = ['TeamWinsDiablo','TeamWinsFemale', 'TeamWinsMale', 'TeamWinsStarCraft', 'TeamWinsWarcraft','WinsWarrior', 'WinsAssassin', 'WinsSupport','WinsSpecialist','WinsStarCraft', 'WinsDiablo', 'WinsWarcraft', 'WinsMale', 'WinsFemale', 'PlaysStarCraft', 'PlaysDiablo', 'PlaysOverwatch', 'PlaysWarCraft', 'PlaysWarrior', 'PlaysAssassin', 'PlaysSupport', 'PlaysSpecialist', 'PlaysMale', 'PlaysFemale', 'Tier1Talent', 'Tier2Talent', 'Tier3Talent', 'Tier4Talent', 'Tier5Talent', 'Tier6Talent', 'Tier7Talent', 'TeamLevel', 'LessThan4Deaths', 'LessThan3TownStructuresLost', 'Level', 'MetaExperience', 'TeamTakedowns', 'Role', 'EndOfMatchAwardGivenToNonwinner', 'GameScore', 'LunarNewYearSuccesfulArtifactTurnIns', 'LunarNewYearEventCompleted', 'StarcraftDailyEventCompleted', 'StarcraftPiecesCollected', 'LunarNewYearRoosterEventCompleted', 'PachimariMania', 'TouchByBlightPlague', 'EscapesPerformed', 'VengeancesPerformed', 'TeamfightEscapesPerformed', 'OutnumberedDeaths', 'EndOfMatchAwardMVPBoolean', 'EndOfMatchAwardHighestKillStreakBoolean', 'EndOfMatchAwardMostVengeancesPerformedBoolean', 'EndOfMatchAwardMostDaredevilEscapesBoolean', 'EndOfMatchAwardMostEscapesBoolean', 'EndOfMatchAwardMostXPContributionBoolean', 'EndOfMatchAwardMostHeroDamageDoneBoolean', 'EndOfMatchAwardMostKillsBoolean', 'EndOfMatchAwardHatTrickBoolean', 'EndOfMatchAwardClutchHealerBoolean', 'EndOfMatchAwardMostProtectionBoolean', 'EndOfMatchAward0DeathsBoolean', 'EndOfMatchAwardMostSiegeDamageDoneBoolean', 'EndOfMatchAwardMostDamageTakenBoolean', 'EndOfMatchAward0OutnumberedDeathsBoolean', 'EndOfMatchAwardMostHealingBoolean', 'EndOfMatchAwardMostStunsBoolean', 'EndOfMatchAwardMostRootsBoolean', 'EndOfMatchAwardMostSilencesBoolean', 'EndOfMatchAwardMostMercCampsCapturedBoolean', 'EndOfMatchAwardMostTeamfightDamageTakenBoolean', 'EndOfMatchAwardMostTeamfightHealingDoneBoolean', 'EndOfMatchAwardMostTeamfightHeroDamageDoneBoolean', 'EndOfMatchAwardMostDamageToMinionsBoolean', 'EndOfMatchAwardMapSpecificBoolean', 'EndOfMatchAwardMostDragonShrinesCapturedBoolean', 'EndOfMatchAwardMostTimePushingBoolean', 'EndOfMatchAwardMostTimeOnPointBoolean', 'EndOfMatchAwardMostInterruptedCageUnlocksBoolean', 'EndOfMatchAwardMostSeedsCollectedBoolean', 'EndOfMatchAwardMostDamageToPlantsBoolean', 'EndOfMatchAwardMostCurseDamageDoneBoolean', 'EndOfMatchAwardMostCoinsPaidBoolean', 'EndOfMatchAwardMostImmortalDamageBoolean', 'EndOfMatchAwardMostDamageDoneToZergBoolean', 'EndOfMatchAwardMostTimeInTempleBoolean', 'EndOfMatchAwardMostGemsTurnedInBoolean', 'EndOfMatchAwardMostSkullsCollectedBoolean', 'EndOfMatchAwardMostAltarDamageDone', 'EndOfMatchAwardMostNukeDamageDoneBoolean']
+    for i in excludeFromStats:
+        stats.pop(i, None)
+    
+
+    return [chatHistory, player, teamBlue, teamRed, stats, statistics]
 
 @app.route('/')
 def home_page():
@@ -196,7 +205,7 @@ def home_page():
 def replay_page():
     if request.method == 'POST':
         replay = request.files['file']
-        [global_chatHistory, global_player, global_teamBlue, global_teamRed, global_stats] = open_replay(replay)
+        [global_chatHistory, global_player, global_teamBlue, global_teamRed, global_stats, global_statistics] = open_replay(replay)
 
         chatlog = ""
         for i in global_chatHistory:
@@ -204,9 +213,8 @@ def replay_page():
 
         talents = dict()
         for i in global_player:
-            talents["{}{} ({}) : ".format("\n", i['playerName'].decode(), i['heroName'])] = i['talent']
-        
+            talents["{}{} ({}) : ".format("\n", i['playerName'].decode(), i['heroName'])] = "https://min.hyeok.org/SILVER/#/" + i['heroLink'] + '/' + i['talent']
         replay_template = env.get_template('replay.html')
 
-        return replay_template.render(chatlog=chatlog, talents=talents, stats=global_stats)
+        return replay_template.render(chatlog=chatlog, talents=talents, stats=global_stats, statistics=global_statistics)
 
