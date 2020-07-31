@@ -1,6 +1,6 @@
 import heroprotocol, sys, pprint, json, mpyq
 from heroprotocol.versions import build, latest
-from flask import Flask, render_template, Response, request
+from flask import Flask, render_template, Response, request, url_for
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 app = Flask(__name__)
@@ -58,7 +58,8 @@ def open_replay(replay_file):
     gameevents = archive.read_file('replay.game.events')
     messageevents = archive.read_file('replay.message.events')
     attributeevents = protocol.decode_replay_attributes_events(archive.read_file('replay.attributes.events'))
-    
+    heroList = list()
+    nameList = list()
     if hasattr(protocol, 'decode_replay_tracker_events'):
         contents =archive.read_file('replay.tracker.events')
 
@@ -104,6 +105,8 @@ def open_replay(replay_file):
                                 teamRed['LevelUp'].append(time)
                                 
                 #Hero, Talents
+                
+                
                 if event['m_eventName'].decode() == 'EndOfGameTalentChoices':
                     player_number = event['m_intData'][0]['m_value'] - 1
                     j = 1
@@ -116,6 +119,7 @@ def open_replay(replay_file):
                                     break
                             player[player_number][i['m_key'].decode()] = thisHero
                             player[player_number]['heroName'] = thisHeroName
+                            heroList.append(thisHeroName)
                             player[player_number]['heroLink'] = player[player_number]['Hero']
 
                         elif i['m_key'].decode() != 'Win/Loss' and i['m_key'] != 'Map':
@@ -174,6 +178,8 @@ def open_replay(replay_file):
             team = 'Blue'
         player[player_number]['team'] = team
         player[player_number]['playerName'] = i['m_name']
+        nameList.append(i['m_name'].decode())
+        
         player_number += 1
 
     for i in protocol.decode_replay_message_events(messageevents):  
@@ -188,13 +194,14 @@ def open_replay(replay_file):
             player[player_number]['Pings'].append(time)
     #for i in chatHistory:
         #print('({}:{}){}: {}'.format(format(int(i[0]//60), '02d'), format(int(i[0]%60), '02d'), player[int(i[1])]['playerName'].decode(), i[2].decode()))
+    
     stats = statistics.copy()
     excludeFromStats = ['TeamWinsDiablo','TeamWinsFemale', 'TeamWinsMale', 'TeamWinsStarCraft', 'TeamWinsWarcraft','WinsWarrior', 'WinsAssassin', 'WinsSupport','WinsSpecialist','WinsStarCraft', 'WinsDiablo', 'WinsWarcraft', 'WinsMale', 'WinsFemale', 'PlaysStarCraft', 'PlaysDiablo', 'PlaysOverwatch', 'PlaysWarCraft', 'PlaysWarrior', 'PlaysAssassin', 'PlaysSupport', 'PlaysSpecialist', 'PlaysMale', 'PlaysFemale', 'Tier1Talent', 'Tier2Talent', 'Tier3Talent', 'Tier4Talent', 'Tier5Talent', 'Tier6Talent', 'Tier7Talent', 'TeamLevel', 'LessThan4Deaths', 'LessThan3TownStructuresLost', 'Level', 'MetaExperience', 'TeamTakedowns', 'Role', 'EndOfMatchAwardGivenToNonwinner', 'GameScore', 'LunarNewYearSuccesfulArtifactTurnIns', 'LunarNewYearEventCompleted', 'StarcraftDailyEventCompleted', 'StarcraftPiecesCollected', 'LunarNewYearRoosterEventCompleted', 'PachimariMania', 'TouchByBlightPlague', 'EscapesPerformed', 'VengeancesPerformed', 'TeamfightEscapesPerformed', 'OutnumberedDeaths', 'EndOfMatchAwardMVPBoolean', 'EndOfMatchAwardHighestKillStreakBoolean', 'EndOfMatchAwardMostVengeancesPerformedBoolean', 'EndOfMatchAwardMostDaredevilEscapesBoolean', 'EndOfMatchAwardMostEscapesBoolean', 'EndOfMatchAwardMostXPContributionBoolean', 'EndOfMatchAwardMostHeroDamageDoneBoolean', 'EndOfMatchAwardMostKillsBoolean', 'EndOfMatchAwardHatTrickBoolean', 'EndOfMatchAwardClutchHealerBoolean', 'EndOfMatchAwardMostProtectionBoolean', 'EndOfMatchAward0DeathsBoolean', 'EndOfMatchAwardMostSiegeDamageDoneBoolean', 'EndOfMatchAwardMostDamageTakenBoolean', 'EndOfMatchAward0OutnumberedDeathsBoolean', 'EndOfMatchAwardMostHealingBoolean', 'EndOfMatchAwardMostStunsBoolean', 'EndOfMatchAwardMostRootsBoolean', 'EndOfMatchAwardMostSilencesBoolean', 'EndOfMatchAwardMostMercCampsCapturedBoolean', 'EndOfMatchAwardMostTeamfightDamageTakenBoolean', 'EndOfMatchAwardMostTeamfightHealingDoneBoolean', 'EndOfMatchAwardMostTeamfightHeroDamageDoneBoolean', 'EndOfMatchAwardMostDamageToMinionsBoolean', 'EndOfMatchAwardMapSpecificBoolean', 'EndOfMatchAwardMostDragonShrinesCapturedBoolean', 'EndOfMatchAwardMostTimePushingBoolean', 'EndOfMatchAwardMostTimeOnPointBoolean', 'EndOfMatchAwardMostInterruptedCageUnlocksBoolean', 'EndOfMatchAwardMostSeedsCollectedBoolean', 'EndOfMatchAwardMostDamageToPlantsBoolean', 'EndOfMatchAwardMostCurseDamageDoneBoolean', 'EndOfMatchAwardMostCoinsPaidBoolean', 'EndOfMatchAwardMostImmortalDamageBoolean', 'EndOfMatchAwardMostDamageDoneToZergBoolean', 'EndOfMatchAwardMostTimeInTempleBoolean', 'EndOfMatchAwardMostGemsTurnedInBoolean', 'EndOfMatchAwardMostSkullsCollectedBoolean', 'EndOfMatchAwardMostAltarDamageDone', 'EndOfMatchAwardMostNukeDamageDoneBoolean']
     for i in excludeFromStats:
         stats.pop(i, None)
     
 
-    return [chatHistory, player, teamBlue, teamRed, stats, statistics]
+    return [chatHistory, player, teamBlue, teamRed, stats, statistics, nameList, heroList]
 
 @app.route('/')
 def home_page():
@@ -205,7 +212,7 @@ def home_page():
 def replay_page():
     if request.method == 'POST':
         replay = request.files['file']
-        [global_chatHistory, global_player, global_teamBlue, global_teamRed, global_stats, global_statistics] = open_replay(replay)
+        [global_chatHistory, global_player, global_teamBlue, global_teamRed, global_stats, global_statistics, global_nameList, global_heroList] = open_replay(replay)
 
         chatlog = ""
         for i in global_chatHistory:
@@ -215,6 +222,7 @@ def replay_page():
         for i in global_player:
             talents["{}{} ({}) : ".format("\n", i['playerName'].decode(), i['heroName'])] = "https://min.hyeok.org/SILVER/#/" + i['heroLink'] + '/' + i['talent']
         replay_template = env.get_template('replay.html')
-
-        return replay_template.render(chatlog=chatlog, talents=talents, stats=global_stats, statistics=global_statistics)
+        cssURL = url_for('static', filename='replay.css')
+        jsURL = url_for('static', filename='replay.js')
+        return replay_template.render(cssURL=cssURL, jsURL=jsURL, chatlog=chatlog, talents=talents, stats=global_stats, statistics=global_statistics, nameList=global_nameList, heroList=global_heroList)
 
