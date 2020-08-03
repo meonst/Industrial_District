@@ -112,7 +112,14 @@ def open_replay(replay_file):
                     j = 1
                     for i in event['m_stringData']:
                         if i['m_key'].decode() == 'Hero':
+                            if i['m_value'].decode() == 'HeroMedivhRaven':
+                                thisHero = "Medivh"
+                                thisHeroName = herodata["Medivh"]["name"]
+                            if i['m_value'].decode() == 'HeroDVaPilot':
+                                thisHero = "DVa"
+                                thisHeroName = herodata["DVa"]["name"]
                             for Hero in herodata:
+                                
                                 if herodata[Hero]["unitId"] == i['m_value'].decode():
                                     thisHero = Hero
                                     thisHeroName = herodata[Hero]["name"]
@@ -162,10 +169,7 @@ def open_replay(replay_file):
                     
                 
 
-            #try:
-                #pprint.pprint(event['m_eventName'], sys.stdout)
-            #except:
-                #a=1
+
     for i in player:
         i['talent'] = i['talent'].ljust(14, '0')
     # Hero name, Player name, Team
@@ -192,9 +196,6 @@ def open_replay(replay_file):
             player_number = i['_userid']['m_userId'] - 1
             time = looptime(i['_gameloop'])
             player[player_number]['Pings'].append(time)
-    #for i in chatHistory:
-        #print('({}:{}){}: {}'.format(format(int(i[0]//60), '02d'), format(int(i[0]%60), '02d'), player[int(i[1])]['playerName'].decode(), i[2].decode()))
-    
     stats = statistics.copy()
     excludeFromStats = ['TeamWinsDiablo','TeamWinsFemale', 'TeamWinsMale', 'TeamWinsStarCraft', 'TeamWinsWarcraft','WinsWarrior', 'WinsAssassin', 'WinsSupport','WinsSpecialist','WinsStarCraft', 'WinsDiablo', 'WinsWarcraft', 'WinsMale', 'WinsFemale', 'PlaysStarCraft', 'PlaysDiablo', 'PlaysOverwatch', 'PlaysWarCraft', 'PlaysWarrior', 'PlaysAssassin', 'PlaysSupport', 'PlaysSpecialist', 'PlaysMale', 'PlaysFemale', 'Tier1Talent', 'Tier2Talent', 'Tier3Talent', 'Tier4Talent', 'Tier5Talent', 'Tier6Talent', 'Tier7Talent', 'TeamLevel', 'LessThan4Deaths', 'LessThan3TownStructuresLost', 'Level', 'MetaExperience', 'TeamTakedowns', 'Role', 'EndOfMatchAwardGivenToNonwinner', 'GameScore', 'LunarNewYearSuccesfulArtifactTurnIns', 'LunarNewYearEventCompleted', 'StarcraftDailyEventCompleted', 'StarcraftPiecesCollected', 'LunarNewYearRoosterEventCompleted', 'PachimariMania', 'TouchByBlightPlague', 'EscapesPerformed', 'VengeancesPerformed', 'TeamfightEscapesPerformed', 'OutnumberedDeaths', 'EndOfMatchAwardMVPBoolean', 'EndOfMatchAwardHighestKillStreakBoolean', 'EndOfMatchAwardMostVengeancesPerformedBoolean', 'EndOfMatchAwardMostDaredevilEscapesBoolean', 'EndOfMatchAwardMostEscapesBoolean', 'EndOfMatchAwardMostXPContributionBoolean', 'EndOfMatchAwardMostHeroDamageDoneBoolean', 'EndOfMatchAwardMostKillsBoolean', 'EndOfMatchAwardHatTrickBoolean', 'EndOfMatchAwardClutchHealerBoolean', 'EndOfMatchAwardMostProtectionBoolean', 'EndOfMatchAward0DeathsBoolean', 'EndOfMatchAwardMostSiegeDamageDoneBoolean', 'EndOfMatchAwardMostDamageTakenBoolean', 'EndOfMatchAward0OutnumberedDeathsBoolean', 'EndOfMatchAwardMostHealingBoolean', 'EndOfMatchAwardMostStunsBoolean', 'EndOfMatchAwardMostRootsBoolean', 'EndOfMatchAwardMostSilencesBoolean', 'EndOfMatchAwardMostMercCampsCapturedBoolean', 'EndOfMatchAwardMostTeamfightDamageTakenBoolean', 'EndOfMatchAwardMostTeamfightHealingDoneBoolean', 'EndOfMatchAwardMostTeamfightHeroDamageDoneBoolean', 'EndOfMatchAwardMostDamageToMinionsBoolean', 'EndOfMatchAwardMapSpecificBoolean', 'EndOfMatchAwardMostDragonShrinesCapturedBoolean', 'EndOfMatchAwardMostTimePushingBoolean', 'EndOfMatchAwardMostTimeOnPointBoolean', 'EndOfMatchAwardMostInterruptedCageUnlocksBoolean', 'EndOfMatchAwardMostSeedsCollectedBoolean', 'EndOfMatchAwardMostDamageToPlantsBoolean', 'EndOfMatchAwardMostCurseDamageDoneBoolean', 'EndOfMatchAwardMostCoinsPaidBoolean', 'EndOfMatchAwardMostImmortalDamageBoolean', 'EndOfMatchAwardMostDamageDoneToZergBoolean', 'EndOfMatchAwardMostTimeInTempleBoolean', 'EndOfMatchAwardMostGemsTurnedInBoolean', 'EndOfMatchAwardMostSkullsCollectedBoolean', 'EndOfMatchAwardMostAltarDamageDone', 'EndOfMatchAwardMostNukeDamageDoneBoolean']
     for i in excludeFromStats:
@@ -203,16 +204,17 @@ def open_replay(replay_file):
 
     return [chatHistory, player, teamBlue, teamRed, stats, statistics, nameList, heroList]
 
-@app.route('/')
-def home_page():
-    home_template = env.get_template('home.html')
-    return home_template.render()
 
-@app.route('/replay', methods=['GET', 'POST'])
+
+@app.route('/', methods=['GET', 'POST'])
 def replay_page():
     if request.method == 'POST':
         replay = request.files['file']
-        [global_chatHistory, global_player, global_teamBlue, global_teamRed, global_stats, global_statistics, global_nameList, global_heroList] = open_replay(replay)
+        try:
+            [global_chatHistory, global_player, global_teamBlue, global_teamRed, global_stats, global_statistics, global_nameList, global_heroList] = open_replay(replay)
+        except:
+            home_template = env.get_template('home.html')
+            return home_template.render()
 
         chatlog = ""
         for i in global_chatHistory:
@@ -225,4 +227,7 @@ def replay_page():
         cssURL = url_for('static', filename='replay.css')
         jsURL = url_for('static', filename='replay.js')
         return replay_template.render(cssURL=cssURL, jsURL=jsURL, chatlog=chatlog, talents=talents, stats=global_stats, statistics=global_statistics, nameList=global_nameList, heroList=global_heroList)
+    else:
+        home_template = env.get_template('home.html')
+        return home_template.render()
 
