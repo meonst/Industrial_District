@@ -2,11 +2,29 @@
 
 <title> silvercity </title>
 
+<link rel='stylesheet' type='text/css' href='{{ cssURL }}'>
+
 
 <body>
+    <br>
     <form method = "POST" enctype = "multipart/form-data">
         <input id="chooseReplay" type = "file" name = "file" value = "Choose Replay" accept=".StormReplay"/>
         <input id="submitReplay" type = "submit" name = "submit" value = "submit replay" formaction="/"/>
     </form>
+    <p id='noteForUsers'>
+        <br>
+        This website is used for getting game stats, talents and chatlogs.
+        <br>
+        Although the stats do not correctly represent who actually played well,
+        <br>
+        and the ones who have better stats could have played worse during action.
+        <br>
+        However having more tools to see what the game is not showing you is better.
+        <br>
+        Referencing these stats and the talents will give better insight.
+        <br>
+        I hope these stats could give you more knowledge on how to play well.
+        <br>
+    </p>
 </body>
 

@@ -1,6 +1,6 @@
 <!doctype html>
 
-<title>silvercity</title>
+<title> silvercity </title>
 <link rel='stylesheet' type='text/css' href='{{ cssURL }}'>
 
 <body>
@@ -11,15 +11,26 @@
 </body>
 
 <br>
-<button onclick='toggle("chatlog")'>chatlog</button>
-<button onclick='toggle("talents")'>talents</button>
+<p>This game was played on {{ mapName }}</p>
 <button onclick='toggle("stats")'>stats</button>
+<button onclick='toggle("talents")'>talents</button>
+<button onclick='toggle("chatlog")'>chatlog</button>
 <button onclick='toggle("statistics")'>statistics</button>
 
-<pre id='chatlog'>
-    {% if chatlog %}
-    {{chatlog}}
-    {% endif %}
+<pre id='stats'>
+    <table>
+    <tr id='Players'>
+        <th id='playerRow'>Players</th> {% for i in nameList %} <th id='playerRow'>{{ i }}</th> {% endfor %}
+    </tr>
+    <tr id='Heroes'>
+        <th>Heroes</th> {% for i in heroList %} <th>{{ i }}</th> {% endfor %}
+    </tr>
+    {% for i in stats %}
+    <tr>
+        <th id='Rows'>{{ i }}</th> {% for j in stats[i] %} <th>{{ j }}</th> {% endfor %}
+    </tr>
+    {% endfor %}
+    </table>
 </pre>
 
 <pre id='talents'>
@@ -28,20 +39,10 @@
     {% endfor %}
 </pre>
 
-<pre id='stats'>
-    <table>
-    <tr>
-        <th>Players</th> {% for i in nameList %} <th>{{ i }}</th> {% endfor %}
-    </tr>
-    <tr>
-        <th>Heroes</th> {% for i in heroList %} <th>{{ i }}</th> {% endfor %}
-    </tr>
-    {% for i in stats %}
-    <tr>
-        <th>{{ i }}</th> {% for j in stats[i] %} <th>{{ j }}</th> {% endfor %}
-    </tr>
-    {% endfor %}
-    </table>
+<pre id='chatlog'>
+    {% if chatlog %}
+    {{chatlog}}
+    {% endif %}
 </pre>
 
 <pre id='statistics'>

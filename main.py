@@ -54,12 +54,13 @@ def open_replay(replay_file):
         print >> sys.stderr, 'Unsupported base build: %d' % baseBuild
         sys.exit(1)
 
-    details = protocol.decode_replay_details(archive.read_file('replay.details'))
+    details = protocol.decode_replay_details(archive.read_file('replay.details'))    
     gameevents = archive.read_file('replay.game.events')
     messageevents = archive.read_file('replay.message.events')
     attributeevents = protocol.decode_replay_attributes_events(archive.read_file('replay.attributes.events'))
     heroList = list()
     nameList = list()
+    mapName = details['m_title'].decode()
     if hasattr(protocol, 'decode_replay_tracker_events'):
         contents =archive.read_file('replay.tracker.events')
 
@@ -202,7 +203,7 @@ def open_replay(replay_file):
         stats.pop(i, None)
     
 
-    return [chatHistory, player, teamBlue, teamRed, stats, statistics, nameList, heroList]
+    return [chatHistory, player, teamBlue, teamRed, stats, statistics, nameList, heroList, mapName]
 
 
 
@@ -211,10 +212,11 @@ def replay_page():
     if request.method == 'POST':
         replay = request.files['file']
         try:
-            [global_chatHistory, global_player, global_teamBlue, global_teamRed, global_stats, global_statistics, global_nameList, global_heroList] = open_replay(replay)
+            [global_chatHistory, global_player, global_teamBlue, global_teamRed, global_stats, global_statistics, global_nameList, global_heroList, global_mapName] = open_replay(replay)
         except:
+            cssURL = url_for('static', filename='home.css')
             home_template = env.get_template('home.html')
-            return home_template.render()
+            return home_template.render(cssURL=cssURL)
 
         chatlog = ""
         for i in global_chatHistory:
@@ -226,8 +228,9 @@ def replay_page():
         replay_template = env.get_template('replay.html')
         cssURL = url_for('static', filename='replay.css')
         jsURL = url_for('static', filename='replay.js')
-        return replay_template.render(cssURL=cssURL, jsURL=jsURL, chatlog=chatlog, talents=talents, stats=global_stats, statistics=global_statistics, nameList=global_nameList, heroList=global_heroList)
+        return replay_template.render(cssURL=cssURL, jsURL=jsURL, chatlog=chatlog, talents=talents, stats=global_stats, statistics=global_statistics, nameList=global_nameList, heroList=global_heroList, mapName=global_mapName)
     else:
+        cssURL = url_for('static', filename='home.css')
         home_template = env.get_template('home.html')
-        return home_template.render()
+        return home_template.render(cssURL=cssURL)
 
