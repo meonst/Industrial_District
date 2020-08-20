@@ -13,7 +13,7 @@ talent_sort = ['80', '20', '0g', '04', '01']
 talent_tier = [0, 1, 4, 7, 10, 13, 16, 20]
 global chatHistory, teamBlue, teamRed, player
 player = list(dict() for i in range(0, 10))
-version = '80333'
+version = '81376'
 Language = 'enus'
 with open('./json/herodata_{}_{}.json'.format(version, Language), encoding='utf-8') as json_file:
     herodata = json.load(json_file)
