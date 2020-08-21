@@ -202,7 +202,26 @@ def open_replay(replay_file):
     for i in excludeFromStats:
         stats.pop(i, None)
     
-
+    #percentageStats = dict()
+    #def getPercentage(statList):
+    #    percentageList = [0 for i in range(10)]
+    #    blueSum = sum(statList[:5])
+    #    redSum = sum(statList[5:])
+    #    for i in range(0, 5):
+    #        percentageList[i] = int(((statList[i] / blueSum) * 10000)) / 100
+    #    for i in range(5, 10):
+    #        percentageList[i] = int(((statList[i] / redSum) * 10000)) / 100
+    #    return percentageList
+    #percentageStats['ExperienceContribution'] = getPercentage(stats['ExperienceContribution'])
+    #percentageStats['SiegeDamage'] = getPercentage(stats['SiegeDamage'])
+    #percentageStats['HeroDamage'] = getPercentage(stats['HeroDamage'])
+    #percentageStats['TimeSpentDead'] = getPercentage(stats['TimeSpentDead'])
+    #percentageStats['DamageTaken'] = getPercentage(stats['DamageTaken'])
+    #percentageStats['TeamfightDamageTaken'] = getPercentage(stats['TeamfightDamageTaken'])
+    #percentageStats['TeamfightHeroDamage'] = getPercentage(stats['TeamfightHeroDamage'])
+    #percentageStats['MinionKills'] = getPercentage(stats['MinionKills'])
+    
+    
     return [chatHistory, player, teamBlue, teamRed, stats, statistics, nameList, heroList, mapName]
 
 
@@ -216,8 +235,9 @@ def replay_page():
         except:
             cssURL = url_for('static', filename='home.css')
             home_template = env.get_template('home.html')
+            print("error")
             return home_template.render(cssURL=cssURL)
-
+        
         chatlog = ""
         for i in global_chatHistory:
             chatlog += "{}({}:{}){}: {}".format("\n", format(int(i[0]//60), '02d'), format( int(i[0]%60), '02d'), player[int(i[1])]['playerName'].decode(), i[2].decode()) 

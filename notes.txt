@@ -1,0 +1,9 @@
+going to add charts about...
+-exp contribution
+-siege damage
+-hero damage
+-time spent dead
+-damage soaked
+-teamfight dmg taken
+-teamfight dmg done
+-minion kills
