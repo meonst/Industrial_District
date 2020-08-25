@@ -67,34 +67,56 @@
 <pre id='charts'>
     <canvas id='blueExp'></canvas>
     <canvas id='redExp'></canvas>
+
+    <canvas id='blueSiegeDmg'></canvas>
+    <canvas id='redSiegeDmg'></canvas>
+
+    <canvas id='blueHeroDmg'></canvas>
+    <canvas id='redHeroDmg'></canvas>
+
+    <canvas id='blueDeathTime'></canvas>
+    <canvas id='redDeathTime'></canvas>
+
+    <canvas id='blueDmgTaken'></canvas>
+    <canvas id='redDmgTaken'></canvas>
+
+    <canvas id='blueTeamFightDmgTaken'></canvas>
+    <canvas id='redTeamFightDmgTaken'></canvas>
+
+    <canvas id='blueTeamFightDmg'></canvas>
+    <canvas id='redTeamFightDmg'></canvas>
+
+    <canvas id='blueMinionKills'></canvas>
+    <canvas id='redMinionKills'></canvas>
 </pre>
 
 <script>
-    var blueExpCanvas = document.getElementById('blueExp');
-    var blueExpContributionChart = new Chart(blueExpCanvas, {
-        type: 'pie',
-        data: {
-            labels: [
-                {% for i in nameList[:5] %}
-                '{{ i }}',
-                {% endfor %} 
-            ],
-            datasets: [{
-                label: '# of Votes',
-                data: [
-                    {% for i in stats['ExperienceContribution'][:5] %}
-                    {{ i }},
-                    {% endfor %}
-                ],
-                backgroundColor: [
+    var pieColor = [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(255, 206, 86, 0.2)',
                     'rgba(75, 192, 192, 0.2)',
                     'rgba(153, 102, 255, 0.2)',
+                ]
+    var blueExpCanvas = document.getElementById('blueExp');
+    var blueExpContributionChart = new Chart(blueExpCanvas, {
+        type: 'pie',
+        data: {
+            labels: [
+                {% for i in range(0, 5) %}
+                '{{ nameList[i] }}({{ heroList[i] }})',
+                {% endfor %} 
+            ],
+            datasets: [{
+                label: 'exp contribution',
+                data: [
+                    {% for i in range(0, 5) %}
+                    '{{ stats['ExperienceContribution'][i] }}',
+                    {% endfor %}
                 ],
+                backgroundColor: pieColor,
             }]
-        }
+        },
     });
     
     var redExpCanvas = document.getElementById('redExp');
@@ -102,25 +124,21 @@
         type: 'pie',
         data: {
             labels: [
-                {% for i in nameList[5:] %}
-                '{{ i }}',
+                {% for i in range(5, 10) %}
+                '{{ nameList[i] }}({{ heroList[i] }})',
                 {% endfor %} 
             ],
             datasets: [{
-                label: '# of Votes',
+                label: 'exp contribution',
                 data: [
-                    {% for i in stats['ExperienceContribution'][5:] %}
-                    {{ i }},
+                    {% for i in range(5, 10) %}
+                    '{{ stats['ExperienceContribution'][i] }}',
                     {% endfor %}
                 ],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                ],
+                backgroundColor: pieColor,
             }]
         },
     });
+
+
 </script>
