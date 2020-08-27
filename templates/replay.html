@@ -2,8 +2,8 @@
 
 <title> silvercity </title>
 <link rel='stylesheet' type='text/css' href='{{ cssURL }}'>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
-<script src='{{ jsURL }}'></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src='{{ jsURL }}'></script>
 
 <body>
     <form method = "POST" enctype = "multipart/form-data">
@@ -65,80 +65,63 @@
 </pre>
 
 <pre id='charts'>
-    <canvas id='blueExp'></canvas>
-    <canvas id='redExp'></canvas>
 
-    <canvas id='blueSiegeDmg'></canvas>
-    <canvas id='redSiegeDmg'></canvas>
+<div id='blueExp'></div><div id='redExp'></div>
 
-    <canvas id='blueHeroDmg'></canvas>
-    <canvas id='redHeroDmg'></canvas>
+<div id='blueSiegeDmg'></div><div id='redSiegeDmg'></div>
 
-    <canvas id='blueDeathTime'></canvas>
-    <canvas id='redDeathTime'></canvas>
+<div id='blueHeroDmg'></div><div id='redHeroDmg'></div>
 
-    <canvas id='blueDmgTaken'></canvas>
-    <canvas id='redDmgTaken'></canvas>
+<div id='blueDeathTime'></div><div id='redDeathTime'></div>
 
-    <canvas id='blueTeamFightDmgTaken'></canvas>
-    <canvas id='redTeamFightDmgTaken'></canvas>
+<div id='blueDmgTaken'></div><div id='redDmgTaken'></div>
 
-    <canvas id='blueTeamFightDmg'></canvas>
-    <canvas id='redTeamFightDmg'></canvas>
+<div id='blueTeamFightDmgTaken'></div><div id='redTeamFightDmgTaken'></div>
 
-    <canvas id='blueMinionKills'></canvas>
-    <canvas id='redMinionKills'></canvas>
+<div id='blueTeamFightDmg'></div><div id='redTeamFightDmg'></div>
+
+<div id='blueMinionKills'></div><div id='redMinionKills'></div>
 </pre>
 
-<script>
-    var pieColor = [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                ]
-    var blueExpCanvas = document.getElementById('blueExp');
-    var blueExpContributionChart = new Chart(blueExpCanvas, {
-        type: 'pie',
-        data: {
-            labels: [
-                {% for i in range(0, 5) %}
-                '{{ nameList[i] }}({{ heroList[i] }})',
-                {% endfor %} 
-            ],
-            datasets: [{
-                label: 'exp contribution',
-                data: [
-                    {% for i in range(0, 5) %}
-                    '{{ stats['ExperienceContribution'][i] }}',
-                    {% endfor %}
-                ],
-                backgroundColor: pieColor,
-            }]
-        },
-    });
-    
-    var redExpCanvas = document.getElementById('redExp');
-    var redExpContributionChart = new Chart(redExpCanvas, {
-        type: 'pie',
-        data: {
-            labels: [
-                {% for i in range(5, 10) %}
-                '{{ nameList[i] }}({{ heroList[i] }})',
-                {% endfor %} 
-            ],
-            datasets: [{
-                label: 'exp contribution',
-                data: [
-                    {% for i in range(5, 10) %}
-                    '{{ stats['ExperienceContribution'][i] }}',
-                    {% endfor %}
-                ],
-                backgroundColor: pieColor,
-            }]
-        },
-    });
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
 
+    function drawChart() {
+        {% for j in range(0, 8) %}
+        var blueData = google.visualization.arrayToDataTable([
+            ['Name', 'Value'],
+            {% for i in range(0, 5) %}
+            ['{{ nameList[i] }}({{ heroList[i] }})', parseInt('{{ stats[chartLink[j]][i] }}')],
+            {% endfor %} 
+        ]);
+        var blueOptions = {
+            title: 'Blue Team '.concat('{{ chartTitle[j] }}'),
+            pieHole: 0.3,
+        };
+        var blueChart = new google.visualization.PieChart(document.getElementById('blue'.concat('{{ chartLinkID[j] }}')));
+        blueChart.draw(blueData, blueOptions);
+
+        var redData = google.visualization.arrayToDataTable([
+            ['Name', 'Value'],
+            {% for i in range(5, 10) %}
+            ['{{ nameList[i] }}({{ heroList[i] }})', parseInt('{{ stats[chartLink[j]][i] }}')],
+            {% endfor %} 
+        ]);
+        var redOptions = {
+            title: 'Red Team '.concat('{{ chartTitle[j] }}'),
+            pieHole: 0.3,
+        };
+        var redChart = new google.visualization.PieChart(document.getElementById('red'.concat('{{ chartLinkID[j] }}')));
+        redChart.draw(redData, redOptions);
+
+        {% endfor %}
+
+
+
+
+    }
 
 </script>
+
+<meta id='replayData' data=''>

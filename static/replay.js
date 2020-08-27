@@ -41,9 +41,4 @@ function toggle(selected_block) {
     }
 }
 
-if (document.getElementById("chooseReplay").value != "") {
-    submitReplay_block = document.getElementById("submitReplay")
-    submitReplay_block.style.display = "block"
-}
-
 

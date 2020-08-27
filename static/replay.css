@@ -18,3 +18,10 @@
     display: none;
 }
 
+#charts div {
+    
+    display: inline-block;
+}
+
+
+
