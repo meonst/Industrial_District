@@ -18,7 +18,7 @@ chartLinkID = ["Exp", "SiegeDmg", "HeroDmg", "DeathTime", "DmgTaken", "TeamFight
 
 global chatHistory, teamBlue, teamRed, player
 player = list(dict() for i in range(0, 10))
-version = '81376'
+version = '81700'
 Language = 'enus'
 with open('./json/herodata_{}_{}.json'.format(version, Language), encoding='utf-8') as json_file:
     herodata = json.load(json_file)
