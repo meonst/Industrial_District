@@ -1,6 +1,6 @@
 click==7.1.2
 Flask==1.1.2
-heroprotocol==2.52.1.82169
+heroprotocol==2.52.2.82624
 itsdangerous==1.1.0
 Jinja2==2.11.2
 MarkupSafe==1.1.1
