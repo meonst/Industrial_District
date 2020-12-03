@@ -1,1 +1,5 @@
+add json file
+update heroprotocol
+update version
+
 gcloud app deploy --stop-previous-version
