@@ -4,25 +4,44 @@
 <link rel='stylesheet' type='text/css' href='{{ cssURL }}'>
 
 <body>
-    <br>
-    <form method = "POST" enctype = "multipart/form-data">
-        <input id="chooseReplay" type = "file" name = "file" value = "Choose Replay" accept=".StormReplay"/>
-        <input id="submitReplay" type = "submit" name = "submit" value = "submit replay" formaction="/"/>
+    <form method="POST" enctype="multipart/form-data" id="Replay">
+        <input id="chooseReplay" type="file" name="file" value="Choose Replay" accept=".StormReplay"/>
+        <text id="chooseReplayDesign">
+            Drag here or Click to choose replay<br>
+            
+        </text>
+        <input id="submitReplay" type = "submit" name = "submit" value = "Submit replay" formaction="/"/>
     </form>
     <p id='noteForUsers'>
         <br>
         This website is used for getting game stats, talents and chatlogs.
-        <br>
+        
         Although the stats do not correctly represent who actually played well,
-        <br>
+        
         and the ones who have better stats could have played worse during action.
-        <br>
+        
         However having more tools to see what the game is not showing you is better.
-        <br>
+        
         Referencing these stats and the talents will give better insight.
-        <br>
+        
         I hope these stats could give you more knowledge on how to play well.
         <br>
     </p>
+
+    <script type="text/javascript">
+        const replayUpdate = document.getElementById('chooseReplay')
+        replayUpdate.addEventListener('change', (event) => {
+            const replayName = replayUpdate.value;
+            if (replayName != "") {
+                document.getElementById('chooseReplayDesign').textContent = replayName.slice(12)    
+            }
+            else {
+                document.getElementById('chooseReplayDesign').textContent = "Drag here or Click to choose replay"
+                
+            }
+            
+        })
+    </script>
+
 </body>
 

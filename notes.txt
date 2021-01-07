@@ -7,3 +7,6 @@ going to add charts about...
 -teamfight dmg taken
 -teamfight dmg done
 -minion kills
+
+
+blueteam first
