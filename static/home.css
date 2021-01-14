@@ -38,7 +38,6 @@
     top: 111px;
     width: 50%;
     border: 0px;
-    
     padding: 0px;
-    
+    pointer-events: none;
 }

@@ -34,10 +34,11 @@
             const replayName = replayUpdate.value;
             if (replayName != "") {
                 document.getElementById('chooseReplayDesign').textContent = replayName.slice(12)    
+                document.getElementById('submitReplay').style.pointerEvents = "auto";
             }
             else {
                 document.getElementById('chooseReplayDesign').textContent = "Drag here or Click to choose replay"
-                
+                document.getElementById('submitReplay').style.pointerEvents = "none";
             }
             
         })

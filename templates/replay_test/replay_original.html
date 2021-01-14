@@ -1,0 +1,127 @@
+<!doctype html>
+
+<title> silvercity </title>
+<link rel='stylesheet' type='text/css' href='{{ cssURL }}'>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src='{{ jsURL }}'></script>
+
+<body>
+    <form method = "POST" enctype = "multipart/form-data">
+        <input id="chooseReplay" type = "file" name = "file" value = "Choose Replay" accept=".StormReplay"/>
+        <input id="submitReplay" type = "submit" name = "submit" value = "submit replay" formaction="/"/>
+    </form>
+</body>
+
+<br>
+<p>{{ gameMode }} {{ gameTime }} {{ mapName }} {{ gameLength }} {{ gameVersion }}</p>
+<button onclick='toggle("stats")'>stats</button>
+<button onclick='toggle("talents")'>talents</button>
+<button onclick='toggle("chatlog")'>chatlog</button>
+<button onclick='toggle("statistics")'>statistics</button>
+<button onclick='toggle("charts")'>charts</button>
+
+<pre id='stats'>
+    <table>
+    <tr id='Players'>
+        <th id='playerRow'>Players</th> {% for i in nameList %} <th id='playerRow'>{{ i }}</th> {% endfor %}
+    </tr>
+    <tr id='Heroes'>
+        <th>Heroes</th> {% for i in heroList %} <th>{{ i }}</th> {% endfor %}
+    </tr>
+    {% for i in stats %}
+    <tr>
+        <th id='Rows'>{{ i }}</th> {% for j in stats[i] %} <th>{{ j }}</th> {% endfor %}
+    </tr>
+    {% endfor %}
+    </table>
+</pre>
+
+<pre id='talents'>
+    {% for i in talents %}
+    {{ i }}<a href="{{ talents[i] }}">{{ talents[i] }}</a>
+    {% endfor %}
+</pre>
+
+<pre id='chatlog'>
+    {% if chatlog %}
+    {{chatlog}}
+    {% endif %}
+</pre>
+
+<pre id='statistics'>
+    <table>
+        <tr>
+            <th>Players</th> {% for i in nameList %} <th>{{ i }}</th> {% endfor %}
+        </tr>
+        <tr>
+            <th>Heroes</th> {% for i in heroList %} <th>{{ i }}</th> {% endfor %}
+        </tr>
+        {% for i in statistics %}
+        <tr>
+            <th>{{ i }}</th> {% for j in statistics[i] %} <th>{{ j }}</th> {% endfor %}
+        </tr>
+        {% endfor %}
+        </table>
+</pre>
+
+<pre id='charts'>
+
+<div id='blueExp'></div><div id='redExp'></div>
+
+<div id='blueSiegeDmg'></div><div id='redSiegeDmg'></div>
+
+<div id='blueHeroDmg'></div><div id='redHeroDmg'></div>
+
+<div id='blueDeathTime'></div><div id='redDeathTime'></div>
+
+<div id='blueDmgTaken'></div><div id='redDmgTaken'></div>
+
+<div id='blueTeamFightDmgTaken'></div><div id='redTeamFightDmgTaken'></div>
+
+<div id='blueTeamFightDmg'></div><div id='redTeamFightDmg'></div>
+
+<div id='blueMinionKills'></div><div id='redMinionKills'></div>
+</pre>
+
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        {% for j in range(0, 8) %}
+        var blueData = google.visualization.arrayToDataTable([
+            ['Name', 'Value'],
+            {% for i in range(0, 5) %}
+            ['{{ nameList[i] }}({{ heroList[i] }})', parseInt('{{ stats[chartLink[j]][i] }}')],
+            {% endfor %} 
+        ]);
+        var blueOptions = {
+            title: 'Blue Team '.concat('{{ chartTitle[j] }}'),
+            pieHole: 0.3,
+        };
+        var blueChart = new google.visualization.PieChart(document.getElementById('blue'.concat('{{ chartLinkID[j] }}')));
+        blueChart.draw(blueData, blueOptions);
+
+        var redData = google.visualization.arrayToDataTable([
+            ['Name', 'Value'],
+            {% for i in range(5, 10) %}
+            ['{{ nameList[i] }}({{ heroList[i] }})', parseInt('{{ stats[chartLink[j]][i] }}')],
+            {% endfor %} 
+        ]);
+        var redOptions = {
+            title: 'Red Team '.concat('{{ chartTitle[j] }}'),
+            pieHole: 0.3,
+        };
+        var redChart = new google.visualization.PieChart(document.getElementById('red'.concat('{{ chartLinkID[j] }}')));
+        redChart.draw(redData, redOptions);
+
+        {% endfor %}
+
+
+
+
+    }
+
+</script>
+
+<meta id='replayData' data=''>

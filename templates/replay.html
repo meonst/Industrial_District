@@ -13,12 +13,13 @@
 </body>
 
 <br>
-<p>{{ gameTime }} {{ mapName }} {{ gameLength }} {{ gameVersion }}</p>
+<p>{{ gameMode }} {{ gameTime }} {{ mapName }} {{ gameLength }} {{ gameVersion }}</p>
 <button onclick='toggle("stats")'>stats</button>
 <button onclick='toggle("talents")'>talents</button>
 <button onclick='toggle("chatlog")'>chatlog</button>
 <button onclick='toggle("statistics")'>statistics</button>
 <button onclick='toggle("charts")'>charts</button>
+<button onclick='toggle("newCharts")'>new charts</button>
 
 <pre id='stats'>
     <table>
@@ -36,15 +37,12 @@
     </table>
 </pre>
 
-<pre id='talents'>
-    {% for i in talents %}
-    {{ i }}<a href="{{ talents[i] }}">{{ talents[i] }}</a>
-    {% endfor %}
-</pre>
+<pre id='talents'>{% for i in talents %}<div id='talents_player_{{ talents[i][4] }}'><img id='talents_player_portrait' src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ talents[i][0] }}"><div id=talents_player_name>{{ i }}
+{{ talents[i][1] }}</div><a id='talents_player_icon_box' href="{{ talents[i][2] }}">{% for j in range(0, 7) %}<img id='talents_player_icon_box_individual' src="https://min.hyeok.org/SILVER/files/images/abilitytalents/{{ talents[i][3][j] }}">{% endfor %}</a></div>{% endfor %}</pre>
 
 <pre id='chatlog'>
     {% if chatlog %}
-    {{chatlog}}
+        {{chatlog}}
     {% endif %}
 </pre>
 
@@ -65,23 +63,32 @@
 </pre>
 
 <pre id='charts'>
+    <div id='blueExp'></div><div id='redExp'></div>
 
-<div id='blueExp'></div><div id='redExp'></div>
+    <div id='blueSiegeDmg'></div><div id='redSiegeDmg'></div>
 
-<div id='blueSiegeDmg'></div><div id='redSiegeDmg'></div>
+    <div id='blueHeroDmg'></div><div id='redHeroDmg'></div>
 
-<div id='blueHeroDmg'></div><div id='redHeroDmg'></div>
+    <div id='blueDeathTime'></div><div id='redDeathTime'></div>
 
-<div id='blueDeathTime'></div><div id='redDeathTime'></div>
+    <div id='blueDmgTaken'></div><div id='redDmgTaken'></div>
 
-<div id='blueDmgTaken'></div><div id='redDmgTaken'></div>
+    <div id='blueTeamFightDmgTaken'></div><div id='redTeamFightDmgTaken'></div>
 
-<div id='blueTeamFightDmgTaken'></div><div id='redTeamFightDmgTaken'></div>
+    <div id='blueTeamFightDmg'></div><div id='redTeamFightDmg'></div>
 
-<div id='blueTeamFightDmg'></div><div id='redTeamFightDmg'></div>
-
-<div id='blueMinionKills'></div><div id='redMinionKills'></div>
+    <div id='blueMinionKills'></div><div id='redMinionKills'></div>
 </pre>
+
+
+<pre id='newCharts'>
+    <div id='newCharts_categories'>{% for i in range(0, 8) %}<div id='checkbox_{{ chartTitle[i] }}'><input type="checkbox" id='checkbox_{{ chartTitle[i] }}_checkbox'> <label for="checkbox_{{ chartTitle[i] }}_label">{{ chartTitle[i] }}</label></div>{% endfor %} </div> 
+    <div id='newCharts_chart'>{% for i in range(0, 10) %} <div id='newCharts_chart_players'> {{ nameList[i] }}</div> {% endfor %}
+    </div>
+
+</pre>
+
+
 
 <script type="text/javascript">
     google.charts.load('current', {'packages':['corechart']});
@@ -116,10 +123,6 @@
         redChart.draw(redData, redOptions);
 
         {% endfor %}
-
-
-
-
     }
 
 </script>
