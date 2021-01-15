@@ -13,7 +13,7 @@
 </body>
 
 <br>
-<p>{{ gameMode }} {{ gameTime }} {{ mapName }} {{ gameLength }} {{ gameVersion }}</p>
+<p>{{ gameDetails['gameMode'] }} {{ gameDetails['gameTime'] }} {{ gameDetails['mapName'] }} {{ gameDetails['gameLength'] }} {{ gameDetails['gameVersion'] }}</p>
 <button onclick='toggle("stats")'>stats</button>
 <button onclick='toggle("talents")'>talents</button>
 <button onclick='toggle("chatlog")'>chatlog</button>
@@ -24,10 +24,10 @@
 <pre id='stats'>
     <table>
     <tr id='Players'>
-        <th id='playerRow'>Players</th> {% for i in nameList %} <th id='playerRow'>{{ i }}</th> {% endfor %}
+        <th id='playerRow'>Players</th> {% for i in range(0, 10) %} <th id='playerRow'>{{ players[i]['playerName'] }}</th> {% endfor %}
     </tr>
     <tr id='Heroes'>
-        <th>Heroes</th> {% for i in heroList %} <th>{{ i }}</th> {% endfor %}
+        <th id='heroRow'>Heroes</th> {% for i in range(0, 10) %} <th>{{ players[i]['heroName'] }}</th> {% endfor %}
     </tr>
     {% for i in stats %}
     <tr>
@@ -37,8 +37,8 @@
     </table>
 </pre>
 
-<pre id='talents'>{% for i in talents %}<div id='talents_player_{{ talents[i][4] }}'><img id='talents_player_portrait' src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ talents[i][0] }}"><div id=talents_player_name>{{ i }}
-{{ talents[i][1] }}</div><a id='talents_player_icon_box' href="{{ talents[i][2] }}">{% for j in range(0, 7) %}<img id='talents_player_icon_box_individual' src="https://min.hyeok.org/SILVER/files/images/abilitytalents/{{ talents[i][3][j] }}">{% endfor %}</a></div>{% endfor %}</pre>
+<pre id='talents'>{% for i in range(0, 10) %}<div id="talents_player_{{ players[i]['team'] }}"><img id="talents_player_portrait" src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[i]['partyPanelPortrait'] }}"><div id=talents_player_name>{{ players[i]['playerName'] }}
+{{ players[i]['heroName'] }}</div><a id="talents_player_icon_box" href="https://min.hyeok.org/SILVER/#/{{ players[i]['heroLink'] }}/{{ players[i]['talent'] }}">{% for j in range(0, 7) %}<img id='talents_player_icon_box_individual' src="https://min.hyeok.org/SILVER/files/images/abilitytalents/{{ players[i]['talentIcon'][j] }}">{% endfor %}</a></div>{% endfor %}</pre>
 
 <pre id='chatlog'>
     {% if chatlog %}
@@ -48,18 +48,18 @@
 
 <pre id='statistics'>
     <table>
-        <tr>
-            <th>Players</th> {% for i in nameList %} <th>{{ i }}</th> {% endfor %}
+        <tr id='Players'>
+            <th id='playerRow'>Players</th> {% for i in range(0, 10) %} <th id='playerRow'>{{ players[i]['playerName'] }}</th> {% endfor %}
         </tr>
-        <tr>
-            <th>Heroes</th> {% for i in heroList %} <th>{{ i }}</th> {% endfor %}
+        <tr id='Heroes'>
+            <th id='heroRow'>Heroess</th> {% for i in range(0, 10) %} <th>{{ players[i]['heroName'] }}</th> {% endfor %}
         </tr>
         {% for i in statistics %}
         <tr>
             <th>{{ i }}</th> {% for j in statistics[i] %} <th>{{ j }}</th> {% endfor %}
         </tr>
         {% endfor %}
-        </table>
+    </table>
 </pre>
 
 <pre id='charts'>
@@ -80,10 +80,9 @@
     <div id='blueMinionKills'></div><div id='redMinionKills'></div>
 </pre>
 
-
 <pre id='newCharts'>
     <div id='newCharts_categories'>{% for i in range(0, 8) %}<div id='checkbox_{{ chartTitle[i] }}'><input type="checkbox" id='checkbox_{{ chartTitle[i] }}_checkbox'> <label for="checkbox_{{ chartTitle[i] }}_label">{{ chartTitle[i] }}</label></div>{% endfor %} </div> 
-    <div id='newCharts_chart'>{% for i in range(0, 10) %} <div id='newCharts_chart_players'> {{ nameList[i] }}</div> {% endfor %}
+    <div id='newCharts_chart'>{% for i in range(0, 10) %} <div id='newCharts_chart_players'> {{ players[i]['playerName'] }}</div> {% endfor %}
     </div>
 
 </pre>
@@ -99,7 +98,7 @@
         var blueData = google.visualization.arrayToDataTable([
             ['Name', 'Value'],
             {% for i in range(0, 5) %}
-            ['{{ nameList[i] }}({{ heroList[i] }})', parseInt('{{ stats[chartLink[j]][i] }}')],
+            ["{{ players[i]['playerName'] }}({{ players[i]['heroName'] }})", parseInt('{{ stats[chartLink[j]][i] }}')],
             {% endfor %} 
         ]);
         var blueOptions = {
@@ -112,7 +111,7 @@
         var redData = google.visualization.arrayToDataTable([
             ['Name', 'Value'],
             {% for i in range(5, 10) %}
-            ['{{ nameList[i] }}({{ heroList[i] }})', parseInt('{{ stats[chartLink[j]][i] }}')],
+            ["{{ players[i]['playerName'] }}({{ players[i]['heroName'] }})", parseInt('{{ stats[chartLink[j]][i] }}')],
             {% endfor %} 
         ]);
         var redOptions = {
