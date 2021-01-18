@@ -1,18 +1,18 @@
 <!doctype html>
 
 <title> silvercity </title>
-<link rel='stylesheet' type='text/css' href='{{ cssURL }}'>
+<link rel="stylesheet" type="text/css" href="{{ cssURL }}">
 
 <body>
-    <form method="POST" enctype="multipart/form-data" id="Replay">
-        <input id="chooseReplay" type="file" name="file" value="Choose Replay" accept=".StormReplay"/>
-        <text id="chooseReplayDesign">
+    <form method="POST" enctype="multipart/form-data" id="replay">
+        <input id="choose_replay" type="file" name="file" value="Choose Replay" accept=".StormReplay"/>
+        <text id="choose_replay_design">
             Drag here or Click to choose replay<br>
             
         </text>
-        <input id="submitReplay" type = "submit" name = "submit" value = "Submit replay" formaction="/"/>
+        <input id="submit_replay" type = "submit" name = "submit" value = "Submit replay" formaction="/"/>
     </form>
-    <p id='noteForUsers'>
+    <p id="note_for_users">
         <br>
         This website is used for getting game stats, talents and chatlogs.
         
@@ -29,16 +29,16 @@
     </p>
 
     <script type="text/javascript">
-        const replayUpdate = document.getElementById('chooseReplay')
-        replayUpdate.addEventListener('change', (event) => {
-            const replayName = replayUpdate.value;
-            if (replayName != "") {
-                document.getElementById('chooseReplayDesign').textContent = replayName.slice(12)    
-                document.getElementById('submitReplay').style.pointerEvents = "auto";
+        const replay_update = document.getElementById("choose_replay")
+        replay_update.addEventListener("change", (event) => {
+            const replay_name = replay_update.value;
+            if (replay_name != "") {
+                document.getElementById("choose_replay_design").textContent = replay_name.slice(12)    
+                document.getElementById("submit_replay").style.pointerEvents = "auto";
             }
             else {
-                document.getElementById('chooseReplayDesign').textContent = "Drag here or Click to choose replay"
-                document.getElementById('submitReplay').style.pointerEvents = "none";
+                document.getElementById("choose_replay_design").textContent = "Drag here or Click to choose replay"
+                document.getElementById("submit_replay").style.pointerEvents = "none";
             }
             
         })

@@ -16,16 +16,10 @@
 
 #charts {
     display: none;
-}
-
-#charts div {
-    display: inline-block;
-}
-#newCharts {
-    display: none;
     position: relative;
 }
-#talents_player_Blue {
+
+#talents_player_blue {
     height: 56px;
     padding: 1px;
     border: 1px;
@@ -35,7 +29,7 @@
     background-color: rgba(30, 30, 256, 0.05);
 }
 
-#talents_player_Red {
+#talents_player_red {
     height: 56px;
     padding: 1px;
     border: 1px;
@@ -71,36 +65,71 @@
     padding-left: 1px;
 }
 
-#chooseReplay {
+#choose_replay {
     width: 400px;
 }
 
 
 
-#newCharts_categories {
+#charts_categories {
     border-style: solid;
     position: absolute;
     top: 0;
     left: 0;
     
     width: 200px;
-    height: 300px;
+    height: 503px;
     
 }
-#newCharts_categories div {
+#charts_categories div {
     height: 20px;   
 
 }
-#newCharts_categories div input {
+#charts_categories div input {
     display: inline-block;    
 }
-#newCharts_chart {
+#charts_players {
     border-style: solid;
+    border-right-width: 1px;
+    border-right-style: dotted;
     position: absolute;
     top: 0;
-    left: 206px;
-    
-    width: 300px;
-    height: 300px;
+    left: 203px;
+    width: 200px;
+    height: 503px;
+}
 
+#charts_players div {
+    text-align: left;
+    width: 200px;
+    height: 32px;
+}
+#charts_players_player_0 {
+    margin-top: 8px;
+}
+#charts_players_player_4 {
+    margin-bottom: 16px;
+}
+
+#charts_players_player_5 {
+    margin-top: 16px;
+}
+#charts_players_player_9 {
+    margin-bottom: 8px;
+}
+
+#charts_players_player_name {
+    font-size: 10pt;
+    vertical-align: 12px;
+}
+
+#charts_chart {
+    border-style: solid;
+    border-left-style: none;
+    
+    position: absolute;
+    top: 0;
+    left: 407px;
+    width: 500px;
+    height: 503px;
 }

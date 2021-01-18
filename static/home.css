@@ -1,15 +1,15 @@
-#noteForUsers {
+#note_for_users {
     position: absolute;
     left: 25%;
     width: 50%;
     font-size: 15pt;
     line-height: 20pt;
 }
-#Replay {
+#replay {
     width: 100%;
     height: 121px;
 }
-#chooseReplay {
+#choose_replay {
     position: absolute;
     top: 8px;
     left: 25%;
@@ -19,7 +19,7 @@
     z-index: 1;
     
 }
-#chooseReplayDesign {
+#choose_replay_design {
     position: absolute;
     top: 8px;
     left: 25%;
@@ -31,7 +31,7 @@
     text-align: center;
     line-height: 30px
 }
-#submitReplay {
+#submit_replay {
     position: absolute;
     left: 25%;
     width: 50%;
