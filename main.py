@@ -21,7 +21,7 @@ chart_link_ID = ["Exp", "SiegeDmg", "HeroDmg", "DeathTime", "DmgTaken", "TeamFig
 
 global chat_history, team_blue, team_red, players
 players = list(dict() for i in range(0, 10))
-version = "83004"
+version = "83632"
 language = "enus"
 with open("./json/herodata_{}_{}.json".format(version, language), encoding="utf-8") as json_file:
     hero_data = json.load(json_file)
@@ -238,10 +238,11 @@ def replay_page():
         replay_template = env.get_template("replay.html")
         css_URL = url_for("static", filename="replay.css")
         js_URL = url_for("static", filename="replay.js")
+        print(return_data[3])
         return replay_template.render(css_URL=css_URL, js_URL=js_URL, chatlog=chatlog, players=return_data[1], stats=return_data[2], statistics=return_data[3], game_details=return_data[4], chart_title=chart_title, chart_link=chart_link, chart_link_ID=chart_link_ID)
         
     else:
         css_URL = url_for("static", filename="home.css")
         home_template = env.get_template("home.html")
-        return home_template.render(cssURL=cssURL)
+        return home_template.render(css_URL=css_URL)
 

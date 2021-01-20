@@ -78,7 +78,7 @@
     left: 0;
     
     width: 200px;
-    height: 503px;
+    height: 420px;
     
 }
 #charts_categories div {
@@ -92,31 +92,59 @@
     border-style: solid;
     border-right-width: 1px;
     border-right-style: dotted;
+    padding-left: 2px;
+    padding-right: 2px;
     position: absolute;
     top: 0;
     left: 203px;
-    width: 200px;
-    height: 503px;
+    width: 32px;
+    height: 420px;
 }
 
 #charts_players div {
-    text-align: left;
-    width: 200px;
     height: 32px;
 }
 #charts_players_player_0 {
-    margin-top: 8px;
+    margin-top: 4px;
+    margin-bottom: -11px;
+}
+#charts_players_player_1 {
+    margin-top: 4px;
+    margin-bottom: -11px;
+}
+#charts_players_player_2 {
+    margin-top: 4px;
+    margin-bottom: -11px;
+}
+#charts_players_player_3 {
+    margin-top: 4px;
+    margin-bottom: -11px;
 }
 #charts_players_player_4 {
-    margin-bottom: 16px;
+    margin-top: 4px;
+    margin-bottom: -1px;
 }
-
 #charts_players_player_5 {
-    margin-top: 16px;
+    margin-top: 14px;
+    margin-bottom: -11px;
+}
+#charts_players_player_6 {
+    margin-top: 4px;
+    margin-bottom: -11px;
+}
+#charts_players_player_7 {
+    margin-top: 4px;
+    margin-bottom: -11px;
+}
+#charts_players_player_8 {
+    margin-top: 4px;
+    margin-bottom: -11px;
 }
 #charts_players_player_9 {
-    margin-bottom: 8px;
+    margin-top: 4px;
+    margin-bottom: -11px;
 }
+
 
 #charts_players_player_name {
     font-size: 10pt;
@@ -129,7 +157,7 @@
     
     position: absolute;
     top: 0;
-    left: 407px;
-    width: 500px;
-    height: 503px;
+    left: 243px;
+    width: 700px;
+    height: 420px;
 }
