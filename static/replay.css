@@ -76,7 +76,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    
+    overflow: scroll;
     width: 200px;
     height: 420px;
     
@@ -104,19 +104,7 @@
 #charts_players div {
     height: 32px;
 }
-#charts_players_player_0 {
-    margin-top: 4px;
-    margin-bottom: -11px;
-}
-#charts_players_player_1 {
-    margin-top: 4px;
-    margin-bottom: -11px;
-}
-#charts_players_player_2 {
-    margin-top: 4px;
-    margin-bottom: -11px;
-}
-#charts_players_player_3 {
+#charts_players_player_0, #charts_players_player_1, #charts_players_player_2, #charts_players_player_3, #charts_players_player_6, #charts_players_player_7, #charts_players_player_8, #charts_players_player_9 {
     margin-top: 4px;
     margin-bottom: -11px;
 }
@@ -128,22 +116,14 @@
     margin-top: 14px;
     margin-bottom: -11px;
 }
-#charts_players_player_6 {
-    margin-top: 4px;
-    margin-bottom: -11px;
-}
-#charts_players_player_7 {
-    margin-top: 4px;
-    margin-bottom: -11px;
-}
-#charts_players_player_8 {
-    margin-top: 4px;
-    margin-bottom: -11px;
-}
-#charts_players_player_9 {
-    margin-top: 4px;
-    margin-bottom: -11px;
-}
+
+.charts_chart_exact{
+    display: none;
+} 
+
+
+
+
 
 
 #charts_players_player_name {

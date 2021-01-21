@@ -12,12 +12,14 @@ env = Environment(
 
 talent_sort = ["80", "20", "0g", "04", "01"]
 talent_tier = [0, 1, 4, 7, 10, 13, 16, 20]
+chart_maximum = [0, 5, 10, 25, 50, 75, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2500, 5000, 7500, 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000, 125000, 150000, 175000, 200000, 225000, 250000, 275000, 300000, 350000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000, 2000000, 3000000, 5000000, 7000000, 10000000, 100000000, 1000000000, 10000000000, 100000000000, 1000000000000]
 game_mode_dict = {-1: "Custom", 50001: "Quick Match", 50021: "Versus AI", 50031: "Brawl", 50041: "Practice", 50051: "Unranked Draft", 50061: "Hero League", 50071: "Team League", 50101:"ARAM"}
 
 
-chart_link = ["ExperienceContribution", "SiegeDamage", "HeroDamage", "TimeSpentDead", "DamageTaken", "TeamfightDamageTaken", "TeamfightHeroDamage", "MinionKills"]
-chart_title = ["EXP Contribution", "Siege Damage", "Hero Damage", "Time Spent Dead", "Damage Taken", "Teamfight Damage Taken", "Teamfight Damage Dealt", "Minion Kills"]
-chart_link_ID = ["Exp", "SiegeDmg", "HeroDmg", "DeathTime", "DmgTaken", "TeamFightDmgTaken", "TeamFightDmg", "MinionKills"]
+new_chart_link = ["ExperienceContribution", "SiegeDamage", "HeroDamage", "TimeSpentDead", "DamageTaken", "TeamfightDamageTaken", "TeamfightHeroDamage", "MinionKills"]
+new_chart_title = ["EXP Contribution", "Siege Damage", "Hero Damage", "Time Spent Dead", "Damage Taken", "Teamfight Damage Taken", "Teamfight Damage Dealt", "Minion Kills"]
+chart_link = ["Takedowns", "Deaths", "SoloKill", "Assists", "ExperienceContribution", "Healing", "SiegeDamage", "StructureDamage", "MinionDamage", "HeroDamage", "SelfHealing", "TimeSpentDead", "TimeCCdEnemyHeroes", "DamageTaken", "TimeSilencingEnemyHeroes", "TimeStunningEnemyHeroes", "TeamfightHealingDone", "TeamfightDamageTaken", "TeamfightHeroDamage", "PhysicalDamage", "SpellDamage", "MinionKills", "RegenGlobes"]
+chart_title = ["Kill Participation", "Deaths", "Kills", "Assists", "Experience Contribution", "Healing", "Siege Damage", "Structure Damage", "Minion Damage", "Hero Damage", "Self Healing", "Time Spent Dead", "Time CCing Enemy Heroes", "Damage Taken", "Time Silencing Enemy Heroes", "Time Stunning Enemy Heroes", "Teamfight Healing Done", "Teamfight Damage Taken", "Teamfight Hero Damage", "Physical Damage", "Spell Damage", "Minion Kills", "Regen Globes"]
 
 global chat_history, team_blue, team_red, players
 players = list(dict() for i in range(0, 10))
@@ -82,15 +84,22 @@ def open_replay(replay_file):
     if hasattr(protocol, "decode_replay_tracker_events"):
         contents = archive.read_file("replay.tracker.events")
 
-        for event in protocol.decode_replay_tracker_events(contents):
+        for event in protocol.decode_replay_tracker_events(contents):   
             if event["_event"] == "NNet.Replay.Tracker.SScoreResultEvent":
                 statistics = dict()
+                statistics_maximum = dict()
+                
                 for i in event["m_instanceList"]:
                     values = list()
                     for j in i["m_values"][0:10]:
                         values.append(j[0]["m_value"])
                     if values != [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]:
+                        
                         statistics[i["m_name"].decode()] = values
+                        for j in range(0, 55):
+                            if max(values) < chart_maximum[j]:
+                                statistics_maximum[i["m_name"].decode()] = chart_maximum[j]
+                                break
 
 
 
@@ -221,7 +230,7 @@ def open_replay(replay_file):
     exclude_from_stats = ["TeamWinsDiablo","TeamWinsFemale", "TeamWinsMale", "TeamWinsStarCraft", "TeamWinsWarcraft","WinsWarrior", "WinsAssassin", "WinsSupport","WinsSpecialist","WinsStarCraft", "WinsDiablo", "WinsWarcraft", "WinsMale", "WinsFemale", "PlaysStarCraft", "PlaysDiablo", "PlaysOverwatch", "PlaysWarCraft", "PlaysWarrior", "PlaysAssassin", "PlaysSupport", "PlaysSpecialist", "PlaysMale", "PlaysFemale", "Tier1Talent", "Tier2Talent", "Tier3Talent", "Tier4Talent", "Tier5Talent", "Tier6Talent", "Tier7Talent", "TeamLevel", "LessThan4Deaths", "LessThan3TownStructuresLost", "Level", "MetaExperience", "TeamTakedowns", "Role", "EndOfMatchAwardGivenToNonwinner", "GameScore", "LunarNewYearSuccesfulArtifactTurnIns", "LunarNewYearEventCompleted", "StarcraftDailyEventCompleted", "StarcraftPiecesCollected", "LunarNewYearRoosterEventCompleted", "PachimariMania", "TouchByBlightPlague", "EscapesPerformed", "VengeancesPerformed", "TeamfightEscapesPerformed", "OutnumberedDeaths", "EndOfMatchAwardMVPBoolean", "EndOfMatchAwardHighestKillStreakBoolean", "EndOfMatchAwardMostVengeancesPerformedBoolean", "EndOfMatchAwardMostDaredevilEscapesBoolean", "EndOfMatchAwardMostEscapesBoolean", "EndOfMatchAwardMostXPContributionBoolean", "EndOfMatchAwardMostHeroDamageDoneBoolean", "EndOfMatchAwardMostKillsBoolean", "EndOfMatchAwardHatTrickBoolean", "EndOfMatchAwardClutchHealerBoolean", "EndOfMatchAwardMostProtectionBoolean", "EndOfMatchAward0DeathsBoolean", "EndOfMatchAwardMostSiegeDamageDoneBoolean", "EndOfMatchAwardMostDamageTakenBoolean", "EndOfMatchAward0OutnumberedDeathsBoolean", "EndOfMatchAwardMostHealingBoolean", "EndOfMatchAwardMostStunsBoolean", "EndOfMatchAwardMostRootsBoolean", "EndOfMatchAwardMostSilencesBoolean", "EndOfMatchAwardMostMercCampsCapturedBoolean", "EndOfMatchAwardMostTeamfightDamageTakenBoolean", "EndOfMatchAwardMostTeamfightHealingDoneBoolean", "EndOfMatchAwardMostTeamfightHeroDamageDoneBoolean", "EndOfMatchAwardMostDamageToMinionsBoolean", "EndOfMatchAwardMapSpecificBoolean", "EndOfMatchAwardMostDragonShrinesCapturedBoolean", "EndOfMatchAwardMostTimePushingBoolean", "EndOfMatchAwardMostTimeOnPointBoolean", "EndOfMatchAwardMostInterruptedCageUnlocksBoolean", "EndOfMatchAwardMostSeedsCollectedBoolean", "EndOfMatchAwardMostDamageToPlantsBoolean", "EndOfMatchAwardMostCurseDamageDoneBoolean", "EndOfMatchAwardMostCoinsPaidBoolean", "EndOfMatchAwardMostImmortalDamageBoolean", "EndOfMatchAwardMostDamageDoneToZergBoolean", "EndOfMatchAwardMostTimeInTempleBoolean", "EndOfMatchAwardMostGemsTurnedInBoolean", "EndOfMatchAwardMostSkullsCollectedBoolean", "EndOfMatchAwardMostAltarDamageDone", "EndOfMatchAwardMostNukeDamageDoneBoolean"]
     for i in exclude_from_stats:
         stats.pop(i, None)
-    return [chat_history, players, stats, statistics, game_details]
+    return [chat_history, players, stats, statistics, statistics_maximum, game_details]
 
 
 
@@ -238,8 +247,7 @@ def replay_page():
         replay_template = env.get_template("replay.html")
         css_URL = url_for("static", filename="replay.css")
         js_URL = url_for("static", filename="replay.js")
-        print(return_data[3])
-        return replay_template.render(css_URL=css_URL, js_URL=js_URL, chatlog=chatlog, players=return_data[1], stats=return_data[2], statistics=return_data[3], game_details=return_data[4], chart_title=chart_title, chart_link=chart_link, chart_link_ID=chart_link_ID)
+        return replay_template.render(css_URL=css_URL, js_URL=js_URL, chatlog=chatlog, players=return_data[1], stats=return_data[2], statistics=return_data[3], statistics_maximum=return_data[4], game_details=return_data[5], chart_title=chart_title, chart_link=chart_link)
         
     else:
         css_URL = url_for("static", filename="home.css")

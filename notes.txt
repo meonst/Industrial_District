@@ -10,3 +10,28 @@ going to add charts about...
 
 
 blueteam first
+
+
+Takedowns		
+Deaths		
+SoloKill
+Assists
+ExperienceContribution
+Healing
+SiegeDamage
+StructureDamage
+MinionDamage
+HeroDamage
+SelfHealing
+TimeSpentDead
+TimeCCdEnemyHeroes
+DamageTaken
+TimeSilencingEnemyHeroes
+TimeStunningEnemyHeroes
+TeamfightHealingDone
+TeamfightDamageTaken
+TeamfightHeroDamage
+PhysicalDamage
+SpellDamage
+MinionKills
+RegenGlobes

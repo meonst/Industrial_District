@@ -18,6 +18,7 @@
 <button onclick="toggle('talents')">talents</button>
 <button onclick="toggle('chatlog')">chatlog</button>
 <button onclick="toggle('statistics')">statistics</button>
+<button onclick="toggle('charts')">charts</button>
 
 <pre id="stats">
     <table>
@@ -62,16 +63,26 @@
 
 
 <pre id="charts">
-    <div id="charts_categories">{% for i in range(0, 8) %}<div id="checkbox_{{ chart_title[i] }}"><input type="checkbox" id="checkbox_{{ chart_title[i] }}_checkbox" class="chart_checkbox"> <label for="checkbox_{{ chart_title[i] }}_label">{{ chart_title[i] }}</label></div>{% endfor %} </div> 
+    <div id="charts_categories">{% for i in range(0, 23) %}<div id="checkbox_{{ chart_title[i] }}"><input type="checkbox" id="checkbox_{{ chart_title[i] }}_checkbox" class="chart_checkbox"> <label for="checkbox_{{ chart_title[i] }}_label">{{ chart_title[i] }}</label></div>{% endfor %} </div> 
     <div id="charts_players">{% for i in range(0, 10) %}<div id="charts_players_player_{{ i }}"><img id="charts_players_portrait" src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[i]['minimap_portrait'] }}"></div> {% endfor %}
     </div>
     <canvas id="charts_chart" width="700px" height="420px">        
     </canvas>
-    {% for i in range(0, 8) %}
+    {% for i in range(0, 23) %}
+
+        
     {% for j in range(0, 5) %}
-    <div id="charts_chart_{{ i }}_{{ j }}" style="display: none; background-color: blue;"></div>
-    <div id="charts_chart_{{ i }}_{{ j + 5 }}" style="display: none; background-color: red"></div>
+    <div id="charts_chart_{{ i }}_{{ j }}" class="charts_chart_{{ i }}" style="display: none; position: absolute;"></div>
+    <div id="charts_chart_{{ i }}_{{ j + 5 }}" class="charts_chart_{{ i }}" style="display: none; position: absolute;"></div> 
     {% endfor %}
+
+    <div id="charts_chart_exact_{{ i }}" class="charts_chart_exact" style="font-size: 20pt;" >
+        {% for j in range(0, 5) %}
+        <div id="charts_chart_exact_{{ i }}_{{ j }}" style="position: absolute; z-index: 1; width: 80px; text-align: right;">{{ statistics[chart_link[i]][j] }}</div>
+        <div id="charts_chart_exact_{{ i }}_{{ j + 5 }}" style="position: absolute; z-index: 1; width: 80px; text-align: right;">{{ statistics[chart_link[i]][j + 5] }}</div>
+        {% endfor %}
+    </div>
+
     {% endfor %}
 
 
@@ -80,10 +91,10 @@
     const drawing = document.getElementById("charts_chart").getContext("2d");
     var checkbox_group = document.getElementsByClassName('chart_checkbox')
     var update = []
-    var checked_cout = 0
+    var checked_count = 0
     chart_checkbox_limit()
 
-    {% for i in range(0, 8) %}
+    {% for i in range(0, 23) %}
     update[{{ i }}] = document.getElementById("checkbox_{{ chart_title[i] }}_checkbox")
     update[{{ i }}].addEventListener("change", (event) => {
         graph_drawing()
@@ -92,24 +103,64 @@
 
 
     function graph_drawing() {
-        {% for i in range(0, 8) %}
+        var graph_count = 0;
+        
+        {% for i in range(0, 23) %}
         
         if (checkbox_group[{{ i }}].checked == true) {
-        
-        console.log("{{ statistics[chart_link[i]] }}"))
-        console.log("{{ statistics[chart_link[i]] }}")
-        {% for j in range(0, 10) %}
 
-        document.getElementById("charts_chart_{{ i }}_{{ j }}").style.display = "block"
-        
-        {% endfor %}   
+            {% for j in range(0, 5) %}
 
-        }
-        else {        
+            document.getElementById("charts_chart_{{ i }}_{{ j }}").style.display = "block";
+            document.getElementById("charts_chart_{{ i }}_{{ j }}").style.width = (700 * {{ statistics[chart_link[i]][j] / statistics_maximum[chart_link[i]] }}).toString() + "px";
+            document.getElementById("charts_chart_{{ i }}_{{ j }}").style.left = "244px";
+            
+            
+            document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.display = "block";
+            document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.width = (700 * {{ statistics[chart_link[i]][j + 5] / statistics_maximum[chart_link[i]] }}).toString() + "px";
+            document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.left = "244px";
+
+            document.getElementById("charts_chart_exact_{{ i }}_{{ j }}").style.top = (7 + (40 * {{ j }})).toString() + "px";
+            document.getElementById("charts_chart_exact_{{ i }}_{{ j }}").style.left = "860px";
+            document.getElementById("charts_chart_exact_{{ i }}_{{ j + 5 }}").style.top = (27 + (40 * {{ j + 5 }})).toString() + "px";      
+            document.getElementById("charts_chart_exact_{{ i }}_{{ j + 5 }}").style.left = "860px"; 
+
+            if (checked_count == 1) {
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.height = "32px";
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.top = (7 + (40 * {{ j }})).toString() + "px";
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.backgroundColor = "rgba(80, 80, 256, 0.9)"
+
+                document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.height = "32px";
+                document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.top = (27 + (40 * {{ j + 5 }})).toString() + "px";
+                document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.backgroundColor = "rgba(256, 80, 80, 0.9)"
+
+            } else if (checked_count == 2) {
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.height = "15px";
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.top = (7 + (graph_count * 17) + (40 * {{ j }})).toString() + "px";                
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.backgroundColor = "rgba(80, 80, 256, " + (0.9 - (graph_count * 0.1)).toString() + ")"
+
+                document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.height = "15px";
+                document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.top = (27 + (graph_count * 17) + (40 * {{ j + 5 }})).toString() + "px";
+                document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.backgroundColor = "rgba(256, 80, 80, " + (0.9 - (graph_count * 0.1)).toString() + ")"
+
+            } else if (checked_count == 3) {
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.height = "10px";
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.top = (7 + (graph_count * 11) + (40 * {{ j }})).toString() + "px";               
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.backgroundColor = "rgba(80, 80, 256, " + (0.9 - (graph_count * 0.1)).toString() + ")"
+
+                document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.height = "10px";
+                document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.top = (27 + (graph_count * 11) + (40 * {{ j + 5 }})).toString() + "px";
+                document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.backgroundColor = "rgba(256, 80, 80, " + (0.9 - (graph_count * 0.1)).toString() + ")"
+                
+            }
+            {% endfor %}  
+            graph_count += 1
+        } else {        
             {% for j in range(0, 10) %}
-            document.getElementById("charts_chart_{{ i }}_{{ j }}").style.display = "none" 
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.display = "none" 
             {% endfor %}  
         }
+
         {% endfor %}
         
 
@@ -131,6 +182,14 @@
     }
 </script>
 
+<style>
 
+{% for i in range(0, 23) %}
+.charts_chart_{{ i }}:hover ~ #charts_chart_exact_{{ i }} {
+    display: block;
+}
+{% endfor %}
+
+</style>
 
 <meta id="replay_data" data="">
