@@ -23,7 +23,7 @@ chart_title = ["Kill Participation", "Deaths", "Kills", "Assists", "Experience C
 
 global chat_history, team_blue, team_red, players
 players = list(dict() for i in range(0, 10))
-version = "83632"
+version = "83716"
 language = "enus"
 with open("./json/herodata_{}_{}.json".format(version, language), encoding="utf-8") as json_file:
     hero_data = json.load(json_file)
