@@ -35,3 +35,86 @@ PhysicalDamage
 SpellDamage
 MinionKills
 RegenGlobes
+
+timeline ----------------------------------------------
+
+
+GatesOpen
+PlayerDeath
+LevelUp
+JungleCampCapture
+TownStructureDeath
+
+TalentChosen
+RegenGlobePickedUp
+
+EndOfGameUpVotesCollected
+EndOfGameXPBreakdown
+EndOfGameTimeSpentDead
+EndOfGameTalentChoices
+EndOfGameMarksmanStacks
+
+LootVoiceLineUsed
+LootSprayUsed
+LootWheelUsed
+
+PeriodicXPBreakdown
+
+GameStart
+PlayerInit
+TownStructureInit
+PlayerSpawned
+JungleCampInit
+
+
+#map specific
+    infernal shrines
+        InfernalShrineCaptured
+        PunisherKilled
+
+    Sky temple
+        SkyTempleShotsFired
+        SkyTempleCaptured
+        SkyTempleActivated
+
+    Tomb of the spider queen
+        SoulEatersSpawned
+
+    Dragon Shire
+        DragonKnightActivated
+
+    Volskaya Industries
+        VolskayaCapturePointSpawned
+        VolskayaCapturePointComplete
+
+    Towers of doom
+        Altar Captured
+        Town Captured
+
+    Warhead Junction
+        WarheadJunctionNukesSpawned
+        WarheadJunctionNukeCollected
+        WarheadJunctionNukeFired
+        WarheadJunctionNukeDropped
+
+    Blackheart's Bay
+        GhostShipCaptured
+
+    Braxis Holdout
+        BraxisHoldoutMapEventComplete
+
+    Battlefield of eternity
+        Boss Duel Started
+        Immortal Defeated
+
+    Cursed Hallows
+        TributeCollected
+        RavenCurseActivated
+
+
+    Alterac pass        
+    Garden of terror
+    Hanamura Temple
+
+
+----------------------------------------------

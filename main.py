@@ -58,8 +58,8 @@ def open_replay(replay_file):
     #camp_capture will be in the form of (time, captured camp)
     team_blue = dict()
     team_red = dict()   
-    team_blue["level_up"] = list(0 for i in range(0, 2))
-    team_red["level_up"] = list(0 for i in range(0, 2))
+    team_blue["level_up"] = list(0 for i in range(1))
+    team_red["level_up"] = list(0 for i in range(1))
     team_blue["camp_capture"] = list()
     team_red["camp_capture"] = list()
     chatlog = ""
@@ -120,6 +120,12 @@ def open_replay(replay_file):
                             break
             #checking for notable events
             if "m_eventName" in event:
+                
+                #if event["m_eventName"].decode() not in ["LootWheelUsed", "EndOfGameUpVotesCollected","RegenGlobePickedUp","PlayerDeath","LevelUp","JungleCampCapture","TalentChosen","EndOfGameXPBreakdown","EndOfGameTimeSpentDead","EndOfGameTalentChoices", "LootVoiceLineUsed","PeriodicXPBreakdown","LootSprayUsed","TownStructureDeath","GameStart","PlayerInit","TownStructureInit","PlayerSpawned","JungleCampInit","GatesOpen"]:
+                #    print(event["m_eventName"].decode())
+                if event["m_eventName"].decode() == "EndOfGameMarksmanStacks":
+                    print(event)
+
                 #TimeSpentDead. Since this automatically adds time at the point of death, it may not correctly represent the actual time dead.
                 if event["m_eventName"].decode() == "EndOfGameTimeSpentDead":
                     time_spent_dead = event["m_fixedData"][0]["m_value"] / 4096
@@ -127,7 +133,7 @@ def open_replay(replay_file):
                     players[player_number]["time_spent_dead"] = time_spent_dead
                 
                 #Camp Capture
-                if event["m_eventName"].decode() == "Junglecamp_capture":
+                if event["m_eventName"].decode() == "JungleCampCapture":
                     time = looptime(event["_gameloop"])
                     if event["m_fixedData"][0]["m_value"] == 4096:
                         team_blue["camp_capture"].append((time, event["m_stringData"][0]["m_value"]))
@@ -246,8 +252,7 @@ def replay_page():
     if request.method == "POST":
         replay = request.files["file"]
         return_data = open_replay(replay)
-        
-        
+       
         replay_template = env.get_template("replay.html")
         css_URL = url_for("static", filename="replay.css")
         js_URL = url_for("static", filename="replay.js")
