@@ -88,6 +88,8 @@ JungleCampInit
         VolskayaCapturePointComplete
 
     Towers of doom
+        Six Town Event Start
+        Six Town Event End
         Altar Captured
         Town Captured
 

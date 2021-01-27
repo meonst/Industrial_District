@@ -53,15 +53,12 @@ def open_replay(replay_file):
         i["death"] = list()
         i["talent"] = ""
         i["talent_icon"] = ["storm_ui_icon_monk_trait1.png"] * 7
-    #team_blue, team_red will each record the time of a event happening
-    #level_up will be the time of when the level up happened
-    #camp_capture will be in the form of (time, captured camp)
-    team_blue = dict()
-    team_red = dict()   
-    team_blue["level_up"] = list(0 for i in range(1))
-    team_red["level_up"] = list(0 for i in range(1))
-    team_blue["camp_capture"] = list()
-    team_red["camp_capture"] = list()
+    #team_blue_timeline, team_red_timeline will each record the time of a event happening
+    #data will be given in chronological order (although there might be a few exceptions)
+    #data will be given in the form of a list [gameloop, "name_of_event", reference data]
+    team_blue_timeline = list()
+    team_red_timeline = list()  
+
     chatlog = ""
 
     
@@ -79,9 +76,9 @@ def open_replay(replay_file):
     #each of these will be either a dictionary or a list with data in it
     details = protocol.decode_replay_details(archive.read_file("replay.details"))    
     init_data = protocol.decode_replay_initdata(archive.read_file("replay.initdata"))
-    game_events = archive.read_file("replay.game.events")
     message_events = archive.read_file("replay.message.events")
-    attribute_events = protocol.decode_replay_attributes_events(archive.read_file("replay.attributes.events"))
+    #game_events = archive.read_file("replay.game.events")
+    #attribute_events = protocol.decode_replay_attributes_events(archive.read_file("replay.attributes.events"))
     
     #game_details will be a dictionary with certain details of the game
     game_details = dict()
@@ -120,36 +117,54 @@ def open_replay(replay_file):
                             break
             #checking for notable events
             if "m_eventName" in event:
-                
                 #if event["m_eventName"].decode() not in ["LootWheelUsed", "EndOfGameUpVotesCollected","RegenGlobePickedUp","PlayerDeath","LevelUp","JungleCampCapture","TalentChosen","EndOfGameXPBreakdown","EndOfGameTimeSpentDead","EndOfGameTalentChoices", "LootVoiceLineUsed","PeriodicXPBreakdown","LootSprayUsed","TownStructureDeath","GameStart","PlayerInit","TownStructureInit","PlayerSpawned","JungleCampInit","GatesOpen"]:
                 #    print(event["m_eventName"].decode())
-                if event["m_eventName"].decode() == "EndOfGameMarksmanStacks":
-                    print(event)
+                if event["m_eventName"].decode() == "TownStructureDeath":
+                    
+                    print("건물", int((looptime(event["_gameloop"]) + 38) // 60), int((looptime(event["_gameloop"]) + 38) % 60), event["m_intData"][0]["m_value"])
+                    players_involved = list()
+                    for i in event["m_intData"]:
+                        if i["m_key"] == b"TownID":
+                            players_involved.append(i["m_value"])
+                        else:
+                            players_involved.append(i["m_value"] - 1)
+                    if players_involved[0] < 5:
+                        team_blue_timeline.append([event["_gameloop"], "Structure Death", players_involved])
+                    if players_involved[0] > 5:
+                        team_red_timeline.append([event["_gameloop"], "Structure Death", players_involved])
+                #Player Death [gameloop, event_name, [victim, related player 1, related player 2, ...]]
+                if event["m_eventName"].decode() == "PlayerDeath":
+                    players_involved = list()
+                    for i in event["m_intData"]:
+                        players_involved.append(i["m_value"] - 1)
+                    if players_involved[0] < 5:
+                        team_blue_timeline.append([event["_gameloop"], "player_death", players_involved])
+                    if players_involved[0] > 5:
+                        team_red_timeline.append([event["_gameloop"], "player_death", players_involved])
+                #Camp Capture 
+                if event["m_eventName"].decode() == "JungleCampCapture":
+                    print("용병캠프", int((looptime(event["_gameloop"]) + 38) // 60), int((looptime(event["_gameloop"]) + 38) % 60), event["m_intData"][0]["m_value"])
+                    if event["m_fixedData"][0]["m_value"] == 4096:
+                        team_blue_timeline.append([event["_gameloop"], "camp_capture", event["m_intData"][0]["m_value"]])
+                        
+                    elif event["m_fixedData"][0]["m_value"] == 8192:
+                        team_red_timeline.append([event["_gameloop"], "camp_capture", event["m_intData"][0]["m_value"]])
+
+                #Level Up, will only be checking level up for user 0 and 5 since the level up time is the same for everyone else on the same team
+                if event["m_eventName"].decode() == "LevelUp":
+    
+                    if event["_gameloop"] > 610:
+                        player_number = event["m_intData"][0]["m_value"] - 1
+                        if player_number == 0:
+                            team_blue_timeline.append([event["_gameloop"], "level_up", event["m_intData"][1]["m_value"]])
+                        elif player_number == 5:
+                            team_red_timeline.append([event["_gameloop"], "level_up", event["m_intData"][1]["m_value"]])
 
                 #TimeSpentDead. Since this automatically adds time at the point of death, it may not correctly represent the actual time dead.
                 if event["m_eventName"].decode() == "EndOfGameTimeSpentDead":
                     time_spent_dead = event["m_fixedData"][0]["m_value"] / 4096
                     player_number = event["m_intData"][0]["m_value"] - 1
                     players[player_number]["time_spent_dead"] = time_spent_dead
-                
-                #Camp Capture
-                if event["m_eventName"].decode() == "JungleCampCapture":
-                    time = looptime(event["_gameloop"])
-                    if event["m_fixedData"][0]["m_value"] == 4096:
-                        team_blue["camp_capture"].append((time, event["m_stringData"][0]["m_value"]))
-                    elif event["m_fixedData"][0]["m_value"] == 8192:
-                        team_red["camp_capture"].append((time, event["m_stringData"][0]["m_value"]))
-                    
-
-                #Level Up, will only be checking level up for user 0 and 5 since the level up time is the same for everyone else on the same team
-                if event["m_eventName"].decode() == "LevelUp":
-                    time = looptime(event["_gameloop"])
-                    if time > 0:
-                        player_number = event["m_intData"][0]["m_value"] - 1
-                        if player_number == 0:
-                            team_blue["level_up"].append(time)
-                        elif player_number == 5:
-                            team_red["level_up"].append(time)
 
                 #"EndOfGameTalentChoices" has multiple info inside, however only the hero names and talent choices will be used.
                 #Hero 
