@@ -16,7 +16,7 @@
 <button onclick="toggle('stats')">stats</button>
 <button onclick="toggle('talents')">talents</button>
 <button onclick="toggle('chatlog')">chatlog</button>
-<button onclick="toggle('statistics')">statistics</button>
+<button onclick="toggle('timeline')">timeline</button>
 <button onclick="toggle('charts')">charts</button>
 
 <pre id="stats">
@@ -39,25 +39,21 @@
 {{ players[i]["hero_name"] }}</div><a id="talents_player_icon_box" href="https://min.hyeok.org/SILVER/#/{{ players[i]['hero_link'] }}/{{ players[i]['talent'] }}">{% for j in range(0, 7) %}<img id="talents_player_icon_box_individual" src="https://min.hyeok.org/SILVER/files/images/abilitytalents/{{ players[i]['talent_icon'][j] }}">{% endfor %}</a></div>{% endfor %}</pre>
 
 <pre id="chatlog">
-    {% if chatlog %}
-        {{chatlog}}
-    {% endif %}
+    {% if chatlog %} {{chatlog}} {% endif %}
 </pre>
 
-<pre id="statistics">
-    <table>
-        <tr id="Players">
-            <th id="player_row">Players</th> {% for i in range(0, 10) %} <th id="playerRow">{{ players[i]["player_name"] }}</th> {% endfor %}
-        </tr>
-        <tr id="Heroes">
-            <th id="hero_row">Heroes</th> {% for i in range(0, 10) %} <th>{{ players[i]["hero_name"] }}</th> {% endfor %}
-        </tr>
-        {% for i in statistics %}
-        <tr>
-            <th>{{ i }}</th> {% for j in statistics[i] %} <th>{{ j }}</th> {% endfor %}
-        </tr>
-        {% endfor %}
-    </table>
+<pre id="timeline">
+    <pre id="timeline_axis"></pre>
+    
+    {% for i in team_blue_timeline %}
+    <pre id="blue_{{ i[1] }}" class="blue_timeline" style="position: absolute; left:200px; top:{{ 0 + i[0]/16 }}px;">{{ i[0] }} {{ i[1] }} {{ i[2] }}</pre>
+    {% endfor %}
+
+    {% for i in team_red_timeline %}
+    <pre id="red_{{ i[1] }}" class="red_timeline" style="position: absolute; left:510px; top:{{ 0 + i[0]/16 }}px;">{{ i[0] }} {{ i[1] }} {{ i[2] }}</pre>
+    {% endfor %}
+    
+    
 </pre>
 
 

@@ -32,7 +32,44 @@ language = "enus"
 with open("./json/herodata_{}_{}.json".format(version, language), encoding="utf-8") as json_file:
     hero_data = json.load(json_file)
 
+map_structure_ID = {
+    "DragonShire": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Bottom Keep", "Rightside Bottom Fort", "Rightside Middle Keep", "Rightside Middle Fort"],
+    "ControlPoints": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Middle Keep", "Rightside Middle Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
+    "Volskaya": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Middle Keep", "Rightside Middle Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
+    "TowersOfDoom": ["placeholder", "Leftside Top Keep", "Leftside Middle Keep", "Leftside Bottom Keep", "Rightside Top Keep", "Rightside Middle Keep", "Rightside Bottom Keep"],
+    "Warhead Junction":["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Middle Keep", "Rightside Middle Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
+    "HauntedWoods": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Middle Keep", "Rightside Middle Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
+    "Hanamura": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
+    "Crypts": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Middle Keep", "Rightside Middle Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
+    "BlackheartsBay": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Middle Keep", "Rightside Middle Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
+    "BattlefieldOfEternity": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
+    "CursedHollow": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Middle Keep", "Rightside Middle Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
+    "BraxisHoldout": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
+    "Shrines": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Bottom Keep", "Rightside Bottom Fort", "Rightside Middle Keep", "Rightside Middle Fort"],
+    "AlteracPass": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Middle Keep", "Rightside Middle Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
+    "BraxisOutpost": ["placeholder", "Leftside Keep", "Leftside Fort", "Rightside Keep", "Rightside Fort"],
+    "SilverCity": ["placeholder", "Leftside Keep", "Leftside Fort", "Rightside Keep", "Rightside Fort"],
+    "LostCavern": ["placeholder", "Leftside Keep", "Leftside Fort", "Rightside Keep", "Rightside Fort"],
+}
 
+map_camp_ID = {
+    "DragonShire": ["placeholder", "Leftside Siege Camp", "Leftside Bruiser Camp", "Rightside Siege Camp", "Rightside Bruiser Camp", "Bottom Bruiser Camp"],
+    "ControlPoints": ["placeholder", "Leftside Siege Camp", "Leftside Bruiser Camp", "Rightside Bruiser Camp", "Rightside Siege Camp", "Boss Camp"],
+    "Volskaya": ["placeholder", "Leftside Fortification Camp", "Rightside Fortification Camp", "Leftside Siege Camp", "Rightside Siege Camp", "Support Camp"],
+    "TowersOfDoom": ["placeholder", "Leftside Siege Camp", "Rightside Siege Camp", "Top Siege Camp", "Boss Camp"],
+    "Warhead Junction": ["placeholder", "Leftside Siege Camp", "Leftside Bruiser Camp", "Rightside Siege Camp", "Rightside Bruiser Camp", "Boss Camp"],
+    "HauntedWoods": ["placeholder", "Leftside Middle Siege Camp", "Leftside Top Siege Camp", "Leftside Bruiser Camp", "Rightside Middle Siege Camp", "Rightside Bottom Siege Camp", "Rightside Bruiser Camp"],
+    "Hanamura": ["placeholder", "Leftside Fortification Camp", "Rightside Fortification Camp", "Leftside Siege Camp", "Rightside Siege Camp", "Top Recon Camp", "Bottom Recon Camp"],
+    "Crypts": ["placeholder", "Bottom Siege Camp", "Leftside Bruiser Camp", "Rightside Bruiser Camp", "Boss Camp"],
+    "BlackheartsBay": ["placeholder", "Leftside Bruiser Camp", "Leftside Siege Camp", "Rightside Bruiser Camp", "Rightside Siege Camp", "Bottom Bruiser Camp", "Boss Camp", "Leftside Middle Skeletal Pirates", "Leftside Top Skeletal Pirates", "Rightside Middle Skeletal Pirates", "Rightside Top Skeletal Pirates"],
+    "BattlefieldOfEternity": ["placeholder", "Top Siege Camp", "Leftside Bruiser Camp", "Bottom Siege Camp", "Rightside Bruiser Camp"],
+    "CursedHollow": ["placeholder", "Leftside Siege Camp", "Rightside Bruiser Camp", "Rightside Siege Camp", "Leftside Bruiser Camp", "Leftside Boss Camp", "Rightside Boss Camp"],
+    "BraxisHoldout": ["placeholder", "Leftside Siege Camp", "Leftside Bruiser Camp", "Rightside Siege Camp", "Rightside Bruiser Camp", "Boss Camp"],
+    "Shrines": ["placeholder", "Leftside Siege Camp", "Leftside Bruiser Camp", "Rightside Siege Camp", "Rightside Bruiser Camp", "Bottom Siege Camp"],
+    "AlteracPass": ["placeholder", "Leftside Siege Camp", "Top Boss Camp", "Rightside Siege Camp", "Bottom Boss Camp"], 
+    "BraxisOutpost": ["placeholder", "Leftside Bruiser Camp", "Rightside Bruiser Camp"],
+    "SilverCity": ["placeholder", "Leftside Siege Camp", "Rightside Siege Camp"],
+}
 #gametime will be given in integer t, after going through this function, it will represent time in seconds
 def looptime(t):
     return (t - 610) / 16
@@ -60,7 +97,7 @@ def open_replay(replay_file):
     team_red_timeline = list()  
 
     chatlog = ""
-
+    structure_deaths = list()
     
     #start by reading the header(it can be done with any protocol)
     #from the header open the corresponding version of protocol
@@ -82,16 +119,22 @@ def open_replay(replay_file):
     
     #game_details will be a dictionary with certain details of the game
     game_details = dict()
+
     #the name of the map the game was played on
     game_details["map_name"] = details["m_title"].decode()
+
     #the version which the game was played on
     game_details["game_version"] = "{}.{}.{}.{}".format(header["m_version"]["m_major"], header["m_version"]["m_minor"], header["m_version"]["m_revision"], header["m_version"]["m_baseBuild"])
+    
     #the regional time this game was played on
     game_details["game_time"] = datetime.fromtimestamp((details["m_timeUTC"] + details["m_timeLocalOffset"]) // 10000000 - 11644506000)
+    
     #the length of the game
     game_details["game_length"] = "{0:02d}:{1:02d}".format(int(header["m_elapsedGameLoops"] / 16) // 60, int((header["m_elapsedGameLoops"] / 16) % 60))
+    
     #the winner of the game(assuming there are no ties)
     game_details["winner"] = ["Blue", "Red"][details["m_playerList"][0]["m_result"] - 1]
+    
     #the game_mode this game is played on(default set to Unknown to avoid error)
     game_details["game_mode"] = "Unknown"
     if init_data["m_syncLobbyState"]["m_gameDescription"]["m_gameOptions"]["m_ammId"] in game_mode_dict:
@@ -119,20 +162,19 @@ def open_replay(replay_file):
             if "m_eventName" in event:
                 #if event["m_eventName"].decode() not in ["LootWheelUsed", "EndOfGameUpVotesCollected","RegenGlobePickedUp","PlayerDeath","LevelUp","JungleCampCapture","TalentChosen","EndOfGameXPBreakdown","EndOfGameTimeSpentDead","EndOfGameTalentChoices", "LootVoiceLineUsed","PeriodicXPBreakdown","LootSprayUsed","TownStructureDeath","GameStart","PlayerInit","TownStructureInit","PlayerSpawned","JungleCampInit","GatesOpen"]:
                 #    print(event["m_eventName"].decode())
-                if event["m_eventName"].decode() == "TownStructureDeath":
-                    
-                    print("건물", int((looptime(event["_gameloop"]) + 38) // 60), int((looptime(event["_gameloop"]) + 38) % 60), event["m_intData"][0]["m_value"])
+
+                #Structuer Death [gameloop, broken structure, related players]
+                if event["m_eventName"].decode() == "TownStructureDeath":    
+                    #print("건물", int((looptime(event["_gameloop"]) + 38) // 60), int((looptime(event["_gameloop"]) + 38) % 60), event["m_intData"][0]["m_value"])
                     players_involved = list()
                     for i in event["m_intData"]:
                         if i["m_key"] == b"TownID":
-                            players_involved.append(i["m_value"])
+                            structure_ID = i["m_value"]
                         else:
                             players_involved.append(i["m_value"] - 1)
-                    if players_involved[0] < 5:
-                        team_blue_timeline.append([event["_gameloop"], "Structure Death", players_involved])
-                    if players_involved[0] > 5:
-                        team_red_timeline.append([event["_gameloop"], "Structure Death", players_involved])
-                #Player Death [gameloop, event_name, [victim, related player 1, related player 2, ...]]
+                    structure_deaths.append([event["_gameloop"], structure_ID, players_involved])
+
+                #Player Death [gameloop, event_name, [victim, related players]]
                 if event["m_eventName"].decode() == "PlayerDeath":
                     players_involved = list()
                     for i in event["m_intData"]:
@@ -141,18 +183,17 @@ def open_replay(replay_file):
                         team_blue_timeline.append([event["_gameloop"], "player_death", players_involved])
                     if players_involved[0] > 5:
                         team_red_timeline.append([event["_gameloop"], "player_death", players_involved])
+
                 #Camp Capture 
                 if event["m_eventName"].decode() == "JungleCampCapture":
-                    print("용병캠프", int((looptime(event["_gameloop"]) + 38) // 60), int((looptime(event["_gameloop"]) + 38) % 60), event["m_intData"][0]["m_value"])
+                    #print("용병캠프", int((looptime(event["_gameloop"]) + 38) // 60), int((looptime(event["_gameloop"]) + 38) % 60), event["m_intData"][0]["m_value"])
                     if event["m_fixedData"][0]["m_value"] == 4096:
                         team_blue_timeline.append([event["_gameloop"], "camp_capture", event["m_intData"][0]["m_value"]])
-                        
                     elif event["m_fixedData"][0]["m_value"] == 8192:
                         team_red_timeline.append([event["_gameloop"], "camp_capture", event["m_intData"][0]["m_value"]])
 
                 #Level Up, will only be checking level up for user 0 and 5 since the level up time is the same for everyone else on the same team
                 if event["m_eventName"].decode() == "LevelUp":
-    
                     if event["_gameloop"] > 610:
                         player_number = event["m_intData"][0]["m_value"] - 1
                         if player_number == 0:
@@ -174,24 +215,27 @@ def open_replay(replay_file):
                     for i in event["m_stringData"]:
                         if i["m_key"].decode() == "Hero":
                             if i["m_value"].decode() == "HeroMedivhRaven":
-                                thisHero = "Medivh"
-                                thisHeroName = hero_data["Medivh"]["name"]
+                                this_hero = "Medivh"
                             if i["m_value"].decode() == "HeroDVaPilot":
-                                thisHero = "DVa"
-                                thisHeroName = hero_data["DVa"]["name"]
-                            for Hero in hero_data:
-                                if hero_data[Hero]["unitId"] == i["m_value"].decode():
-                                    thisHero = Hero
-                                    thisHeroName = hero_data[Hero]["name"]
+                                this_hero = "DVa"
+                            if i["m_value"].decode() == "HeroAlexstraszaDragon":
+                                this_hero = "Alexstrasza"
+                                
+                            for hero in hero_data:
+                                if hero_data[hero]["unitId"] == i["m_value"].decode():
+                                    this_hero = hero
                                     break
-                            players[player_number][i["m_key"].decode()] = thisHero
-                            players[player_number]["hero_name"] = thisHeroName
-                            players[player_number]["hero_link"] = players[player_number]["Hero"]
+                            players[player_number]["hero"] = this_hero
+                            players[player_number]["hero_name"] = hero_data[this_hero]["name"]
+                            players[player_number]["hero_link"] = players[player_number]["hero"]
                             players[player_number]["party_panel_portrait"] = hero_data[players[player_number]["hero_link"]]["portraits"]["partyPanel"]
                             players[player_number]["minimap_portrait"] = hero_data[players[player_number]["hero_link"]]["portraits"]["minimap"]
-                #Talents
-                        elif i["m_key"].decode() != "Win/Loss" and i["m_key"] != "Map":
-                            for which_talent in hero_data[players[player_number]["Hero"]]["talents"]["level{}".format(talent_tier[j])]:
+                        #map_link will be used to determine which map should be used for identifying camps and structures
+                        elif i["m_key"].decode() == "Map":
+                            map_link = i["m_value"].decode()
+                        #Talents
+                        elif i["m_key"].decode() != "Win/Loss":
+                            for which_talent in hero_data[players[player_number]["hero"]]["talents"]["level{}".format(talent_tier[j])]:
                                 
                                 if which_talent["nameId"] == i["m_value"].decode():
                                     players[player_number]["talent_icon"][j - 1] = which_talent["icon"]
@@ -199,18 +243,15 @@ def open_replay(replay_file):
                                     j += 1
                                     continue
                 
-                                    
-            
-                            
                 #Player Kills
-                
                 if event["m_eventName"].decode() == "PlayerDeath":
                     time = looptime(event["_gameloop"])
                     dead_player_number = event["m_intData"][0]["m_value"] - 1
                     players[dead_player_number]["death"].append(time)
                     for i in range(1, len(event["m_intData"])):
                         player_number = event["m_intData"][i]["m_value"] - 1
-                        players[player_number]["player_kill"].append((time, dead_player_number))
+                        if player_number < 10 and player_number >= 0: #this is necessary since the player_number will be 10 or 11 when the final blow is caused by minions
+                            players[player_number]["player_kill"].append((time, dead_player_number))
                 
                 #Spray
                 if event["m_eventName"].decode() == "LootSprayUsed":
@@ -230,8 +271,6 @@ def open_replay(replay_file):
                     player_number = event["m_intData"][0]["m_value"] - 1
                     players[player_number]["regen_globes_time"].append(time)
                     
-                
-
     #This part is needed for the talent link to function as intended even in cases where the game ends pre 20
     for i in players:
         i["talent"] = i["talent"].ljust(14, "0")
@@ -247,18 +286,64 @@ def open_replay(replay_file):
     #Chat Messages
         if i["_event"] == "NNet.Game.SChatMessage":
             chatlog += "{}({}:{}){}: {}".format("\n", format(int(looptime(i["_gameloop"])//60), "02d"), format( int(looptime(i["_gameloop"])%60), "02d"), players[i["_userid"]["m_userId"]]["player_name"], i["m_string"].decode()) 
+
     #Ping Messages
         if i ["_event"] == "NNet.Game.SPingMessage":
             player_number = i["_userid"]["m_userId"]
             time = looptime(i["_gameloop"])
             players[player_number]["pings"].append(time)
+
     #This will soon be changed
     stats = statistics.copy()
     exclude_from_stats = ["TeamWinsDiablo","TeamWinsFemale", "TeamWinsMale", "TeamWinsStarCraft", "TeamWinsWarcraft","WinsWarrior", "WinsAssassin", "WinsSupport","WinsSpecialist","WinsStarCraft", "WinsDiablo", "WinsWarcraft", "WinsMale", "WinsFemale", "PlaysStarCraft", "PlaysDiablo", "PlaysOverwatch", "PlaysWarCraft", "PlaysWarrior", "PlaysAssassin", "PlaysSupport", "PlaysSpecialist", "PlaysMale", "PlaysFemale", "Tier1Talent", "Tier2Talent", "Tier3Talent", "Tier4Talent", "Tier5Talent", "Tier6Talent", "Tier7Talent", "TeamLevel", "LessThan4Deaths", "LessThan3TownStructuresLost", "Level", "MetaExperience", "TeamTakedowns", "Role", "EndOfMatchAwardGivenToNonwinner", "GameScore", "LunarNewYearSuccesfulArtifactTurnIns", "LunarNewYearEventCompleted", "StarcraftDailyEventCompleted", "StarcraftPiecesCollected", "LunarNewYearRoosterEventCompleted", "PachimariMania", "TouchByBlightPlague", "EscapesPerformed", "VengeancesPerformed", "TeamfightEscapesPerformed", "OutnumberedDeaths", "EndOfMatchAwardMVPBoolean", "EndOfMatchAwardHighestKillStreakBoolean", "EndOfMatchAwardMostVengeancesPerformedBoolean", "EndOfMatchAwardMostDaredevilEscapesBoolean", "EndOfMatchAwardMostEscapesBoolean", "EndOfMatchAwardMostXPContributionBoolean", "EndOfMatchAwardMostHeroDamageDoneBoolean", "EndOfMatchAwardMostKillsBoolean", "EndOfMatchAwardHatTrickBoolean", "EndOfMatchAwardClutchHealerBoolean", "EndOfMatchAwardMostProtectionBoolean", "EndOfMatchAward0DeathsBoolean", "EndOfMatchAwardMostSiegeDamageDoneBoolean", "EndOfMatchAwardMostDamageTakenBoolean", "EndOfMatchAward0OutnumberedDeathsBoolean", "EndOfMatchAwardMostHealingBoolean", "EndOfMatchAwardMostStunsBoolean", "EndOfMatchAwardMostRootsBoolean", "EndOfMatchAwardMostSilencesBoolean", "EndOfMatchAwardMostMercCampsCapturedBoolean", "EndOfMatchAwardMostTeamfightDamageTakenBoolean", "EndOfMatchAwardMostTeamfightHealingDoneBoolean", "EndOfMatchAwardMostTeamfightHeroDamageDoneBoolean", "EndOfMatchAwardMostDamageToMinionsBoolean", "EndOfMatchAwardMapSpecificBoolean", "EndOfMatchAwardMostDragonShrinesCapturedBoolean", "EndOfMatchAwardMostTimePushingBoolean", "EndOfMatchAwardMostTimeOnPointBoolean", "EndOfMatchAwardMostInterruptedCageUnlocksBoolean", "EndOfMatchAwardMostSeedsCollectedBoolean", "EndOfMatchAwardMostDamageToPlantsBoolean", "EndOfMatchAwardMostCurseDamageDoneBoolean", "EndOfMatchAwardMostCoinsPaidBoolean", "EndOfMatchAwardMostImmortalDamageBoolean", "EndOfMatchAwardMostDamageDoneToZergBoolean", "EndOfMatchAwardMostTimeInTempleBoolean", "EndOfMatchAwardMostGemsTurnedInBoolean", "EndOfMatchAwardMostSkullsCollectedBoolean", "EndOfMatchAwardMostAltarDamageDone", "EndOfMatchAwardMostNukeDamageDoneBoolean", "KilledTreasureGoblin", "TimeOnPoint", "CageUnlocksInterrupted", "GardenSeedsCollectedByPlayer", "PlaysNexus", "PlaysOverwatchOrNexus", "Multikill", "DamageDoneToZerg"]
     for i in exclude_from_stats:
         stats.pop(i, None)
     #-------------------------
-    return [chatlog, players, stats, statistics, statistics_maximum, game_details]
+    
+    #structure deaths for 3 lane maps except Towers of Doom
+    if map_link in ["DragonShire", "ControlPoints", "Volskaya", "Warhead Junction", "Shrines", "AlteracPass", "HauntedWoods", "CursedHollow", "Crypts", "BlackheartsBay"]:
+        for i in structure_deaths:
+            if i[1] <= 6:
+                team_blue_timeline.append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])    
+            if i[1] > 6:
+                team_red_timeline.append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
+
+    #structure deaths for 2 lane maps
+    if map_link in ["BattlefieldOfEternity", "BraxisHoldout", "Hanamura"]:
+        for i in structure_deaths:
+            if i[1] <= 4:
+                team_blue_timeline.append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])    
+            if i[1] > 4:
+                team_red_timeline.append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
+
+    #structure deaths for 1 lane maps except Industrial District
+    if map_link in ["BraxisOutpost", "SilverCity", "LostCavern"]:
+        for i in structure_deaths:
+            if i[1] <= 2:
+                team_blue_timeline.append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])    
+            if i[1] > 2:
+                team_red_timeline.append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
+    
+    #structure deaths for Towers of Doom
+    if map_link == "TowersOfDoom":
+        structure_owner = ["placeholder", "blue", "blue", "blue", "red", "red", "red"]
+        for i in structure_deaths:
+            if structure_owner[i[1]] == "blue":
+                team_blue_timeline.append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
+                structure_owner[i[1]] = "red"
+            elif structure_owner[i[1]] == "red":
+                team_red_timeline.append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
+                structure_owner[i[1]] = "blue"
+
+    #map specific camp names
+    for i in team_blue_timeline:
+        if i[1] == "camp_capture":
+            i[2] = map_camp_ID[map_link][i[2]]
+    for i in team_red_timeline:
+        if i[1] == "camp_capture":
+            i[2] = map_camp_ID[map_link][i[2]]
+
+    return [chatlog, players, stats, statistics, statistics_maximum, game_details, team_blue_timeline, team_red_timeline]
 
 
 
@@ -271,7 +356,7 @@ def replay_page():
         replay_template = env.get_template("replay.html")
         css_URL = url_for("static", filename="replay.css")
         js_URL = url_for("static", filename="replay.js")
-        return replay_template.render(css_URL=css_URL, js_URL=js_URL, chatlog=return_data[0], players=return_data[1], stats=return_data[2], statistics=return_data[3], statistics_maximum=return_data[4], game_details=return_data[5], chart_title=chart_title, chart_link=chart_link)
+        return replay_template.render(css_URL=css_URL, js_URL=js_URL, chatlog=return_data[0], players=return_data[1], stats=return_data[2], statistics=return_data[3], statistics_maximum=return_data[4], game_details=return_data[5], team_blue_timeline=return_data[6], team_red_timeline=return_data[7], chart_title=chart_title, chart_link=chart_link)
         
     else:
         css_URL = url_for("static", filename="home.css")
