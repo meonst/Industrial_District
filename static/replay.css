@@ -1,5 +1,6 @@
 
 #stats {
+    margin-top: 20px;
     display: none;
 }
 
@@ -8,6 +9,7 @@
 }
 
 #timeline {
+    margin-top: 20px;
     display: none;
     position: relative;
 }
@@ -108,15 +110,15 @@
 }
 #charts_players_player_0, #charts_players_player_1, #charts_players_player_2, #charts_players_player_3, #charts_players_player_6, #charts_players_player_7, #charts_players_player_8, #charts_players_player_9 {
     margin-top: 4px;
-    margin-bottom: -11px;
+    margin-bottom: 8px;
 }
 #charts_players_player_4 {
     margin-top: 4px;
-    margin-bottom: -1px;
+    margin-bottom: 23px;
 }
 #charts_players_player_5 {
-    margin-top: 14px;
-    margin-bottom: -11px;
+    margin-top: 28px;
+    margin-bottom: 8px;
 }
 
 .charts_chart_exact{
@@ -136,7 +138,6 @@
 #charts_chart {
     border-style: solid;
     border-left-style: none;
-    
     position: absolute;
     top: 0;
     left: 243px;
@@ -148,18 +149,100 @@
     background-color: black;
     position: absolute;
     left: 500px;
-    width: 10px;
-    height: 800px;
+    top: 0px;
+    width: 5px;
+    margin: 0px;
+    z-index: 2;
+    border-bottom: 100px;
+    border-bottom-style: solid;
+    border-bottom-color: white;
+    
+}
+#timeline_gate_open {
+    position: absolute;
+    width: 1005px;
+    height: 3px;
+    left: 0px;
+    background-color: goldenrod;
+    z-index: 1;
 }
 
-.blue_timeline:hover {
+.blue_timeline_event:hover {
     z-index: 1;
     background-color: black;
     color: white;
 }
-.red_timeline:hover {
+.red_timeline_event:hover {
     z-index: 1;
     background-color: black;
     color: white;
     
+}
+
+.blue_timeline_level {
+    position: absolute;
+    left: 0px;
+    width: 497px; 
+    margin: 0px;
+    color: black;
+    padding-right: 3px;
+    border-color: blue;
+    border-top-style: solid;
+    text-align: right;
+    
+}
+.red_timeline_level {
+    position: absolute;
+    left: 505px;
+    width: 497px; 
+    margin: 0px;
+    color: black;
+    padding-left: 3px;
+    border-color: red;
+    border-top-style: solid;
+    text-align: left;
+}
+
+#blue_level_up_1, #blue_level_up_2, #blue_level_up_3 {
+    background-color: rgba(0, 0, 100, 0)
+}
+#blue_level_up_4, #blue_level_up_5, #blue_level_up_6 {
+    background-color: rgba(0, 0, 255, 0.05)
+}
+#blue_level_up_7, #blue_level_up_8, #blue_level_up_9 {
+    background-color: rgba(0, 0, 205, 0.1)
+}
+#blue_level_up_10, #blue_level_up_11, #blue_level_up_12 {
+    background-color: rgba(10, 10, 255, 0.2)
+}
+#blue_level_up_13, #blue_level_up_14, #blue_level_up_15 {
+    background-color: rgba(120, 120, 255, 0.4)
+}
+#blue_level_up_16, #blue_level_up_17, #blue_level_up_18, #blue_level_up_19 {
+    background-color: rgba(70, 70, 255, 0.4)
+}
+#blue_level_up_20, #blue_level_up_21, #blue_level_up_22, #blue_level_up_23, #blue_level_up_24, #blue_level_up_25, #blue_level_up_26, #blue_level_up_27, #blue_level_up_28, #blue_level_up_29, #blue_level_up_30 {
+    background-color: rgba(0, 0, 255, 0.5)
+}
+
+#red_level_up_1, #red_level_up_2, #red_level_up_3 {
+    background-color: rgba(100, 0, 0, 0)
+}
+#red_level_up_4, #red_level_up_5, #red_level_up_6 {
+    background-color: rgba(255, 0, 0, 0.05)
+}
+#red_level_up_7, #red_level_up_8, #red_level_up_9 {
+    background-color: rgba(205, 0, 0, 0.1)
+}
+#red_level_up_10, #red_level_up_11, #red_level_up_12 {
+    background-color: rgba(255, 10, 10, 0.2)
+}
+#red_level_up_13, #red_level_up_14, #red_level_up_15 {
+    background-color: rgba(255, 120, 120, 0.4)
+}
+#red_level_up_16, #red_level_up_17, #red_level_up_18, #red_level_up_19 {
+    background-color: rgba(255, 70, 70, 0.4)
+}
+#red_level_up_20, #red_level_up_21, #red_level_up_22, #red_level_up_23, #red_level_up_24, #red_level_up_25, #red_level_up_26, #red_level_up_27, #red_level_up_28, #red_level_up_29, #red_level_up_30 {
+    background-color: rgba(255, 0, 0, 0.5)
 }

@@ -12,6 +12,13 @@ env = Environment(
 #used for making talent links
 talent_sort = ["80", "20", "0g", "04", "01"]
 talent_tier = [0, 1, 4, 7, 10, 13, 16, 20]
+#used for timeline
+timeline_icon = {
+    "camp_capture": "storm_ui_minimapicon_mercenary.png",
+    "player_death": "storm_ui_hud_minimap_wcav_attack.png",
+    "structure_death": "storm_ui_minimapicon_town_glow_fill.png",
+}
+
 #used for checking what mode the game was played in
 game_mode_dict = {-1: "Custom", 50001: "Quick Match", 50021: "Versus AI", 50031: "Brawl", 50041: "Practice", 50051: "Unranked Draft", 50061: "Hero League", 50071: "Team League", 50101:"ARAM"}
 #used for giving a ceiling for charts
@@ -70,9 +77,7 @@ map_camp_ID = {
     "BraxisOutpost": ["placeholder", "Leftside Bruiser Camp", "Rightside Bruiser Camp"],
     "SilverCity": ["placeholder", "Leftside Siege Camp", "Rightside Siege Camp"],
 }
-#gametime will be given in integer t, after going through this function, it will represent time in seconds
-def looptime(t):
-    return (t - 610) / 16
+
 
 #this is considered to be the main function of this code
 def open_replay(replay_file):
@@ -93,11 +98,15 @@ def open_replay(replay_file):
     #team_blue_timeline, team_red_timeline will each record the time of a event happening
     #data will be given in chronological order (although there might be a few exceptions)
     #data will be given in the form of a list [gameloop, "name_of_event", reference data]
-    team_blue_timeline = list()
-    team_red_timeline = list()  
-
+    timeline = dict()
+    timeline["team_blue_timeline"] = list()
+    timeline["team_red_timeline"] = list()  
+    timeline["team_blue_level_up"] = dict()
+    timeline["team_red_level_up"] = dict()
+    timeline["structure_deaths"] = list()
+    
     chatlog = ""
-    structure_deaths = list()
+    
     
     #start by reading the header(it can be done with any protocol)
     #from the header open the corresponding version of protocol
@@ -140,6 +149,15 @@ def open_replay(replay_file):
     if init_data["m_syncLobbyState"]["m_gameDescription"]["m_gameOptions"]["m_ammId"] in game_mode_dict:
         game_details["game_mode"] = game_mode_dict[init_data["m_syncLobbyState"]["m_gameDescription"]["m_gameOptions"]["m_ammId"]]
 
+    #gameloop will be given in integer t, after going through this function, it will represent time in seconds
+    #the calculation is different for ARAM games since there is a 3 second difference for an unknown reason
+    if game_details["game_mode"] == "ARAM":
+        def looptime(t):
+            return (t - 648) / 16        
+    else:
+        
+        def looptime(t):
+            return (t - 610) / 16
     #will be going through tracker events
     if hasattr(protocol, "decode_replay_tracker_events"):
         contents = protocol.decode_replay_tracker_events(archive.read_file("replay.tracker.events"))
@@ -158,11 +176,20 @@ def open_replay(replay_file):
                         if max(values) < chart_maximum[j]:
                             statistics_maximum[i["m_name"].decode()] = chart_maximum[j]
                             break
+            #the end of the game a.k.a core death
+            if event["_event"] == "NNet.Replay.Tracker.SScoreResultEvent":
+                timeline["core_death"] = looptime(event["_gameloop"])
             #checking for notable events
             if "m_eventName" in event:
+                
                 #if event["m_eventName"].decode() not in ["LootWheelUsed", "EndOfGameUpVotesCollected","RegenGlobePickedUp","PlayerDeath","LevelUp","JungleCampCapture","TalentChosen","EndOfGameXPBreakdown","EndOfGameTimeSpentDead","EndOfGameTalentChoices", "LootVoiceLineUsed","PeriodicXPBreakdown","LootSprayUsed","TownStructureDeath","GameStart","PlayerInit","TownStructureInit","PlayerSpawned","JungleCampInit","GatesOpen"]:
                 #    print(event["m_eventName"].decode())
 
+                #gate open time
+                if event["m_eventName"].decode() == "GatesOpen":
+                    timeline["gate_open"] = looptime(event["_gameloop"])
+                
+                    
                 #Structuer Death [gameloop, broken structure, related players]
                 if event["m_eventName"].decode() == "TownStructureDeath":    
                     #print("건물", int((looptime(event["_gameloop"]) + 38) // 60), int((looptime(event["_gameloop"]) + 38) % 60), event["m_intData"][0]["m_value"])
@@ -172,7 +199,7 @@ def open_replay(replay_file):
                             structure_ID = i["m_value"]
                         else:
                             players_involved.append(i["m_value"] - 1)
-                    structure_deaths.append([event["_gameloop"], structure_ID, players_involved])
+                    timeline["structure_deaths"].append([looptime(event["_gameloop"]), structure_ID, players_involved])
 
                 #Player Death [gameloop, event_name, [victim, related players]]
                 if event["m_eventName"].decode() == "PlayerDeath":
@@ -180,26 +207,26 @@ def open_replay(replay_file):
                     for i in event["m_intData"]:
                         players_involved.append(i["m_value"] - 1)
                     if players_involved[0] < 5:
-                        team_blue_timeline.append([event["_gameloop"], "player_death", players_involved])
+                        timeline["team_blue_timeline"].append([looptime(event["_gameloop"]), "player_death", players_involved])
                     if players_involved[0] > 5:
-                        team_red_timeline.append([event["_gameloop"], "player_death", players_involved])
+                        timeline["team_red_timeline"].append([looptime(event["_gameloop"]), "player_death", players_involved])
 
                 #Camp Capture 
                 if event["m_eventName"].decode() == "JungleCampCapture":
                     #print("용병캠프", int((looptime(event["_gameloop"]) + 38) // 60), int((looptime(event["_gameloop"]) + 38) % 60), event["m_intData"][0]["m_value"])
                     if event["m_fixedData"][0]["m_value"] == 4096:
-                        team_blue_timeline.append([event["_gameloop"], "camp_capture", event["m_intData"][0]["m_value"]])
+                        timeline["team_blue_timeline"].append([looptime(event["_gameloop"]), "camp_capture", event["m_intData"][0]["m_value"]])
                     elif event["m_fixedData"][0]["m_value"] == 8192:
-                        team_red_timeline.append([event["_gameloop"], "camp_capture", event["m_intData"][0]["m_value"]])
+                        timeline["team_red_timeline"].append([looptime(event["_gameloop"]), "camp_capture", event["m_intData"][0]["m_value"]])
 
                 #Level Up, will only be checking level up for user 0 and 5 since the level up time is the same for everyone else on the same team
                 if event["m_eventName"].decode() == "LevelUp":
                     if event["_gameloop"] > 610:
                         player_number = event["m_intData"][0]["m_value"] - 1
                         if player_number == 0:
-                            team_blue_timeline.append([event["_gameloop"], "level_up", event["m_intData"][1]["m_value"]])
+                            timeline["team_blue_level_up"][event["m_intData"][1]["m_value"]] = looptime(event["_gameloop"])
                         elif player_number == 5:
-                            team_red_timeline.append([event["_gameloop"], "level_up", event["m_intData"][1]["m_value"]])
+                            timeline["team_red_level_up"][event["m_intData"][1]["m_value"]] = looptime(event["_gameloop"])
 
                 #TimeSpentDead. Since this automatically adds time at the point of death, it may not correctly represent the actual time dead.
                 if event["m_eventName"].decode() == "EndOfGameTimeSpentDead":
@@ -207,7 +234,7 @@ def open_replay(replay_file):
                     player_number = event["m_intData"][0]["m_value"] - 1
                     players[player_number]["time_spent_dead"] = time_spent_dead
 
-                #"EndOfGameTalentChoices" has multiple info inside, however only the hero names and talent choices will be used.
+                #"EndOfGameTalentChoices" has multiple info inside
                 #Hero 
                 if event["m_eventName"].decode() == "EndOfGameTalentChoices":
                     player_number = event["m_intData"][0]["m_value"] - 1
@@ -302,48 +329,54 @@ def open_replay(replay_file):
     
     #structure deaths for 3 lane maps except Towers of Doom
     if map_link in ["DragonShire", "ControlPoints", "Volskaya", "Warhead Junction", "Shrines", "AlteracPass", "HauntedWoods", "CursedHollow", "Crypts", "BlackheartsBay"]:
-        for i in structure_deaths:
+        for i in timeline["structure_deaths"]:
             if i[1] <= 6:
-                team_blue_timeline.append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])    
+                timeline["team_blue_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])    
             if i[1] > 6:
-                team_red_timeline.append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
+                timeline["team_red_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
 
     #structure deaths for 2 lane maps
     if map_link in ["BattlefieldOfEternity", "BraxisHoldout", "Hanamura"]:
-        for i in structure_deaths:
+        for i in timeline["structure_deaths"]:
             if i[1] <= 4:
-                team_blue_timeline.append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])    
+                timeline["team_blue_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])    
             if i[1] > 4:
-                team_red_timeline.append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
+                timeline["team_red_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
 
     #structure deaths for 1 lane maps except Industrial District
     if map_link in ["BraxisOutpost", "SilverCity", "LostCavern"]:
-        for i in structure_deaths:
+        for i in timeline["structure_deaths"]:
             if i[1] <= 2:
-                team_blue_timeline.append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])    
+                timeline["team_blue_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])    
             if i[1] > 2:
-                team_red_timeline.append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
+                timeline["team_red_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
     
     #structure deaths for Towers of Doom
     if map_link == "TowersOfDoom":
         structure_owner = ["placeholder", "blue", "blue", "blue", "red", "red", "red"]
-        for i in structure_deaths:
+        for i in timeline["structure_deaths"]:
             if structure_owner[i[1]] == "blue":
-                team_blue_timeline.append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
+                timeline["team_blue_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
                 structure_owner[i[1]] = "red"
             elif structure_owner[i[1]] == "red":
-                team_red_timeline.append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
+                timeline["team_red_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
                 structure_owner[i[1]] = "blue"
 
     #map specific camp names
-    for i in team_blue_timeline:
+    for i in timeline["team_blue_timeline"]:
         if i[1] == "camp_capture":
             i[2] = map_camp_ID[map_link][i[2]]
-    for i in team_red_timeline:
+    for i in timeline["team_red_timeline"]:
         if i[1] == "camp_capture":
             i[2] = map_camp_ID[map_link][i[2]]
 
-    return [chatlog, players, stats, statistics, statistics_maximum, game_details, team_blue_timeline, team_red_timeline]
+    timeline["team_blue_final_level"] = len(timeline["team_blue_level_up"])
+    timeline["team_red_final_level"] = len(timeline["team_red_level_up"])
+    timeline["team_blue_level_up"][timeline["team_blue_final_level"] + 1] = timeline["core_death"]
+    timeline["team_red_level_up"][timeline["team_red_final_level"] + 1] = timeline["core_death"]
+    
+    
+    return [chatlog, players, stats, statistics, statistics_maximum, game_details, timeline]
 
 
 
@@ -352,11 +385,10 @@ def replay_page():
     if request.method == "POST":
         replay = request.files["file"]
         return_data = open_replay(replay)
-       
         replay_template = env.get_template("replay.html")
         css_URL = url_for("static", filename="replay.css")
         js_URL = url_for("static", filename="replay.js")
-        return replay_template.render(css_URL=css_URL, js_URL=js_URL, chatlog=return_data[0], players=return_data[1], stats=return_data[2], statistics=return_data[3], statistics_maximum=return_data[4], game_details=return_data[5], team_blue_timeline=return_data[6], team_red_timeline=return_data[7], chart_title=chart_title, chart_link=chart_link)
+        return replay_template.render(css_URL=css_URL, js_URL=js_URL, chatlog=return_data[0], players=return_data[1], stats=return_data[2], statistics=return_data[3], statistics_maximum=return_data[4], game_details=return_data[5], timeline=return_data[6], chart_title=chart_title, chart_link=chart_link, timeline_icon=timeline_icon)
         
     else:
         css_URL = url_for("static", filename="home.css")

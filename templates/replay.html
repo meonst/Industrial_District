@@ -19,7 +19,7 @@
 <button onclick="toggle('timeline')">timeline</button>
 <button onclick="toggle('charts')">charts</button>
 
-<pre id="stats">
+<div id="stats">
     <table>
     <tr id="players">
         <th id="player_row">Players</th> {% for i in range(0, 10) %} <th id="player_row">{{ players[i]["player_name"] }}</th> {% endfor %}
@@ -33,7 +33,7 @@
     </tr>
     {% endfor %}
     </table>
-</pre>
+</div>
 
 <pre id="talents">{% for i in range(0, 10) %}<div id="talents_player_{{ players[i]['team'] }}"><img id="talents_player_portrait" src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[i]['party_panel_portrait'] }}"><div id=talents_player_name>{{ players[i]["player_name"] }}
 {{ players[i]["hero_name"] }}</div><a id="talents_player_icon_box" href="https://min.hyeok.org/SILVER/#/{{ players[i]['hero_link'] }}/{{ players[i]['talent'] }}">{% for j in range(0, 7) %}<img id="talents_player_icon_box_individual" src="https://min.hyeok.org/SILVER/files/images/abilitytalents/{{ players[i]['talent_icon'][j] }}">{% endfor %}</a></div>{% endfor %}</pre>
@@ -42,22 +42,46 @@
     {% if chatlog %} {{chatlog}} {% endif %}
 </pre>
 
-<pre id="timeline">
-    <pre id="timeline_axis"></pre>
+<div id="timeline">
+    <div id="timeline_axis" style="height: {{ timeline['core_death'] }}px;"></div>
+    <div id="timeline_gate_open" style="top: {{ timeline['gate_open'] }}px;"></div>
+    <div id="blue_timeline">
+        <div id="blue_timeline_level">
+            {% for i in range(1, timeline["team_blue_final_level"] + 1) %}
+                <div id="blue_level_up_{{ i }}" class="blue_timeline_level" style="top: {{ timeline['team_blue_level_up'][i] }}px; height: {{ timeline['team_blue_level_up'][i + 1] - timeline['team_blue_level_up'][i] - 3 }}px;">
+                    {{ i }}
+                </div>
+            {% endfor %}
+        </div>
+        <div id="blue_timeline_events">
+            {% for i in timeline["team_blue_timeline"] %}
+                <div id="blue_{{ i[1] }}" class="blue_timeline_event" style="position: absolute; left:150px; top:{{ i[0] }}px;">
+                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}"> {{ i[0] }} {{ i[1] }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div id="red_timeline">
+        <div id="red_timeline_level">
+            {% for i in range(1, timeline["team_red_final_level"] + 1) %}
+                <div id="red_level_up_{{ i }}" class="red_timeline_level" style="top: {{ timeline['team_red_level_up'][i] }}px; height: {{ timeline['team_red_level_up'][i + 1] - timeline['team_red_level_up'][i] - 3 }}px;">
+                    {{ i }}
+                </div>
+            {% endfor %}
+        </div>
+        <div id="red_timeline_events">
+            {% for i in timeline["team_red_timeline"] %}
+                <div id="red_{{ i[1] }}" class="red_timeline_event" style="position: absolute; left:530px; top:{{ i[0] }}px;">
+                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}"> {{ i[0] }} {{ i[1] }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
     
-    {% for i in team_blue_timeline %}
-    <pre id="blue_{{ i[1] }}" class="blue_timeline" style="position: absolute; left:200px; top:{{ 0 + i[0]/16 }}px;">{{ i[0] }} {{ i[1] }} {{ i[2] }}</pre>
-    {% endfor %}
-
-    {% for i in team_red_timeline %}
-    <pre id="red_{{ i[1] }}" class="red_timeline" style="position: absolute; left:510px; top:{{ 0 + i[0]/16 }}px;">{{ i[0] }} {{ i[1] }} {{ i[2] }}</pre>
-    {% endfor %}
-    
-    
-</pre>
+</div>
 
 
-<pre id="charts">
+<div id="charts">
     <div id="charts_categories">{% for i in range(0, 23) %}<div id="checkbox_{{ chart_title[i] }}"><input type="checkbox" id="checkbox_{{ chart_title[i] }}_checkbox" class="chart_checkbox"> <label for="checkbox_{{ chart_title[i] }}_label">{{ chart_title[i] }}</label></div>{% endfor %} </div> 
     <div id="charts_players">{% for i in range(0, 10) %}<div id="charts_players_player_{{ i }}"><img id="charts_players_portrait" src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[i]['minimap_portrait'] }}"></div> {% endfor %}
     </div>
@@ -81,7 +105,7 @@
     {% endfor %}
 
 
-</pre>
+</div>
 <script type="text/javascript">
     const drawing = document.getElementById("charts_chart").getContext("2d");
     var checkbox_group = document.getElementsByClassName('chart_checkbox')
