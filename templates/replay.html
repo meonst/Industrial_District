@@ -20,16 +20,16 @@
 <button onclick="toggle('charts')">charts</button>
 
 <div id="stats">
-    <table>
+    <table id="stats_table">
     <tr id="players">
-        <th id="player_row">Players</th> {% for i in range(0, 10) %} <th id="player_row">{{ players[i]["player_name"] }}</th> {% endfor %}
+        <th id="player_row">Players</th> {% for i in range(0, 10) %} <th id="player_row" class="tc_{{ i }}">{{ players[i]["player_name"] }}</th> {% endfor %}
     </tr>
     <tr id="heroes">
-        <th id="hero_row">Heroes</th> {% for i in range(0, 10) %} <th>{{ players[i]["hero_name"] }}</th> {% endfor %}
+        <th id="hero_row">Heroes</th> {% for i in range(0, 10) %} <th class="tc_{{ i }}">{{ players[i]["hero_name"] }}</th> {% endfor %}
     </tr>
-    {% for i in stats %}
-    <tr>
-        <th id="rows">{{ i }}</th> {% for j in stats[i] %} <th>{{ j }}</th> {% endfor %}
+    {% for i in range(0, 33) %}
+    <tr id="stats_stats">
+        <th id="rows">{{ stats_charts_title[i] }}</th> {% for j in stats[stats_charts_link[i]] %} <td class="tc_{{ i }}"> {{ j }}</td> {% endfor %}
     </tr>
     {% endfor %}
     </table>
@@ -82,12 +82,12 @@
 
 
 <div id="charts">
-    <div id="charts_categories">{% for i in range(0, 23) %}<div id="checkbox_{{ chart_title[i] }}"><input type="checkbox" id="checkbox_{{ chart_title[i] }}_checkbox" class="chart_checkbox"> <label for="checkbox_{{ chart_title[i] }}_label">{{ chart_title[i] }}</label></div>{% endfor %} </div> 
+    <div id="charts_categories">{% for i in range(0, 33) %}<div id="checkbox_{{ stats_charts_title[i] }}"><input type="checkbox" id="checkbox_{{ stats_charts_title[i] }}_checkbox" class="chart_checkbox"> <label for="checkbox_{{ stats_charts_title[i] }}_label">{{ stats_charts_title[i] }}</label></div>{% endfor %} </div> 
     <div id="charts_players">{% for i in range(0, 10) %}<div id="charts_players_player_{{ i }}"><img id="charts_players_portrait" src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[i]['minimap_portrait'] }}"></div> {% endfor %}
     </div>
     <canvas id="charts_chart" width="700px" height="420px">        
     </canvas>
-    {% for i in range(0, 23) %}
+    {% for i in range(0, 33) %}
 
         
     {% for j in range(0, 5) %}
@@ -97,8 +97,8 @@
 
     <div id="charts_chart_exact_{{ i }}" class="charts_chart_exact" style="font-size: 20pt;" >
         {% for j in range(0, 5) %}
-        <div id="charts_chart_exact_{{ i }}_{{ j }}" style="position: absolute; z-index: 1; width: 80px; text-align: right;">{{ statistics[chart_link[i]][j] }}</div>
-        <div id="charts_chart_exact_{{ i }}_{{ j + 5 }}" style="position: absolute; z-index: 1; width: 80px; text-align: right;">{{ statistics[chart_link[i]][j + 5] }}</div>
+        <div id="charts_chart_exact_{{ i }}_{{ j }}" style="position: absolute; z-index: 1; width: 80px; text-align: right;">{{ stats[stats_charts_link[i]][j] }}</div>
+        <div id="charts_chart_exact_{{ i }}_{{ j + 5 }}" style="position: absolute; z-index: 1; width: 80px; text-align: right;">{{ stats[stats_charts_link[i]][j + 5] }}</div>
         {% endfor %}
     </div>
 
@@ -113,8 +113,8 @@
     var checked_count = 0
     chart_checkbox_limit()
 
-    {% for i in range(0, 23) %}
-    update[{{ i }}] = document.getElementById("checkbox_{{ chart_title[i] }}_checkbox")
+    {% for i in range(0, 33) %}
+    update[{{ i }}] = document.getElementById("checkbox_{{ stats_charts_title[i] }}_checkbox")
     update[{{ i }}].addEventListener("change", (event) => {
         graph_drawing()
     })
@@ -124,19 +124,20 @@
     function graph_drawing() {
         var graph_count = 0;
         
-        {% for i in range(0, 23) %}
+        {% for i in range(0, 33) %}
+        
         
         if (checkbox_group[{{ i }}].checked == true) {
 
             {% for j in range(0, 5) %}
 
             document.getElementById("charts_chart_{{ i }}_{{ j }}").style.display = "block";
-            document.getElementById("charts_chart_{{ i }}_{{ j }}").style.width = (700 * {{ statistics[chart_link[i]][j] / statistics_maximum[chart_link[i]] }}).toString() + "px";
+            document.getElementById("charts_chart_{{ i }}_{{ j }}").style.width = (700 * {{ stats[stats_charts_link[i]][j] / stats_maximum[stats_charts_link[i]] }}).toString() + "px";
             document.getElementById("charts_chart_{{ i }}_{{ j }}").style.left = "244px";
             
             
             document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.display = "block";
-            document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.width = (700 * {{ statistics[chart_link[i]][j + 5] / statistics_maximum[chart_link[i]] }}).toString() + "px";
+            document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.width = (700 * {{ stats[stats_charts_link[i]][j + 5] / stats_maximum[stats_charts_link[i]] }}).toString() + "px";
             document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.left = "244px";
 
             document.getElementById("charts_chart_exact_{{ i }}_{{ j }}").style.top = (7 + (40 * {{ j }})).toString() + "px";
@@ -184,6 +185,9 @@
         
 
     }
+
+
+
     function chart_checkbox_limit() {
         
         for (var i = 0; i < checkbox_group.length; i++) {
@@ -199,11 +203,13 @@
             }
         }
     }
+
+    
 </script>
 
 <style>
 
-{% for i in range(0, 23) %}
+{% for i in range(0, 33) %}
 .charts_chart_{{ i }}:hover ~ #charts_chart_exact_{{ i }} {
     display: block;
 }

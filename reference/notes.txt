@@ -120,3 +120,71 @@ JungleCampInit
 
 
 ----------------------------------------------
+General
+    SoloKill
+    Assists
+    Deaths
+    ExperienceContribution
+    TimeSpentDead
+Damage
+    HeroDamage
+    PhysicalDamage
+    SpellDamage
+    SiegeDamage
+Healing
+    Healing
+    DamageTaken
+    ProtectionGivenToAllies
+    SelfHealing
+
+Siege
+    SiegeDamage
+    MinionDamage
+    MinionKills
+    StructureDamage
+    TownKills
+    CreepDamage
+    MercCampCaptures
+
+Teamfight
+    TeamfightDamageTaken
+    TeamfightHealingDone
+    TeamfightHeroDamage
+
+Crowd Control
+    TimeStunningEnemyHeroes
+    TimeCCdEnemyHeroes
+    TimeRootingEnemyHeroes
+    TimeSilencingEnemyHeroes
+
+Misc
+    ClutchHealsPerformed
+    EscapesPerformed
+    HighestKillStreak
+    Multikill
+    OnFireTimeOnFire
+    OutnumberedDeaths
+    RegenGlobes
+    WatchTowerCaptures
+
+    
+
+
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+chart_link = ["Takedowns", "SoloKill", "Assists", "Deaths", "TimeSpentDead", "ExperienceContribution", "HeroDamage", "PhysicalDamage", "SpellDamage", "Healing", "SelfHealing", "DamageTaken", "SiegeDamage", "MinionDamage", "MinionKills", "StructureDamage", "TimeCCdEnemyHeroes", "TimeSilencingEnemyHeroes", "TimeStunningEnemyHeroes", "TeamfightHeroDamage", "TeamfightHealingDone", "TeamfightDamageTaken", "RegenGlobes"]
+
+chart_title = ["Kill Participation", "Kills", "Assists", "Deaths", "Time Spent Dead", "EXP Contribution", "Hero Damage", "Physical Damage", "Spell Damage", "Healing", "Self Healing", "Damage Taken", "Siege Damage", "Minion Damage", "Minion Kills", "Structure Damage", "Enemy Hero CC", "Enemy Hero Silence ", "Enemy Hero Stun", "Teamfight Dealing", "Teamfight Healing", "Teamfight Tanking", "Regen Globes"]
