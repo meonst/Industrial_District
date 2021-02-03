@@ -216,7 +216,7 @@ def open_replay(replay_file):
                             structure_ID = i["m_value"]
                         else:
                             players_involved.append(i["m_value"] - 1)
-                    timeline["structure_deaths"].append([looptime(event["_gameloop"]), structure_ID, players_involved])
+                    timeline["structure_deaths"].append([looptime(event["_gameloop"]), structure_ID, players_involved, "{}:{}".format(format(int(looptime(event["_gameloop"]) // 60), "02d"), format(int(looptime(event["_gameloop"]) % 60), "02d"))])
 
                 #Player Death [gameloop, event_name, [victim, related players]]
                 if event["m_eventName"].decode() == "PlayerDeath":
@@ -224,17 +224,17 @@ def open_replay(replay_file):
                     for i in event["m_intData"]:
                         players_involved.append(i["m_value"] - 1)
                     if players_involved[0] < 5:
-                        timeline["team_blue_timeline"].append([looptime(event["_gameloop"]), "player_death", players_involved])
+                        timeline["team_blue_timeline"].append([looptime(event["_gameloop"]), "player_death", players_involved, "{}:{}".format(format(int(looptime(event["_gameloop"]) // 60), "02d"), format(int(looptime(event["_gameloop"]) % 60), "02d"))])
                     if players_involved[0] > 5:
-                        timeline["team_red_timeline"].append([looptime(event["_gameloop"]), "player_death", players_involved])
+                        timeline["team_red_timeline"].append([looptime(event["_gameloop"]), "player_death", players_involved, "{}:{}".format(format(int(looptime(event["_gameloop"]) // 60), "02d"), format(int(looptime(event["_gameloop"]) % 60), "02d"))])
 
                 #Camp Capture 
                 if event["m_eventName"].decode() == "JungleCampCapture":
                     #print("용병캠프", int((looptime(event["_gameloop"]) + 38) // 60), int((looptime(event["_gameloop"]) + 38) % 60), event["m_intData"][0]["m_value"])
                     if event["m_fixedData"][0]["m_value"] == 4096:
-                        timeline["team_blue_timeline"].append([looptime(event["_gameloop"]), "camp_capture", event["m_intData"][0]["m_value"]])
+                        timeline["team_blue_timeline"].append([looptime(event["_gameloop"]), "camp_capture", event["m_intData"][0]["m_value"], "{}:{}".format(format(int(looptime(event["_gameloop"]) // 60), "02d"), format(int(looptime(event["_gameloop"]) % 60), "02d"))])
                     elif event["m_fixedData"][0]["m_value"] == 8192:
-                        timeline["team_red_timeline"].append([looptime(event["_gameloop"]), "camp_capture", event["m_intData"][0]["m_value"]])
+                        timeline["team_red_timeline"].append([looptime(event["_gameloop"]), "camp_capture", event["m_intData"][0]["m_value"], "{}:{}".format(format(int(looptime(event["_gameloop"]) // 60), "02d"), format(int(looptime(event["_gameloop"]) % 60), "02d"))])
 
                 #Level Up, will only be checking level up for user 0 and 5 since the level up time is the same for everyone else on the same team
                 if event["m_eventName"].decode() == "LevelUp":
@@ -329,7 +329,7 @@ def open_replay(replay_file):
     for i in protocol.decode_replay_message_events(message_events):  
     #Chat Messages
         if i["_event"] == "NNet.Game.SChatMessage":
-            chatlog += "{}({}:{}){}: {}".format("\n", format(int(looptime(i["_gameloop"])//60), "02d"), format( int(looptime(i["_gameloop"])%60), "02d"), players[i["_userid"]["m_userId"]]["player_name"], i["m_string"].decode()) 
+            chatlog += "{}({}:{}){}: {}".format("\n", format(int(looptime(i["_gameloop"]) // 60), "02d"), format(int(looptime(i["_gameloop"]) % 60), "02d"), players[i["_userid"]["m_userId"]]["player_name"], i["m_string"].decode()) 
 
     #Ping Messages
         if i ["_event"] == "NNet.Game.SPingMessage":
@@ -343,35 +343,35 @@ def open_replay(replay_file):
     if map_link in ["DragonShire", "ControlPoints", "Volskaya", "Warhead Junction", "Shrines", "AlteracPass", "HauntedWoods", "CursedHollow", "Crypts", "BlackheartsBay"]:
         for i in timeline["structure_deaths"]:
             if i[1] <= 6:
-                timeline["team_blue_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])    
+                timeline["team_blue_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2], i[3]])    
             if i[1] > 6:
-                timeline["team_red_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
+                timeline["team_red_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2], i[3]])
 
     #structure deaths for 2 lane maps
     if map_link in ["BattlefieldOfEternity", "BraxisHoldout", "Hanamura"]:
         for i in timeline["structure_deaths"]:
             if i[1] <= 4:
-                timeline["team_blue_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])    
+                timeline["team_blue_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2], i[3]])    
             if i[1] > 4:
-                timeline["team_red_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
+                timeline["team_red_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2], i[3]])
 
     #structure deaths for 1 lane maps except Industrial District
     if map_link in ["BraxisOutpost", "SilverCity", "LostCavern"]:
         for i in timeline["structure_deaths"]:
             if i[1] <= 2:
-                timeline["team_blue_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])    
+                timeline["team_blue_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2], i[3]])    
             if i[1] > 2:
-                timeline["team_red_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
+                timeline["team_red_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2], i[3]])
     
     #structure deaths for Towers of Doom
     if map_link == "TowersOfDoom":
         structure_owner = ["placeholder", "blue", "blue", "blue", "red", "red", "red"]
         for i in timeline["structure_deaths"]:
             if structure_owner[i[1]] == "blue":
-                timeline["team_blue_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
+                timeline["team_blue_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2], i[3]])
                 structure_owner[i[1]] = "red"
             elif structure_owner[i[1]] == "red":
-                timeline["team_red_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2]])
+                timeline["team_red_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2], i[3]])
                 structure_owner[i[1]] = "blue"
 
     #map specific camp names
@@ -386,8 +386,31 @@ def open_replay(replay_file):
     timeline["team_red_final_level"] = len(timeline["team_red_level_up"])
     timeline["team_blue_level_up"][timeline["team_blue_final_level"] + 1] = timeline["core_death"]
     timeline["team_red_level_up"][timeline["team_red_final_level"] + 1] = timeline["core_death"]
+    timeline["team_blue_timeline"].sort()
+    timeline["team_red_timeline"].sort()
     
+    blue_timeline_position_left = 450
+    timeline["team_blue_timeline"][0].append(blue_timeline_position_left)
+    for i in range(1, len(timeline["team_blue_timeline"])):
+        if timeline["team_blue_timeline"][i][0] - timeline["team_blue_timeline"][i - 1][0] <= 32:
+            blue_timeline_position_left -= 32
+            timeline["team_blue_timeline"][i].append(blue_timeline_position_left)
+        else:
+            blue_timeline_position_left = 450
+            timeline["team_blue_timeline"][i].append(blue_timeline_position_left)
+
+            
+    red_timeline_position_left = 530
+    timeline["team_red_timeline"][0].append(red_timeline_position_left)
+    for i in range(1, len(timeline["team_red_timeline"])):
+        if timeline["team_red_timeline"][i][0] - timeline["team_red_timeline"][i - 1][0] <= 32:
+            red_timeline_position_left += 32
+            timeline["team_red_timeline"][i].append(red_timeline_position_left)
+        else:
+            red_timeline_position_left = 530
+            timeline["team_red_timeline"][i].append(red_timeline_position_left)
     
+
     return [chatlog, players, stats, stats_maximum, game_details, timeline]
 
 

@@ -21,17 +21,33 @@
 
 <div id="stats">
     <table id="stats_table">
-    <tr id="players">
-        <th id="player_row">Players</th> {% for i in range(0, 10) %} <th id="player_row" class="tc_{{ i }}">{{ players[i]["player_name"] }}</th> {% endfor %}
-    </tr>
-    <tr id="heroes">
-        <th id="hero_row">Heroes</th> {% for i in range(0, 10) %} <th class="tc_{{ i }}">{{ players[i]["hero_name"] }}</th> {% endfor %}
-    </tr>
-    {% for i in range(0, 33) %}
-    <tr id="stats_stats">
-        <th id="rows">{{ stats_charts_title[i] }}</th> {% for j in stats[stats_charts_link[i]] %} <td class="tc_{{ i }}"> {{ j }}</td> {% endfor %}
-    </tr>
-    {% endfor %}
+        <colgroup>
+            <col class="stats_title">
+            <col class="stats_player_0">
+            <col class="stats_player_1">
+            <col class="stats_player_2">
+            <col class="stats_player_3">
+            <col class="stats_player_4">
+            <col class="stats_player_5">
+            <col class="stats_player_6">
+            <col class="stats_player_7">
+            <col class="stats_player_8">
+            <col class="stats_player_9">
+        </colgroup>
+
+        <tr id="players">
+            <th id="player_row">Players</th> {% for i in range(0, 10) %} <th id="player_row" scope="col">{{ players[i]["player_name"] }}</th> {% endfor %}
+        </tr>
+
+        <tr id="heroes">
+            <th id="hero_row" scope="row">Heroes</th> {% for i in range(0, 10) %} <th>{{ players[i]["hero_name"] }}</th> {% endfor %}
+        </tr>
+
+        {% for i in range(0, 33) %}
+            <tr id="stats_stats">
+                <th id="rows" scope="row">{{ stats_charts_title[i] }}</th> {% for j in stats[stats_charts_link[i]] %} <td> {{ j }}</td> {% endfor %}
+            </tr>
+        {% endfor %}
     </table>
 </div>
 
@@ -55,8 +71,10 @@
         </div>
         <div id="blue_timeline_events">
             {% for i in timeline["team_blue_timeline"] %}
-                <div id="blue_{{ i[1] }}" class="blue_timeline_event" style="position: absolute; left:150px; top:{{ i[0] }}px;">
-                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}"> {{ i[0] }} {{ i[1] }}
+                <div id="blue_{{ i[1] }}" class="blue_timeline_event" style="position: absolute; left:{{ i[-1] }}px; top:{{ i[0] }}px;">
+                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}">
+                    <br>
+                    {{ i[3] }} {{ i[2] }}
                 </div>
             {% endfor %}
         </div>
@@ -71,8 +89,10 @@
         </div>
         <div id="red_timeline_events">
             {% for i in timeline["team_red_timeline"] %}
-                <div id="red_{{ i[1] }}" class="red_timeline_event" style="position: absolute; left:530px; top:{{ i[0] }}px;">
-                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}"> {{ i[0] }} {{ i[1] }}
+                <div id="red_{{ i[1] }}" class="red_timeline_event" style="position: absolute; left:{{ i[-1] }}px; top:{{ i[0] }}px;">
+                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}">
+                    <br>
+                    {{ i[3] }} {{ i[2] }}
                 </div>
             {% endfor %}
         </div>
@@ -204,7 +224,6 @@
         }
     }
 
-    
 </script>
 
 <style>
