@@ -1,0 +1,8 @@
+{'m_dataBuildNum': 83716,
+ 'm_elapsedGameLoops': 11604,
+ 'm_ngdpRootKey': {'m_data': b'\x1b*Y\xc0Yoi\xc46\x13\xe1a\xc6\x87\x1aR'},
+ 'm_replayCompatibilityHash': {'m_data': b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'},
+ 'm_signature': b'Heroes of the Storm replay\x1b11',
+ 'm_type': 2,
+ 'm_useScaledTime': False,
+ 'm_version': {'m_baseBuild': 83716, 'm_build': 83716, 'm_flags': 1, 'm_major': 2, 'm_minor': 53, 'm_revision': 1}}

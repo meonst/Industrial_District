@@ -206,46 +206,53 @@
     top: 0px;
     width: 5px;
     margin: 0px;
-    z-index: 2;
+    z-index: 3;
     border-bottom: 100px;
     border-bottom-style: solid;
     border-bottom-color: white;
     
 }
-#timeline_gate_open {
+#timeline_gate_open, #timeline_core_death {
     position: absolute;
     width: 1005px;
     height: 3px;
     left: 0px;
     background-color: goldenrod;
-    z-index: 1;
+    z-index: 2;
 }
 .blue_timeline_event {
+    z-index: 4;
     width: 32px;
     height: 32px;
     overflow: hidden;
     transition: width 0.1s, height 0.1s;
+    font-size: 15pt;
 }
 .red_timeline_event {
+    z-index: 4;
     width: 32px;
     height: 32px;
     overflow: hidden;
     transition: width 0.1s, height 0.1s;
+    font-size: 15pt;
 }
 
 .blue_timeline_event:hover {
-    z-index: 1;
-    background-color: black;
+    z-index: 5;
+    background-color: grey;
     color: white;
-    width: 250px;
-    height: 64px;
+    width: auto;
+    height: auto;
+    padding: 2px;
+    
 }
 .red_timeline_event:hover {
-    z-index: 1;
-    background-color: black;
+    z-index: 5;
+    background-color: grey;
     color: white;
-    width: 250px;
-    height: 64px;
+    width: auto;
+    height: auto;
+    padding: 2px;
 }
 
 

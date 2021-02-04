@@ -117,9 +117,15 @@ def open_replay(replay_file):
     #data will be given in the form of a list [gameloop, "name_of_event", reference data]
     timeline = dict()
     timeline["team_blue_timeline"] = list()
-    timeline["team_red_timeline"] = list()  
-    timeline["team_blue_level_up"] = dict()
-    timeline["team_red_level_up"] = dict()
+    timeline["team_blue_timeline_player_death"] = list()
+    timeline["team_blue_timeline_structure_death"] = list()
+    timeline["team_blue_timeline_camp_capture"] = list()
+    timeline["team_blue_level_up"] = {1: 0.0}
+    timeline["team_red_timeline"] = list()
+    timeline["team_red_timeline_player_death"] = list()
+    timeline["team_red_timeline_structure_death"] = list()
+    timeline["team_red_timeline_camp_capture"] = list()
+    timeline["team_red_level_up"] = {1: 0.0}
     timeline["structure_deaths"] = list()
     
     chatlog = ""
@@ -170,9 +176,8 @@ def open_replay(replay_file):
     #the calculation is different for ARAM games since there is a 3 second difference for an unknown reason
     if game_details["game_mode"] == "ARAM":
         def looptime(t):
-            return (t - 648) / 16        
+            return (t - 1206) / 16        
     else:
-        
         def looptime(t):
             return (t - 610) / 16
     #will be going through tracker events
@@ -222,11 +227,14 @@ def open_replay(replay_file):
                 if event["m_eventName"].decode() == "PlayerDeath":
                     players_involved = list()
                     for i in event["m_intData"]:
-                        players_involved.append(i["m_value"] - 1)
-                    if players_involved[0] < 5:
-                        timeline["team_blue_timeline"].append([looptime(event["_gameloop"]), "player_death", players_involved, "{}:{}".format(format(int(looptime(event["_gameloop"]) // 60), "02d"), format(int(looptime(event["_gameloop"]) % 60), "02d"))])
-                    if players_involved[0] > 5:
-                        timeline["team_red_timeline"].append([looptime(event["_gameloop"]), "player_death", players_involved, "{}:{}".format(format(int(looptime(event["_gameloop"]) // 60), "02d"), format(int(looptime(event["_gameloop"]) % 60), "02d"))])
+                        if i["m_key"].decode() == "PlayerID":
+                            victim = i["m_value"] - 1
+                        else:
+                            players_involved.append(i["m_value"] - 1)
+                    if victim < 5:
+                        timeline["team_blue_timeline"].append([looptime(event["_gameloop"]), "player_death", victim, players_involved, "{}:{}".format(format(int(looptime(event["_gameloop"]) // 60), "02d"), format(int(looptime(event["_gameloop"]) % 60), "02d"))])
+                    if victim > 5:
+                        timeline["team_red_timeline"].append([looptime(event["_gameloop"]), "player_death", victim, players_involved, "{}:{}".format(format(int(looptime(event["_gameloop"]) // 60), "02d"), format(int(looptime(event["_gameloop"]) % 60), "02d"))])
 
                 #Camp Capture 
                 if event["m_eventName"].decode() == "JungleCampCapture":
@@ -238,7 +246,13 @@ def open_replay(replay_file):
 
                 #Level Up, will only be checking level up for user 0 and 5 since the level up time is the same for everyone else on the same team
                 if event["m_eventName"].decode() == "LevelUp":
-                    if event["_gameloop"] > 610:
+                    if event["_gameloop"] > 610 and game_details["game_mode"] != "ARAM":
+                        player_number = event["m_intData"][0]["m_value"] - 1
+                        if player_number == 0:
+                            timeline["team_blue_level_up"][event["m_intData"][1]["m_value"]] = looptime(event["_gameloop"])
+                        elif player_number == 5:
+                            timeline["team_red_level_up"][event["m_intData"][1]["m_value"]] = looptime(event["_gameloop"])
+                    elif event["_gameloop"] > 1206 and game_details["game_mode"] == "ARAM":
                         player_number = event["m_intData"][0]["m_value"] - 1
                         if player_number == 0:
                             timeline["team_blue_level_up"][event["m_intData"][1]["m_value"]] = looptime(event["_gameloop"])
@@ -381,36 +395,66 @@ def open_replay(replay_file):
     for i in timeline["team_red_timeline"]:
         if i[1] == "camp_capture":
             i[2] = map_camp_ID[map_link][i[2]]
-
+    
+    #timeline related information
     timeline["team_blue_final_level"] = len(timeline["team_blue_level_up"])
     timeline["team_red_final_level"] = len(timeline["team_red_level_up"])
-    timeline["team_blue_level_up"][timeline["team_blue_final_level"] + 1] = timeline["core_death"]
-    timeline["team_red_level_up"][timeline["team_red_final_level"] + 1] = timeline["core_death"]
+    timeline["team_blue_level_up"][timeline["team_blue_final_level"] + 1] = timeline["core_death"] + 32
+    timeline["team_red_level_up"][timeline["team_red_final_level"] + 1] = timeline["core_death"] + 32
     timeline["team_blue_timeline"].sort()
     timeline["team_red_timeline"].sort()
-    
-    blue_timeline_position_left = 450
+    #setting timeline position from the left so that no elements overlap with each other
+    #also dividing events from the timeline once the left position has been decided in order to represent each information in a more informative way
+    blue_timeline_position_left = 443
+    blue_timeline_position_count = 0
     timeline["team_blue_timeline"][0].append(blue_timeline_position_left)
-    for i in range(1, len(timeline["team_blue_timeline"])):
-        if timeline["team_blue_timeline"][i][0] - timeline["team_blue_timeline"][i - 1][0] <= 32:
-            blue_timeline_position_left -= 32
-            timeline["team_blue_timeline"][i].append(blue_timeline_position_left)
-        else:
-            blue_timeline_position_left = 450
-            timeline["team_blue_timeline"][i].append(blue_timeline_position_left)
+    for i in range(0, len(timeline["team_blue_timeline"])):
+        if i > 0:
+            if blue_timeline_position_count > 8:
+                blue_timeline_position_left = 443
+                blue_timeline_position_count = 0
+                timeline["team_blue_timeline"][i].append(blue_timeline_position_left)
+            elif timeline["team_blue_timeline"][i][0] - timeline["team_blue_timeline"][i - 1][0] <= 32:
+                blue_timeline_position_left -= 32
+                blue_timeline_position_count += 1
+                timeline["team_blue_timeline"][i].append(blue_timeline_position_left)
+            else:
+                blue_timeline_position_left = 443
+                blue_timeline_position_count = 0
+                timeline["team_blue_timeline"][i].append(blue_timeline_position_left)
+
+        if timeline["team_blue_timeline"][i][1] == "player_death":
+            timeline["team_blue_timeline_player_death"].append(timeline["team_blue_timeline"][i])
+        if timeline["team_blue_timeline"][i][1] == "structure_death":
+            timeline["team_blue_timeline_structure_death"].append(timeline["team_blue_timeline"][i])
+        if timeline["team_blue_timeline"][i][1] == "camp_capture":
+            timeline["team_blue_timeline_camp_capture"].append(timeline["team_blue_timeline"][i])
 
             
     red_timeline_position_left = 530
+    red_timeline_position_count = 0
     timeline["team_red_timeline"][0].append(red_timeline_position_left)
-    for i in range(1, len(timeline["team_red_timeline"])):
-        if timeline["team_red_timeline"][i][0] - timeline["team_red_timeline"][i - 1][0] <= 32:
-            red_timeline_position_left += 32
-            timeline["team_red_timeline"][i].append(red_timeline_position_left)
-        else:
-            red_timeline_position_left = 530
-            timeline["team_red_timeline"][i].append(red_timeline_position_left)
-    
+    for i in range(0, len(timeline["team_red_timeline"])):
+        if i > 0:
+            if red_timeline_position_count > 8:
+                red_timeline_position_left = 530
+                red_timeline_position_count = 0
+                timeline["team_red_timeline"][i].append(red_timeline_position_left)
+            elif timeline["team_red_timeline"][i][0] - timeline["team_red_timeline"][i - 1][0] <= 32:
+                red_timeline_position_left += 32
+                red_timeline_position_count += 1
+                timeline["team_red_timeline"][i].append(red_timeline_position_left)
+            else:
+                red_timeline_position_left = 530
+                red_timeline_position_count = 0
+                timeline["team_red_timeline"][i].append(red_timeline_position_left)
 
+        if timeline["team_red_timeline"][i][1] == "player_death":
+            timeline["team_red_timeline_player_death"].append(timeline["team_red_timeline"][i])
+        if timeline["team_red_timeline"][i][1] == "structure_death":
+            timeline["team_red_timeline_structure_death"].append(timeline["team_red_timeline"][i])
+        if timeline["team_red_timeline"][i][1] == "camp_capture":
+            timeline["team_red_timeline_camp_capture"].append(timeline["team_red_timeline"][i])
     return [chatlog, players, stats, stats_maximum, game_details, timeline]
 
 
@@ -423,7 +467,6 @@ def replay_page():
         replay_template = env.get_template("replay.html")
         css_URL = url_for("static", filename="replay.css")
         js_URL = url_for("static", filename="replay.js")
-        
         return replay_template.render(css_URL=css_URL, js_URL=js_URL, chatlog=return_data[0], players=return_data[1], stats=return_data[2], stats_maximum=return_data[3], game_details=return_data[4], timeline=return_data[5], timeline_icon=timeline_icon, stats_charts_link=stats_charts_link, stats_charts_title=stats_charts_title)
         
     else:

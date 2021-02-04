@@ -59,7 +59,7 @@
 </pre>
 
 <div id="timeline">
-    <div id="timeline_axis" style="height: {{ timeline['core_death'] }}px;"></div>
+    <div id="timeline_axis" style="height: {{ timeline['core_death'] + 32 }}px;"></div>
     <div id="timeline_gate_open" style="top: {{ timeline['gate_open'] }}px;"></div>
     <div id="blue_timeline">
         <div id="blue_timeline_level">
@@ -70,13 +70,36 @@
             {% endfor %}
         </div>
         <div id="blue_timeline_events">
-            {% for i in timeline["team_blue_timeline"] %}
+            {% for i in timeline["team_blue_timeline_player_death"] %}
                 <div id="blue_{{ i[1] }}" class="blue_timeline_event" style="position: absolute; left:{{ i[-1] }}px; top:{{ i[0] }}px;">
-                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}">
+                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}" title="player death"> 
+                    <img src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[i[2]]['minimap_portrait'] }}" title="{{ players[i[2]]['player_name'] }}"> 
+                    died at {{ i[4] }}
                     <br>
-                    {{ i[3] }} {{ i[2] }}
+                    {% for j in i[3] %}
+                        <img src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[j]['minimap_portrait'] }}" title="{{ players[j]['player_name'] }}">
+                    {% endfor %}
                 </div>
             {% endfor %}
+            {% for i in timeline["team_blue_timeline_structure_death"] %}
+                <div id="blue_{{ i[1] }}" class="blue_timeline_event" style="position: absolute; left:{{ i[-1] }}px; top:{{ i[0] }}px;">
+                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}"> 
+                    {{ i[2] }} destroyed at {{ i[4] }}
+                    <br>
+                    {% for j in i[3] %}
+                        <img src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[j]['minimap_portrait'] }}" title="{{ players[j]['player_name'] }}">
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            
+            {% for i in timeline["team_blue_timeline_camp_capture"] %}
+                <div id="blue_{{ i[1] }}" class="blue_timeline_event" style="position: absolute; left:{{ i[-1] }}px; top:{{ i[0] }}px;">
+                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}">
+                    {{ i[2] }} captured at {{ i[3] }}
+                </div>
+            {% endfor %}
+            
+
         </div>
     </div>
     <div id="red_timeline">
@@ -88,16 +111,39 @@
             {% endfor %}
         </div>
         <div id="red_timeline_events">
-            {% for i in timeline["team_red_timeline"] %}
+            {% for i in timeline["team_red_timeline_player_death"] %}
                 <div id="red_{{ i[1] }}" class="red_timeline_event" style="position: absolute; left:{{ i[-1] }}px; top:{{ i[0] }}px;">
-                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}">
+                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}" title="player death"> 
+                    <img src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[i[2]]['minimap_portrait'] }}" title="{{ players[i[2]]['player_name'] }}"> 
+                    died at {{ i[4] }}
                     <br>
-                    {{ i[3] }} {{ i[2] }}
+                    {% for j in i[3] %}
+                        <img src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[j]['minimap_portrait'] }}" title="{{ players[j]['player_name'] }}">
+                    {% endfor %}
                 </div>
             {% endfor %}
+            {% for i in timeline["team_red_timeline_structure_death"] %}
+                <div id="red_{{ i[1] }}" class="red_timeline_event" style="position: absolute; left:{{ i[-1] }}px; top:{{ i[0] }}px;">
+                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}"> 
+                    {{ i[2] }} destroyed at {{ i[4] }}
+                    <br>
+                    {% for j in i[3] %}
+                        <img src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[j]['minimap_portrait'] }}" title="{{ players[j]['player_name'] }}">
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            
+            {% for i in timeline["team_red_timeline_camp_capture"] %}
+                <div id="red_{{ i[1] }}" class="red_timeline_event" style="position: absolute; left:{{ i[-1] }}px; top:{{ i[0] }}px;">
+                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}">
+                    {{ i[2] }} captured at {{ i[3] }}
+                </div>
+            {% endfor %}
+            
+
         </div>
     </div>
-    
+    <div id="timeline_core_death" style="top: {{ timeline['core_death'] }}px;"></div>
 </div>
 
 
