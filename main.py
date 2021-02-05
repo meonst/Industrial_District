@@ -138,12 +138,12 @@ def open_replay(replay_file):
     #data will be sorted in chronological order
     
     timeline = dict()
-    timeline["team_blue_timeline"] = list()
+    timeline["team_blue_timeline"] = [[0, 0, 0, 0, 0, 0, 0]]
     timeline["team_blue_timeline_player_death"] = list()
     timeline["team_blue_timeline_structure_death"] = list()
     timeline["team_blue_timeline_camp_capture"] = list()
     timeline["team_blue_level_up"] = {1: 0.0}
-    timeline["team_red_timeline"] = list()
+    timeline["team_red_timeline"] = [[0, 0, 0, 0, 0, 0, 0]]
     timeline["team_red_timeline_player_death"] = list()
     timeline["team_red_timeline_structure_death"] = list()
     timeline["team_red_timeline_camp_capture"] = list()
@@ -255,8 +255,10 @@ def open_replay(replay_file):
                     for i in event["m_intData"]:
                         if i["m_key"].decode() == "PlayerID":
                             victim = i["m_value"] - 1
-                        else:
+                        elif i["m_value"] <= 10 and i["m_value"] >= 1:
+                            
                             players_involved.append(i["m_value"] - 1)
+                    
                     if victim < 5:
                         timeline["team_blue_timeline"].append([looptime(event["_gameloop"]), "player_death", victim, players_involved, "{}:{}".format(format(int(looptime(event["_gameloop"]) // 60), "02d"), format(int(looptime(event["_gameloop"]) % 60), "02d"))])
                     if victim > 5:
@@ -369,7 +371,10 @@ def open_replay(replay_file):
     for i in protocol.decode_replay_message_events(message_events):  
         #Chat Messages
         if i["_event"] == "NNet.Game.SChatMessage":
-            chatlog += "{}({}:{}){}: {}".format("\n", format(int(looptime(i["_gameloop"]) // 60), "02d"), format(int(looptime(i["_gameloop"]) % 60), "02d"), players[user_ID_to_player_number[i["_userid"]["m_userId"]]]["player_name"], i["m_string"].decode()) 
+            if looptime(i["_gameloop"]) < 0:
+                chatlog += "{}(00:00){}: {}".format("\n", players[user_ID_to_player_number[i["_userid"]["m_userId"]]]["player_name"], i["m_string"].decode()) 
+            else:
+                chatlog += "{}({}:{}){}: {}".format("\n", format(int(looptime(i["_gameloop"]) // 60), "02d"), format(int(looptime(i["_gameloop"]) % 60), "02d"), players[user_ID_to_player_number[i["_userid"]["m_userId"]]]["player_name"], i["m_string"].decode()) 
 
         #Ping Messages
         if i ["_event"] == "NNet.Game.SPingMessage":
@@ -482,22 +487,21 @@ def open_replay(replay_file):
         if timeline["team_red_timeline"][i][1] == "camp_capture":
             timeline["team_red_timeline_camp_capture"].append(timeline["team_red_timeline"][i])
     #adding additional stats that are not given in the replay
-    stats["KDA"] = list()
+    stats["KDA"] = ["perfect"] * 10
     stats["DPS"] = list()
     stats["EPS"] = list()
-    stats["KillParticipation"] = list()
+    stats["KillParticipation"] = ["no kills"] * 10
     stats["Award"] = ["none given"] * 10
     for i in range(0, 10):
-        if stats["Deaths"][i] == 0:
-            stats["KDA"].append("Perfect")
-        else:
-            stats["KDA"].append("{:.2f}".format((stats["SoloKill"][i] + stats["Assists"][i]) / stats["Deaths"][i]))
+        if stats["Deaths"][i] != 0:
+            stats["KDA"][i] = "{:.2f}".format((stats["SoloKill"][i] + stats["Assists"][i]) / stats["Deaths"][i])
         stats["DPS"].append("{:.2f}".format(stats["HeroDamage"][i] / timeline["core_death"]))
         stats["EPS"].append("{:.2f}".format(stats["ExperienceContribution"][i] / timeline["core_death"]))
-        if i < 5:
-            stats["KillParticipation"].append("{:.0f}%".format(100 * (stats["SoloKill"][i] + stats["Assists"][i])/sum(stats["Deaths"][5:])))
-        elif i >= 5:
-            stats["KillParticipation"].append("{:.0f}%".format(100 * (stats["SoloKill"][i] + stats["Assists"][i])/sum(stats["Deaths"][:5])))
+        
+        if i < 5 and sum(stats["Deaths"][5:]) != 0:
+            stats["KillParticipation"][i] = "{:.0f}%".format(100 * (stats["SoloKill"][i] + stats["Assists"][i])/sum(stats["Deaths"][5:]))
+        elif i >= 5 and sum(stats["Deaths"][:5]) != 0:
+            stats["KillParticipation"][i] = "{:.0f}%".format(100 * (stats["SoloKill"][i] + stats["Assists"][i])/sum(stats["Deaths"][:5]))
     #matching award and its award name
     end_of_match_award = {
         "EndOfMatchAwardMVPBoolean": "MVP",

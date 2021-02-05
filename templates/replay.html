@@ -177,8 +177,18 @@
     var checkbox_group = document.getElementsByClassName('chart_checkbox')
     var update = []
     var checked_count = 0
+    const replay_update = document.getElementById("choose_replay")
+    replay_update.addEventListener("change", (event) => {
+        const replay_name = replay_update.value;
+        if (replay_name != "") {
+            document.getElementById("submit_replay").style.pointerEvents = "auto";
+        }
+        else {
+            document.getElementById("submit_replay").style.pointerEvents = "none";
+        }
+        
+    })
     chart_checkbox_limit()
-
     {% for i in range(0, 33) %}
     update[{{ i }}] = document.getElementById("checkbox_{{ charts_title[i] }}_checkbox")
     update[{{ i }}].addEventListener("change", (event) => {

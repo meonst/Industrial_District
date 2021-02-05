@@ -1,3 +1,4 @@
+
 function toggle(selected_block) {
     chatlog_block = document.getElementById("chatlog")
     talents_block = document.getElementById("talents")
@@ -40,4 +41,5 @@ function toggle(selected_block) {
         timeline_block.style.display = "none"        
         charts_block.style.display = "block"        
     }
+
 }

@@ -1,4 +1,6 @@
-
+#submit_replay {
+    pointer-events: none;
+}
 #stats {
     margin-top: 20px;
     display: none;
