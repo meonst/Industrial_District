@@ -555,10 +555,11 @@ def open_replay(replay_file):
 def replay_page():
     if request.method == "POST":
         replay = request.files["file"]
-        return_data = open_replay(replay)
-        #except:
-        #    error_template = env.get_template("error.html")
-        #    return error_template.render(css_URL=url_for("static", filename="error.css"))
+        try:
+            return_data = open_replay(replay)
+        except:
+            error_template = env.get_template("error.html")
+            return error_template.render(css_URL=url_for("static", filename="error.css"))
         replay_template = env.get_template("replay.html")
         css_URL = url_for("static", filename="replay.css")
         js_URL = url_for("static", filename="replay.js")
