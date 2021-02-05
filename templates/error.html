@@ -1,0 +1,41 @@
+<!doctype html>
+
+<title> Industrial District </title>
+<link rel="stylesheet" type="text/css" href="{{ css_URL }}">
+
+<body>
+    <form method="POST" enctype="multipart/form-data" id="replay">
+        <input id="choose_replay" type="file" name="file" value="Choose Replay" accept=".StormReplay"/>
+        <text id="choose_replay_design">
+            Drag here or Click to choose replay<br>
+            
+        </text>
+        <input id="submit_replay" type = "submit" name = "submit" value = "Submit replay" formaction="/"/>
+    </form>
+    <p id="note_for_users">
+        <br>
+        An error has occurred.
+        Your replay file could be corrupted, 
+        you may have submitted an unsupported version of replay,
+        or it is an unsupported gamemode.
+        <br>
+    </p>
+
+    <script type="text/javascript">
+        const replay_update = document.getElementById("choose_replay")
+        replay_update.addEventListener("change", (event) => {
+            const replay_name = replay_update.value;
+            if (replay_name != "") {
+                document.getElementById("choose_replay_design").textContent = replay_name.slice(12)    
+                document.getElementById("submit_replay").style.pointerEvents = "auto";
+            }
+            else {
+                document.getElementById("choose_replay_design").textContent = "Drag here or Click to choose replay"
+                document.getElementById("submit_replay").style.pointerEvents = "none";
+            }
+            
+        })
+    </script>
+
+</body>
+

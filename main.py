@@ -20,9 +20,18 @@ timeline_icon = {
 }
 
 #used for checking what mode the game was played in
-game_mode_dict = {-1: "Custom", 50001: "Quick Match", 50021: "Versus AI", 50031: "Brawl", 50041: "Practice", 50051: "Unranked Draft", 50061: "Hero League", 50071: "Team League", 50101:"ARAM"}
-#used for showing stats
-stats_charts_link = [
+game_mode_dict = {None: "Sandbox", -1: "Custom", 50001: "Quick Match", 50021: "Versus AI", 50031: "Brawl", 50041: "Practice", 50051: "Unranked Draft", 50061: "Hero League", 50071: "Team League", 50101:"ARAM"}
+#used for showing stats and charts
+stats_link = [
+    "SoloKill", "Assists", "Deaths", "KDA", "KillParticipation", "ExperienceContribution", "EPS", "TimeSpentDead",
+    "HeroDamage", "PhysicalDamage", "SpellDamage",
+    "Healing", "DamageTaken", "ProtectionGivenToAllies", "SelfHealing",
+    "SiegeDamage","MinionDamage", "MinionKills", "StructureDamage", "TownKills", "CreepDamage", "MercCampCaptures",
+    "TeamfightHeroDamage", "TeamfightDamageTaken", "TeamfightHealingDone",
+    "TimeStunningEnemyHeroes", "TimeCCdEnemyHeroes", "TimeRootingEnemyHeroes", "TimeSilencingEnemyHeroes",
+    "Award", "OnFireTimeOnFire", "RegenGlobes", "HighestKillStreak", "Multikill", "ClutchHealsPerformed", "EscapesPerformed", "WatchTowerCaptures"
+]
+charts_link = [
     "SoloKill", "Assists", "Deaths", "ExperienceContribution", "TimeSpentDead",
     "HeroDamage", "PhysicalDamage", "SpellDamage",
     "Healing", "DamageTaken", "ProtectionGivenToAllies", "SelfHealing",
@@ -31,7 +40,16 @@ stats_charts_link = [
     "TimeStunningEnemyHeroes", "TimeCCdEnemyHeroes", "TimeRootingEnemyHeroes", "TimeSilencingEnemyHeroes",
     "OnFireTimeOnFire", "RegenGlobes", "HighestKillStreak", "Multikill", "ClutchHealsPerformed", "EscapesPerformed", "WatchTowerCaptures"
 ]
-stats_charts_title=[
+stats_title=[
+    "Final Blow", "Assists", "Deaths", "KDA", "Kill Participation", "EXP Contribution", "EXP per Minute", "Time Spent Dead",
+    "Damage to Hero", "Physical Damage", "Spell Damage",
+    "Healing", "Damage Taken", "Shield Given", "Self Healing", 
+    "Siege Damage", "Damage to Minion", "Minion Kills", "Damage to Structure", "Structure Kills", "Damage to Camp", "Camp Captures",
+    "Dealing in Teamfight", "Tanking in Teamfight", "Healing in Teamfight",
+    "Stun Time", "CC Time", "Rooting Time", "Silence Time",
+    "Award", "Time on Fire", "Regen Globes", "Highest Kill Streak", "Multikill", "Clutch Heals", "Escapes Performed", "Watchtower Captures"
+]
+charts_title=[
     "Final Blow", "Assists", "Deaths", "EXP Contribution", "Time Spent Dead",
     "Damage to Hero", "Physical Damage", "Spell Damage",
     "Healing", "Damage Taken", "Shield Given", "Self Healing", 
@@ -41,7 +59,7 @@ stats_charts_title=[
     "Time on Fire", "Regen Globes", "Highest Kill Streak", "Multikill", "Clutch Heals", "Escapes Performed", "Watchtower Captures"
 ]
 #used for giving a ceiling for charts
-charts_maximum = [0, 5, 10, 25, 50, 75, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2500, 5000, 7500, 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000, 125000, 150000, 175000, 200000, 225000, 250000, 275000, 300000, 350000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000, 2000000, 3000000, 5000000, 7000000, 10000000, 100000000, 1000000000, 10000000000, 100000000000, 1000000000000]
+charts_maximum = [0, 1, 3, 5, 10, 25, 50, 75, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2500, 5000, 7500, 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000, 125000, 150000, 175000, 200000, 225000, 250000, 275000, 300000, 350000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000, 2000000, 3000000, 5000000, 7000000, 10000000, 100000000, 1000000000, 10000000000, 100000000000, 1000000000000]
 #used for giving reference to charts
 #announcing global variables
 #team_blue, team_red will be used for timeline
@@ -60,6 +78,7 @@ map_structure_ID = {
     "DragonShire": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Bottom Keep", "Rightside Bottom Fort", "Rightside Middle Keep", "Rightside Middle Fort"],
     "ControlPoints": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Middle Keep", "Rightside Middle Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
     "Volskaya": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Middle Keep", "Rightside Middle Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
+    "VolskayaSandbox": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Middle Keep", "Rightside Middle Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
     "TowersOfDoom": ["placeholder", "Leftside Top Keep", "Leftside Middle Keep", "Leftside Bottom Keep", "Rightside Top Keep", "Rightside Middle Keep", "Rightside Bottom Keep"],
     "Warhead Junction":["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Middle Keep", "Rightside Middle Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
     "HauntedWoods": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Middle Keep", "Rightside Middle Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
@@ -68,6 +87,7 @@ map_structure_ID = {
     "BlackheartsBay": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Middle Keep", "Rightside Middle Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
     "BattlefieldOfEternity": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
     "CursedHollow": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Middle Keep", "Rightside Middle Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
+    "CursedHollowSandbox": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Middle Keep", "Rightside Middle Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
     "BraxisHoldout": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
     "Shrines": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Bottom Keep", "Rightside Bottom Fort", "Rightside Middle Keep", "Rightside Middle Fort"],
     "AlteracPass": ["placeholder", "Leftside Top Keep", "Leftside Top Fort", "Leftside Middle Keep", "Leftside Middle Fort", "Leftside Bottom Keep", "Leftside Bottom Fort", "Rightside Top Keep", "Rightside Top Fort", "Rightside Middle Keep", "Rightside Middle Fort", "Rightside Bottom Keep", "Rightside Bottom Fort"],
@@ -80,6 +100,7 @@ map_camp_ID = {
     "DragonShire": ["placeholder", "Leftside Siege Camp", "Leftside Bruiser Camp", "Rightside Siege Camp", "Rightside Bruiser Camp", "Bottom Bruiser Camp"],
     "ControlPoints": ["placeholder", "Leftside Siege Camp", "Leftside Bruiser Camp", "Rightside Bruiser Camp", "Rightside Siege Camp", "Boss Camp"],
     "Volskaya": ["placeholder", "Leftside Fortification Camp", "Rightside Fortification Camp", "Leftside Siege Camp", "Rightside Siege Camp", "Support Camp"],
+    "VolskayaSandbox": ["placeholder", "Leftside Fortification Camp", "Rightside Fortification Camp", "Leftside Siege Camp", "Rightside Siege Camp", "Support Camp"],
     "TowersOfDoom": ["placeholder", "Leftside Siege Camp", "Rightside Siege Camp", "Top Siege Camp", "Boss Camp"],
     "Warhead Junction": ["placeholder", "Leftside Siege Camp", "Leftside Bruiser Camp", "Rightside Siege Camp", "Rightside Bruiser Camp", "Boss Camp"],
     "HauntedWoods": ["placeholder", "Leftside Middle Siege Camp", "Leftside Top Siege Camp", "Leftside Bruiser Camp", "Rightside Middle Siege Camp", "Rightside Bottom Siege Camp", "Rightside Bruiser Camp"],
@@ -88,6 +109,7 @@ map_camp_ID = {
     "BlackheartsBay": ["placeholder", "Leftside Bruiser Camp", "Leftside Siege Camp", "Rightside Bruiser Camp", "Rightside Siege Camp", "Bottom Bruiser Camp", "Boss Camp", "Leftside Middle Skeletal Pirates", "Leftside Top Skeletal Pirates", "Rightside Middle Skeletal Pirates", "Rightside Top Skeletal Pirates"],
     "BattlefieldOfEternity": ["placeholder", "Top Siege Camp", "Leftside Bruiser Camp", "Bottom Siege Camp", "Rightside Bruiser Camp"],
     "CursedHollow": ["placeholder", "Leftside Siege Camp", "Rightside Bruiser Camp", "Rightside Siege Camp", "Leftside Bruiser Camp", "Leftside Boss Camp", "Rightside Boss Camp"],
+    "CursedHollowSandbox": ["placeholder", "Leftside Siege Camp", "Rightside Bruiser Camp", "Rightside Siege Camp", "Leftside Bruiser Camp", "Leftside Boss Camp", "Rightside Boss Camp"],
     "BraxisHoldout": ["placeholder", "Leftside Siege Camp", "Leftside Bruiser Camp", "Rightside Siege Camp", "Rightside Bruiser Camp", "Boss Camp"],
     "Shrines": ["placeholder", "Leftside Siege Camp", "Leftside Bruiser Camp", "Rightside Siege Camp", "Rightside Bruiser Camp", "Bottom Siege Camp"],
     "AlteracPass": ["placeholder", "Leftside Siege Camp", "Top Boss Camp", "Rightside Siege Camp", "Bottom Boss Camp"], 
@@ -113,8 +135,8 @@ def open_replay(replay_file):
         i["talent"] = ""
         i["talent_icon"] = ["storm_ui_icon_monk_trait1.png"] * 7
     #team_blue_timeline, team_red_timeline will each record the time of a event happening
-    #data will be given in chronological order (although there might be a few exceptions)
-    #data will be given in the form of a list [gameloop, "name_of_event", reference data]
+    #data will be sorted in chronological order
+    
     timeline = dict()
     timeline["team_blue_timeline"] = list()
     timeline["team_blue_timeline_player_death"] = list()
@@ -171,7 +193,11 @@ def open_replay(replay_file):
     game_details["game_mode"] = "Unknown"
     if init_data["m_syncLobbyState"]["m_gameDescription"]["m_gameOptions"]["m_ammId"] in game_mode_dict:
         game_details["game_mode"] = game_mode_dict[init_data["m_syncLobbyState"]["m_gameDescription"]["m_gameOptions"]["m_ammId"]]
-
+    #since the user ID in message events doesn't always match the player number
+    user_ID_to_player_number = dict()
+    for i in range(0, len(init_data["m_syncLobbyState"]["m_lobbyState"]["m_slots"])):
+        user_ID_to_player_number[init_data["m_syncLobbyState"]["m_lobbyState"]["m_slots"][i]["m_userId"]] = i
+        
     #gameloop will be given in integer t, after going through this function, it will represent time in seconds
     #the calculation is different for ARAM games since there is a 3 second difference for an unknown reason
     if game_details["game_mode"] == "ARAM":
@@ -194,7 +220,7 @@ def open_replay(replay_file):
                         values.append(j[0]["m_value"])
                     stats[i["m_name"].decode()] = values
                     #this part is to determine the ceiling to use for charts
-                    for j in range(0, 55):
+                    for j in range(0, 57):
                         if max(values) < charts_maximum[j]:
                             stats_maximum[i["m_name"].decode()] = charts_maximum[j]
                             break
@@ -341,11 +367,11 @@ def open_replay(replay_file):
         player_number += 1
     
     for i in protocol.decode_replay_message_events(message_events):  
-    #Chat Messages
+        #Chat Messages
         if i["_event"] == "NNet.Game.SChatMessage":
-            chatlog += "{}({}:{}){}: {}".format("\n", format(int(looptime(i["_gameloop"]) // 60), "02d"), format(int(looptime(i["_gameloop"]) % 60), "02d"), players[i["_userid"]["m_userId"]]["player_name"], i["m_string"].decode()) 
+            chatlog += "{}({}:{}){}: {}".format("\n", format(int(looptime(i["_gameloop"]) // 60), "02d"), format(int(looptime(i["_gameloop"]) % 60), "02d"), players[user_ID_to_player_number[i["_userid"]["m_userId"]]]["player_name"], i["m_string"].decode()) 
 
-    #Ping Messages
+        #Ping Messages
         if i ["_event"] == "NNet.Game.SPingMessage":
             player_number = i["_userid"]["m_userId"]
             time = looptime(i["_gameloop"])
@@ -354,7 +380,7 @@ def open_replay(replay_file):
 
     
     #structure deaths for 3 lane maps except Towers of Doom
-    if map_link in ["DragonShire", "ControlPoints", "Volskaya", "Warhead Junction", "Shrines", "AlteracPass", "HauntedWoods", "CursedHollow", "Crypts", "BlackheartsBay"]:
+    if map_link in ["DragonShire", "ControlPoints", "Volskaya", "VolskayaSandbox", "Warhead Junction", "Shrines", "AlteracPass", "HauntedWoods", "CursedHollow", "CursedHollowSandbox", "Crypts", "BlackheartsBay"]:
         for i in timeline["structure_deaths"]:
             if i[1] <= 6:
                 timeline["team_blue_timeline"].append([i[0], "structure_death", map_structure_ID[map_link][i[1]], i[2], i[3]])    
@@ -455,7 +481,73 @@ def open_replay(replay_file):
             timeline["team_red_timeline_structure_death"].append(timeline["team_red_timeline"][i])
         if timeline["team_red_timeline"][i][1] == "camp_capture":
             timeline["team_red_timeline_camp_capture"].append(timeline["team_red_timeline"][i])
+    #adding additional stats that are not given in the replay
+    stats["KDA"] = list()
+    stats["DPS"] = list()
+    stats["EPS"] = list()
+    stats["KillParticipation"] = list()
+    stats["Award"] = ["none given"] * 10
+    for i in range(0, 10):
+        if stats["Deaths"][i] == 0:
+            stats["KDA"].append("Perfect")
+        else:
+            stats["KDA"].append("{:.2f}".format((stats["SoloKill"][i] + stats["Assists"][i]) / stats["Deaths"][i]))
+        stats["DPS"].append("{:.2f}".format(stats["HeroDamage"][i] / timeline["core_death"]))
+        stats["EPS"].append("{:.2f}".format(stats["ExperienceContribution"][i] / timeline["core_death"]))
+        if i < 5:
+            stats["KillParticipation"].append("{:.0f}%".format(100 * (stats["SoloKill"][i] + stats["Assists"][i])/sum(stats["Deaths"][5:])))
+        elif i >= 5:
+            stats["KillParticipation"].append("{:.0f}%".format(100 * (stats["SoloKill"][i] + stats["Assists"][i])/sum(stats["Deaths"][:5])))
+    #matching award and its award name
+    end_of_match_award = {
+        "EndOfMatchAwardMVPBoolean": "MVP",
+        "EndOfMatchAwardHighestKillStreakBoolean": "Dominator",
+        "EndOfMatchAwardMostVengeancesPerformedBoolean": "Avenger",
+        "EndOfMatchAwardMostDaredevilEscapesBoolean": "Daredevil",
+        "EndOfMatchAwardMostEscapesBoolean": "Escape Artist",
+        "EndOfMatchAwardMostXPContributionBoolean": "Experienced",
+        "EndOfMatchAwardMostHeroDamageDoneBoolean": "Painbringer",
+        "EndOfMatchAwardMostKillsBoolean": "Finisher",
+        "EndOfMatchAwardHatTrickBoolean": "Hat Trick",
+        "EndOfMatchAwardClutchHealerBoolean": "Clutch Healer",
+        "EndOfMatchAwardMostProtectionBoolean": "Protector",
+        "EndOfMatchAward0DeathsBoolean": "Sole Survivor",
+        "EndOfMatchAwardMostSiegeDamageDoneBoolean": "Siege Master",
+        "EndOfMatchAwardMostDamageTakenBoolean": "Bulwark",
+        "EndOfMatchAward0OutnumberedDeathsBoolean": "Team Player",
+        "EndOfMatchAwardMostHealingBoolean": "Main Healer",
+        "EndOfMatchAwardMostStunsBoolean": "Stunner",
+        "EndOfMatchAwardMostRootsBoolean": "Trapper",
+        "EndOfMatchAwardMostSilencesBoolean": "Silencer",
+        "EndOfMatchAwardMostMercCampsCapturedBoolean": "Headhunter",
+        "EndOfMatchAwardMapSpecificBoolean": "Empty",
+        "EndOfMatchAwardMostDragonShrinesCapturedBoolean": "Shriner",
+        "EndOfMatchAwardMostCurseDamageDoneBoolean": "Master of the Curse",
+        "EndOfMatchAwardMostCoinsPaidBoolean": "Moneybags",
+        "EndOfMatchAwardMostImmortalDamageBoolean": "Immortal Slayer",
+        "EndOfMatchAwardMostDamageDoneToZergBoolean": "Zerg Crusher",
+        "EndOfMatchAwardMostDamageToPlantsBoolean": "Empty",
+        "EndOfMatchAwardMostDamageToMinionsBoolean": "Guardian Slayer",
+        "EndOfMatchAwardMostTimeInTempleBoolean": "Temple Master",
+        "EndOfMatchAwardMostGemsTurnedInBoolean": "Jeweler",
+        "EndOfMatchAwardMostSkullsCollectedBoolean": "Skull Collector",
+        "EndOfMatchAwardMostAltarDamageDone": "Cannoneer",
+        "EndOfMatchAwardMostNukeDamageDoneBoolean": "Da Bomb",
+        "EndOfMatchAwardMostTeamfightDamageTakenBoolean": "Guardian",
+        "EndOfMatchAwardMostTeamfightHealingDoneBoolean": "Combat Medic",
+        "EndOfMatchAwardMostTeamfightHeroDamageDoneBoolean": "Scrapper",
+        "EndOfMatchAwardGivenToNonwinner": "Empty",
+        "EndOfMatchAwardMostTimePushingBoolean": "Pusher",
+        "EndOfMatchAwardMostTimeOnPointBoolean": "Point Guard",
+        "EndOfMatchAwardMostInterruptedCageUnlocksBoolean": "Loyal Defender",
+        "EndOfMatchAwardMostSeedsCollectedBoolean": "Seed Collector"}
+    if "EndOfMatchAwardMVPBoolean" in stats:
+        for i in end_of_match_award:
+            for j in range(0, 10):
+                if stats[i][j] == 1:
+                    stats["Award"][j] = end_of_match_award[i]
     return [chatlog, players, stats, stats_maximum, game_details, timeline]
+
 
 
 
@@ -464,10 +556,13 @@ def replay_page():
     if request.method == "POST":
         replay = request.files["file"]
         return_data = open_replay(replay)
+        #except:
+        #    error_template = env.get_template("error.html")
+        #    return error_template.render(css_URL=url_for("static", filename="error.css"))
         replay_template = env.get_template("replay.html")
         css_URL = url_for("static", filename="replay.css")
         js_URL = url_for("static", filename="replay.js")
-        return replay_template.render(css_URL=css_URL, js_URL=js_URL, chatlog=return_data[0], players=return_data[1], stats=return_data[2], stats_maximum=return_data[3], game_details=return_data[4], timeline=return_data[5], timeline_icon=timeline_icon, stats_charts_link=stats_charts_link, stats_charts_title=stats_charts_title)
+        return replay_template.render(css_URL=css_URL, js_URL=js_URL, chatlog=return_data[0], players=return_data[1], stats=return_data[2], stats_maximum=return_data[3], game_details=return_data[4], timeline=return_data[5], timeline_icon=timeline_icon, stats_link=stats_link, charts_link=charts_link, stats_title=stats_title, charts_title=charts_title)
         
     else:
         css_URL = url_for("static", filename="home.css")
