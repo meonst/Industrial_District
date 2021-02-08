@@ -574,3 +574,10 @@ def replay_page():
         home_template = env.get_template("home.html")
         return home_template.render(css_URL=css_URL)
 
+@app.route("/demo")
+def demo_page():
+    replay_template = env.get_template("demo.html")
+    css_URL = url_for("static", filename="demo.css")
+    js_URL = url_for("static", filename="demo.js")
+    return_data = open_replay("notes\\demo_replay.StormReplay")
+    return replay_template.render(css_URL=css_URL, js_URL=js_URL, chatlog=return_data[0], players=return_data[1], stats=return_data[2], stats_maximum=return_data[3], game_details=return_data[4], timeline=return_data[5], timeline_icon=timeline_icon, stats_link=stats_link, charts_link=charts_link, stats_title=stats_title, charts_title=charts_title)

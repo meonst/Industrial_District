@@ -1,0 +1,347 @@
+<!doctype html>
+
+<title> Industrial District </title>
+<link rel="stylesheet" type="text/css" href="{{ css_URL }}">
+<script type="text/javascript" src="{{ js_URL }}"></script>
+
+<body>
+    <form method = "POST" enctype = "multipart/form-data">
+        <input id="choose_replay" type = "file" name = "file" value = "choose Replay" accept=".StormReplay"/>
+        <input id="submit_replay" type = "submit" name = "submit" value = "submit replay" formaction="/"/>
+    </form>
+</body>
+
+<br>
+<p>{{ game_details["game_mode"] }} {{ game_details["game_time"] }} {{ game_details["map_name"] }} {{ game_details["game_length"] }} {{ game_details["game_version"] }} {{ game_details["winner"] }} team won</p>
+<button onclick="toggle('stats')">stats</button>
+<button onclick="toggle('talents')">talents</button>
+<button onclick="toggle('chatlog')">chatlog</button>
+<button onclick="toggle('timeline')">timeline</button>
+<button onclick="toggle('charts')">charts</button>
+<button onclick="toggle('instructions')">instructions</button>
+<div id="stats">
+    <table id="stats_table">
+        <colgroup>
+            <col class="stats_title">
+            <col class="stats_player_0">
+            <col class="stats_player_1">
+            <col class="stats_player_2">
+            <col class="stats_player_3">
+            <col class="stats_player_4">
+            <col class="stats_player_5">
+            <col class="stats_player_6">
+            <col class="stats_player_7">
+            <col class="stats_player_8">
+            <col class="stats_player_9">
+        </colgroup>
+
+        <tr id="players">
+            <th id="player_row">Players</th> {% for i in range(0, 10) %} <th id="player_row" scope="col">{{ players[i]["player_name"] }}</th> {% endfor %}
+        </tr>
+
+        <tr id="heroes">
+            <th id="hero_row" scope="row">Heroes</th> {% for i in range(0, 10) %} <th>{{ players[i]["hero_name"] }}</th> {% endfor %}
+        </tr>
+
+        {% for i in range(0, 37) %}
+            <tr id="stats_stats">
+                <th id="rows" scope="row">{{ stats_title[i] }}</th> {% for j in stats[stats_link[i]] %} <td> {{ j }}</td> {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<pre id="talents">{% for i in range(0, 10) %}<div id="talents_player_{{ players[i]['team'] }}"><img id="talents_player_portrait" src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[i]['party_panel_portrait'] }}"><div id=talents_player_name>{{ players[i]["player_name"] }}
+{{ players[i]["hero_name"] }}</div><a id="talents_player_icon_box" href="https://min.hyeok.org/SILVER/#/{{ players[i]['hero_link'] }}/{{ players[i]['talent'] }}">{% for j in range(0, 7) %}<img id="talents_player_icon_box_individual" src="https://min.hyeok.org/SILVER/files/images/abilitytalents/{{ players[i]['talent_icon'][j] }}">{% endfor %}</a></div>{% endfor %}</pre>
+
+<pre id="chatlog">
+    {% if chatlog %} {{chatlog}} {% endif %}
+</pre>
+
+<div id="timeline">
+    <div id="timeline_axis" style="height: {{ timeline['core_death'] + 32 }}px;"></div>
+    <div id="timeline_gate_open" style="top: {{ timeline['gate_open'] }}px;"></div>
+    <div id="blue_timeline">
+        <div id="blue_timeline_level">
+            {% for i in range(1, timeline["team_blue_final_level"] + 1) %}
+                <div id="blue_level_up_{{ i }}" class="blue_timeline_level" style="top: {{ timeline['team_blue_level_up'][i] }}px; height: {{ timeline['team_blue_level_up'][i + 1] - timeline['team_blue_level_up'][i] - 3 }}px;">
+                    {{ i }}
+                </div>
+            {% endfor %}
+        </div>
+        <div id="blue_timeline_events">
+            {% for i in timeline["team_blue_timeline_player_death"] %}
+                <div id="blue_{{ i[1] }}" class="blue_timeline_event" style="position: absolute; left:{{ i[-1] }}px; top:{{ i[0] }}px;">
+                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}" title="player death"> 
+                    <img src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[i[2]]['minimap_portrait'] }}" title="{{ players[i[2]]['player_name'] }}"> 
+                    died at {{ i[4] }}
+                    <br>
+                    {% for j in i[3] %}
+                        <img src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[j]['minimap_portrait'] }}" title="{{ players[j]['player_name'] }}">
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            {% for i in timeline["team_blue_timeline_structure_death"] %}
+                <div id="blue_{{ i[1] }}" class="blue_timeline_event" style="position: absolute; left:{{ i[-1] }}px; top:{{ i[0] }}px;">
+                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}"> 
+                    {{ i[2] }} destroyed at {{ i[4] }}
+                    <br>
+                    {% for j in i[3] %}
+                        <img src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[j]['minimap_portrait'] }}" title="{{ players[j]['player_name'] }}">
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            
+            {% for i in timeline["team_blue_timeline_camp_capture"] %}
+                <div id="blue_{{ i[1] }}" class="blue_timeline_event" style="position: absolute; left:{{ i[-1] }}px; top:{{ i[0] }}px;">
+                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}">
+                    {{ i[2] }} captured at {{ i[3] }}
+                </div>
+            {% endfor %}
+            
+
+        </div>
+    </div>
+    <div id="red_timeline">
+        <div id="red_timeline_level">
+            {% for i in range(1, timeline["team_red_final_level"] + 1) %}
+                <div id="red_level_up_{{ i }}" class="red_timeline_level" style="top: {{ timeline['team_red_level_up'][i] }}px; height: {{ timeline['team_red_level_up'][i + 1] - timeline['team_red_level_up'][i] - 3 }}px;">
+                    {{ i }}
+                </div>
+            {% endfor %}
+        </div>
+        <div id="red_timeline_events">
+            {% for i in timeline["team_red_timeline_player_death"] %}
+                <div id="red_{{ i[1] }}" class="red_timeline_event" style="position: absolute; left:{{ i[-1] }}px; top:{{ i[0] }}px;">
+                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}" title="player death"> 
+                    <img src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[i[2]]['minimap_portrait'] }}" title="{{ players[i[2]]['player_name'] }}"> 
+                    died at {{ i[4] }}
+                    <br>
+                    {% for j in i[3] %}
+                        <img src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[j]['minimap_portrait'] }}" title="{{ players[j]['player_name'] }}">
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            {% for i in timeline["team_red_timeline_structure_death"] %}
+                <div id="red_{{ i[1] }}" class="red_timeline_event" style="position: absolute; left:{{ i[-1] }}px; top:{{ i[0] }}px;">
+                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}"> 
+                    {{ i[2] }} destroyed at {{ i[4] }}
+                    <br>
+                    {% for j in i[3] %}
+                        <img src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[j]['minimap_portrait'] }}" title="{{ players[j]['player_name'] }}">
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            
+            {% for i in timeline["team_red_timeline_camp_capture"] %}
+                <div id="red_{{ i[1] }}" class="red_timeline_event" style="position: absolute; left:{{ i[-1] }}px; top:{{ i[0] }}px;">
+                    <img src="https://min.hyeok.org/SILVER/files/industrial_district/{{ timeline_icon[i[1]] }}">
+                    {{ i[2] }} captured at {{ i[3] }}
+                </div>
+            {% endfor %}
+            
+
+        </div>
+    </div>
+    <div id="timeline_core_death" style="top: {{ timeline['core_death'] }}px;"></div>
+</div>
+
+
+<div id="charts">
+    <div id="charts_categories">{% for i in range(0, 33) %}<div id="checkbox_{{ charts_title[i] }}"><input type="checkbox" id="checkbox_{{ charts_title[i] }}_checkbox" class="chart_checkbox"> <label for="checkbox_{{ charts_title[i] }}_label">{{ charts_title[i] }}</label></div>{% endfor %} </div> 
+    <div id="charts_players">{% for i in range(0, 10) %}<div id="charts_players_player_{{ i }}"><img id="charts_players_portrait" src="https://min.hyeok.org/SILVER/files/images/heroportraits/{{ players[i]['minimap_portrait'] }}"></div> {% endfor %}
+    </div>
+    <canvas id="charts_chart" width="700px" height="420px">        
+    </canvas>
+    {% for i in range(0, 33) %}
+
+        
+    {% for j in range(0, 5) %}
+    <div id="charts_chart_{{ i }}_{{ j }}" class="charts_chart_{{ i }}" style="display: none; position: absolute;"></div>
+    <div id="charts_chart_{{ i }}_{{ j + 5 }}" class="charts_chart_{{ i }}" style="display: none; position: absolute;"></div> 
+    {% endfor %}
+
+    <div id="charts_chart_exact_{{ i }}" class="charts_chart_exact" style="font-size: 20pt;" >
+        {% for j in range(0, 5) %}
+        <div id="charts_chart_exact_{{ i }}_{{ j }}" style="position: absolute; z-index: 1; width: 80px; text-align: right;">{{ stats[charts_link[i]][j] }}</div>
+        <div id="charts_chart_exact_{{ i }}_{{ j + 5 }}" style="position: absolute; z-index: 1; width: 80px; text-align: right;">{{ stats[charts_link[i]][j + 5] }}</div>
+        {% endfor %}
+    </div>
+
+    {% endfor %}
+
+
+</div>
+<div id="instructions">
+    <li>About Industrial District</li>
+        <p>
+            It is well known that Heroes of the Storm is not getting the best attention of its developer Blizzard.
+            In addition the lack of methods to better oneself in a genre where it is near impossible to assess one's play is what led me to making this app.
+            Although this may not give a full understanding of a single replay I hope that through numbers of analysis on past games one will eventually result in better plays in the future.
+            I also recommend players to check out <a href="https://www.heroesprofile.com/">Heroes Profile</a>, <a href="https://www.hotslogs.com/">HOTSlogs</a> <a href="https://nexuscompendium.com/">The Nexus Compendium</a> for more information.
+        </p>
+    <li>Stats</li>
+        <p>
+            "Final Blow" is the number of times a player has dealt the final blow to another player.<br>
+            "Assists" is the number of times a player has played a role in a kill without dealing the final blow. The dedication may differ from being essential to a kill to merely standing somewhere near.<br>
+            "Deaths" is the number of times a player died. A high number in deaths doesn't always mean a player is bad depending on how efficiently one used one's life, however it is also true that each death is a minus to the team.<br>
+            "KDA" is ("Final Blow" + "Assists") / "Deaths" just as in any other games.<br>
+            "Kill Participation" shows how much a player participated in making kills. This may be low to split pushers such as Probius, Azmodan or Murky.<br>
+            "EXP Contribution" shows how much EXP a player contributed to the team. Healers tend to have low contribution due to lack of wave clear and being too squishy to gather EXP orbs.<br>
+            "EXP per Minute" is similar to "EXP Contribution" but can be used to compare performance over a number of games.<br>
+            "Time Spent Dead" shows how long a player has been dead during the game. However certain critical deaths such as devoting one's life in exchange of the core does not get comprehensed well due to the fact that the time is added at the moment of death rather than being cumulative.<br>
+            "Damage to Hero" shows how much damage a player dealt to enemy heroes.<br>
+            "Physical Damage" shows how much physical damage a player dealt. "Physical Damage" comes from auto attacks or talents such as Blade Dance from Maiev.<br>
+            "Spell Damage" shows how much spell damage a player dealt. "Spell Damage" comes from skills and most talents.<br>
+            "Healing" shows how much healing a player did.<br>
+            "Damage Taken" shows how much damage a player took.<br>
+            "Self Healing" shows how much self healing a player has done. This may not be a reliable source becuase the skills which counts to "Self Healing" is highly inconsistent.<br>
+            "Siege Damage" shows how much siege damage a player has done. This can further be broken down to "Damage to Minion" and "Damage to Structure" to show how the player played.<br>
+            "Damage to Minion" shows how much damage a player has done to a minion.<br>
+            "Minion Kills" shows how much minions a player has killed.<br>
+            "Damage to Structure" shows how much damage a player has done to a structure.<br>
+            "Structure Kills" shows how much structures a player has helped Killing. Similarily to "Assists" the contribution differ highly.<br>
+            "Damage to Camp" shows how much damage a player has done to mercenaries.<br>
+            "Camp Captures" shows how much mercenary camps a player has captured.<br>
+            "Dealing in Teamfight", "Healing in Teamfight", "Tanking in Teamfight" shows how a player has performed during a teamfight.<br>
+            "Stun Time", "CC Time", "Rooting Time", "Silence Time" shows how much crowd control a player has given.<br>
+            "Award" show which player has gotten which award. Naturally only 5 players will get an award.<br>
+            "Time on Fire" shows how long a player has been on fire.<br> 
+            "Regen Globes" shows how much regeneration globes a player has collected. The numbers are often distorted for heroes with multiple characters such as Rexxar and TLV.<br>
+            "Highest Kill Streak" shows the highest kill streak a player has reached.<br>
+            "Multikill" shows how many multikills a player has taken part in.<br>
+            "Clutch Heals" shows how many clutch heals a player has performed.<br>
+            "Escapes Performed" show how many times a player has escaped death with low HP.<br>
+            "Watchtower Captures" show how many times a player has captured a watchtower.<br>
+        </p>
+    <li>Talents</li>
+        <p>Talent choices can make all the difference in this game. Each players talent is hyperlinked to a external page so that the users can compare talents with a detailed description.</p>
+    <li>Chatlog</li>
+        <p>Chatlog shows the chats between players in the game in chronological order. Unfortunately enemy chats are not saved in the replay file.</p>
+    <li>Timeline</li>
+        <p>Timeline shows player death, structure death and camp captures so that users can see cause and effect between events.</p>
+    <li>Charts</li>
+        <p>Charts gives a bar chart for a more intuitive comparison on the stats.</p>
+</div>
+
+<script type="text/javascript">
+    const drawing = document.getElementById("charts_chart").getContext("2d");
+    var checkbox_group = document.getElementsByClassName('chart_checkbox')
+    var update = []
+    var checked_count = 0
+    const replay_update = document.getElementById("choose_replay")
+    replay_update.addEventListener("change", (event) => {
+        const replay_name = replay_update.value;
+        if (replay_name != "") {
+            document.getElementById("submit_replay").style.pointerEvents = "auto";
+        }
+        else {
+            document.getElementById("submit_replay").style.pointerEvents = "none";
+        }
+        
+    })
+    chart_checkbox_limit()
+    {% for i in range(0, 33) %}
+    update[{{ i }}] = document.getElementById("checkbox_{{ charts_title[i] }}_checkbox")
+    update[{{ i }}].addEventListener("change", (event) => {
+        graph_drawing()
+    })
+    {% endfor %}
+
+
+    function graph_drawing() {
+        var graph_count = 0;
+        
+        {% for i in range(0, 33) %}
+        
+        
+        if (checkbox_group[{{ i }}].checked == true) {
+
+            {% for j in range(0, 5) %}
+
+            document.getElementById("charts_chart_{{ i }}_{{ j }}").style.display = "block";
+            document.getElementById("charts_chart_{{ i }}_{{ j }}").style.width = (700 * {{ stats[charts_link[i]][j] / stats_maximum[charts_link[i]] }}).toString() + "px";
+            document.getElementById("charts_chart_{{ i }}_{{ j }}").style.left = "244px";
+            
+            
+            document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.display = "block";
+            document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.width = (700 * {{ stats[charts_link[i]][j + 5] / stats_maximum[charts_link[i]] }}).toString() + "px";
+            document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.left = "244px";
+
+            document.getElementById("charts_chart_exact_{{ i }}_{{ j }}").style.top = (7 + (40 * {{ j }})).toString() + "px";
+            document.getElementById("charts_chart_exact_{{ i }}_{{ j }}").style.left = "860px";
+            document.getElementById("charts_chart_exact_{{ i }}_{{ j + 5 }}").style.top = (27 + (40 * {{ j + 5 }})).toString() + "px";      
+            document.getElementById("charts_chart_exact_{{ i }}_{{ j + 5 }}").style.left = "860px"; 
+
+            if (checked_count == 1) {
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.height = "32px";
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.top = (7 + (40 * {{ j }})).toString() + "px";
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.backgroundColor = "rgba(80, 80, 256, 0.9)"
+
+                document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.height = "32px";
+                document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.top = (27 + (40 * {{ j + 5 }})).toString() + "px";
+                document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.backgroundColor = "rgba(256, 80, 80, 0.9)"
+
+            } else if (checked_count == 2) {
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.height = "15px";
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.top = (7 + (graph_count * 17) + (40 * {{ j }})).toString() + "px";                
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.backgroundColor = "rgba(80, 80, 256, " + (0.9 - (graph_count * 0.1)).toString() + ")"
+
+                document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.height = "15px";
+                document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.top = (27 + (graph_count * 17) + (40 * {{ j + 5 }})).toString() + "px";
+                document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.backgroundColor = "rgba(256, 80, 80, " + (0.9 - (graph_count * 0.1)).toString() + ")"
+
+            } else if (checked_count == 3) {
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.height = "10px";
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.top = (7 + (graph_count * 11) + (40 * {{ j }})).toString() + "px";               
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.backgroundColor = "rgba(80, 80, 256, " + (0.9 - (graph_count * 0.1)).toString() + ")"
+
+                document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.height = "10px";
+                document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.top = (27 + (graph_count * 11) + (40 * {{ j + 5 }})).toString() + "px";
+                document.getElementById("charts_chart_{{ i }}_{{ j + 5 }}").style.backgroundColor = "rgba(256, 80, 80, " + (0.9 - (graph_count * 0.1)).toString() + ")"
+                
+            }
+            {% endfor %}  
+            graph_count += 1
+        } else {        
+            {% for j in range(0, 10) %}
+                document.getElementById("charts_chart_{{ i }}_{{ j }}").style.display = "none" 
+            {% endfor %}  
+        }
+
+        {% endfor %}
+        
+
+    }
+
+
+
+    function chart_checkbox_limit() {
+        
+        for (var i = 0; i < checkbox_group.length; i++) {
+            checkbox_group[i].onclick = function() {
+                    checked_count = 0;
+                    for (var i = 0; i < checkbox_group.length; i++) {
+                    checked_count += (checkbox_group[i].checked) ? 1 : 0;
+                }
+                if (checked_count > 3) {
+                    this.checked = false;
+                    checked_count -= 1;
+                }
+            }
+        }
+    }
+
+</script>
+
+<style>
+
+{% for i in range(0, 33) %}
+.charts_chart_{{ i }}:hover ~ #charts_chart_exact_{{ i }} {
+    display: block;
+}
+{% endfor %}
+
+</style>
+
+<meta id="replay_data" data="">

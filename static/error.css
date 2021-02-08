@@ -41,3 +41,14 @@
     padding: 0px;
     pointer-events: none;
 }
+#try_demo {
+    position: absolute;
+    left: 25%;
+    width: 50%;
+    top: 450px;
+    width: 50%;
+    border: 0px;
+    padding: 0px;
+    text-align: center;
+    background-color: rgba(239, 239, 239, 225);
+}

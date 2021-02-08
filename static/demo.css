@@ -26,6 +26,13 @@
     margin-top: 20px;
 }
 
+#instructions {
+    display: none;
+    max-width: 600px;
+    position: relative;
+    margin-top: 20px;
+}
+
 
 
 
