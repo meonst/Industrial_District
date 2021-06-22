@@ -2,7 +2,7 @@ click==7.1.2
 Flask==1.1.2
 heroprotocol==2.54.2.85311
 itsdangerous==1.1.0
-Jinja2==2.11.2
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 mpyq==0.2.5
 six==1.15.0
