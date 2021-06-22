@@ -67,7 +67,7 @@ global team_blue, team_red, players
 #players 0-4 is in team blue, 5-9 is in team red(i.e order and chaos)
 players = list(dict() for i in range(0, 10))
 #version will always be the base build for the most recent version
-version = "84249"
+version = "85311"
 #default language will be US english 
 language = "enus"
 #opening json file parsed from the game
